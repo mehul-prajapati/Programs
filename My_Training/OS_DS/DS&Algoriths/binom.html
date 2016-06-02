@@ -1,0 +1,74 @@
+<HTML><HEAD>
+<TITLE>Data Structures and Algorithms: Binomial Coefficients</TITLE>
+
+<META name="description" content="Data Structures and Algorithms Course Notes,
+PLDS210 University of Western Australia">
+<META name="keywords" content="data structures,algorithms,abstract data types,
+dynamic algorithms, binomial coefficients">
+</HEAD>
+<BODY BGCOLOR="#ffffff">
+<TABLE BGCOLOR="#00c0f0" WIDTH="100%" CELLSPACING=0 CELLPADDING=0>
+<TR BGCOLOR="#00f0f0"><TD ALIGN=right>
+<FONT FACE=helvetica SIZE=+1><I>Data Structures and Algorithms</I></FONT>
+</TD></TR>
+
+<TR><TD><FONT FACE=helvetica SIZE=+2><B>9.2 Binomial Coefficients</B></FONT>
+</TD></TR>
+</TABLE>
+<P>
+As with the Fibonacci numbers,
+the binomial coefficients can be calculated recursively -
+making use of the relation:
+<CENTER>
+<SUP>n</SUP>C<SUB>m</SUB> = <SUP>n-1</SUP>C<SUB>m-1</SUB> +
+                            <SUP>n-1</SUP>C<SUB>m</SUB>
+</CENTER>
+A similar analysis to that used for the Fibonacci numbers
+shows that the time complexity using this approach is
+also the binomial coefficient itself.
+<P>
+However, we all know that if we construct Pascal's triangle,
+the <B><I>n<SUP>th</SUP></I></B> row gives all the values,<BR>
+<SUP>n</SUP>C<SUB>m</SUB>, m = 0,n:
+<CENTER>
+<TABLE>
+<TR><TD><PRE>
+              1
+            1   1
+          1   2   1
+        1   3   3   1
+      1   4   6   4   1
+    1   5  10  10   5   1
+  1   6  15  20  15   6   1
+1   7  21  35  35  21   7   1
+</PRE>
+</TD></TR>
+</TABLE>
+</CENTER>
+Each entry takes
+<B><I>O(</I>1<I>)</I></B>
+time to calculate
+and there are 
+<B><I>O(n</I><SUP>2</SUP><I>)</I></B> of them.
+So this calculation of the coefficients takes
+<B><I>O(n</I><SUP>2</SUP><I>)</I></B> 
+time.
+But it uses
+<B><I>O(n</I><SUP>2</SUP><I>)</I></B> 
+space to store the coefficients.
+
+
+<P>
+
+<TABLE CELLPADDING=5 WIDTH="100%" BGCOLOR="#00f0f0" CELLSPACING=4>
+<TR><TD WIDTH=50%>
+<FONT FACE=arial,helvetica>Continue on to <A HREF="opt_bin.html">Optimal Binary Search Trees</A></TD>
+<TD><FONT FACE=arial,helvetica>Back to the <A HREF="ds_ToC.html">Table of Contents</A>
+</TD></TR></TABLE>
+<SMALL>
+&copy; <A HREF=mailto:morris@ee.uwa.edu.au>John Morris</A>, 1998
+</SMALL>
+</BODY>
+</HTML>
+
+

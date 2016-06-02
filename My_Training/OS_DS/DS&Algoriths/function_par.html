@@ -1,0 +1,96 @@
+
+<HTML><HEAD>
+<TITLE>Objects First: Functions as Parameters</TITLE>
+</HEAD>
+<BODY BGCOLOR="#ffffff">
+<TABLE BGCOLOR="#60ffff" WIDTH="100%">
+<TR><TD><H1>Objects First</H1><HR></TD></TR>
+</TABLE>
+
+<H2>Functions as Parameters</H2>
+
+C allows a function to be a formal parameter of another function.
+For example: suppose we want to solve <B><I>f(x) = 0</I></B>
+by Newton's method.
+We define a function that takes an initial guess, x, and a
+function and its derivative as arguments (Newton's method needs the
+function <I>and</I> its derivative):
+<FONT COLOR=green>
+<PRE>double Newton( double x, double (*f)( double ), double (*f1)( double ) ) {
+  double r;
+  ...
+  return r;
+  }
+</PRE></FONT>
+The parentheses around <FONT COLOR=green><TT>*f</TT></FONT> and 
+<FONT COLOR=green><TT>*f1</TT></FONT> indicate that 
+they are <B>pointers
+to a function</B>, not a function that returns a pointer to a double!
+<P>
+So we could find a solution to
+<CENTER>
+<B><I>sin(x) = </I>0</B>
+</CENTER>
+near <B><I>x = </I>0.5</B> by
+calling:
+<FONT COLOR=green>
+<PRE>
+      guess = 0.5;
+      x = Newton( guess, sin, cos );
+</PRE></FONT>
+Note that we just pass the names of the functions,
+<TT><FONT COLOR=green>sin</FONT></TT> and <TT><FONT COLOR=green>cos</FONT></TT>
+as these are pointers to the functions themselves.
+<P>
+To invoke the functions in the body of <TT><FONT COLOR=green>Newton</FONT></TT>,
+the parameter is simply the name of a function, which is
+invoked in the usual way:
+<FONT COLOR=green>
+<PRE>
+#include &lt;stdio.h&gt;
+#include &lt;math.h&gt;
+
+#include "Newton.h"
+
+static double eps = 1.0e-10;
+#define MAX_ITER    1e4
+
+/* Solve f(x) = 0 for a function f which has derivative f1,
+   starting from an initial guess x
+*/
+double Newton( double x, double (*f)( double ), double (*f1)( double ) ) {
+  double next;
+  int cnt = 0;
+
+  do {
+    next = x - f(x)/f1(x);
+    if ( fabs(next - x) <= eps ) return x;
+    x = next;
+    }
+  while ( (cnt++) < MAX_ITER );
+  fprintf(stderr,"Newton exceeded iteration count!\n");
+  return next;
+  }
+</PRE>
+</FONT>
+
+
+
+<P>
+<TABLE WIDTH="100%" BGCOLOR="#00f0ff">
+<TR><TD><H3>Key terms</H3></TD></TR></TABLE>
+<DL>
+</DL>
+
+<P>
+<TABLE CELLPADDING=5 WIDTH="100%" BGCOLOR="#00f0ff">
+<TR><TD><FONT FACE=arial,helvetica>
+Continue on to <A HREF="other_oo.html">Other Object-Oriented Languages</A></TD>
+<TD><FONT FACE=arial,helvetica>
+Back to the <A HREF="CLP_ToC.html">Table of Contents</A>
+</TD></TR></TABLE>
+<SMALL>
+&copy; <A HREF=mailto:morris@ee.uwa.edu.au>John Morris</A>, 1998
+</SMALL>
+</BODY>
+</HTML>

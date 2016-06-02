@@ -1,0 +1,99 @@
+<HTML><HEAD>
+<TITLE>Data Structures and Algorithms: Quick vs Heap Sort</TITLE>
+
+<META name="description" content="Data Structures and Algorithms Course Notes,
+PLDS210 University of Western Australia">
+<META name="keywords" content="data structures,algorithms,abstract data types,
+sorting, quick sort, heap sort">
+</HEAD>
+<BODY BGCOLOR="#ffffff">
+<TABLE BGCOLOR="#00c0f0" WIDTH="100%" CELLSPACING=0 CELLPADDING=0>
+<TR BGCOLOR="#00f0f0"><TD ALIGN=right>
+<FONT FACE=helvetica SIZE=+1><I>Data Structures and Algorithms</I></FONT>
+</TD></TR>
+
+<TR><TD><FONT FACE=helvetica SIZE=+2><B>Comparing Quick and Heap Sorts</B></FONT>
+</TD></TR>
+</TABLE>
+<P>
+ 
+ Empirical studies show that generally quick sort is considerably
+ faster than heapsort.
+<P>
+The following counts of compare and exchange operations were made for
+three different sorting algorithms running on the same data:
+ <CENTER><TABLE BORDER=1>
+ <TR><TH ROWSPAN=2><I>n</I></TH>
+ <TH COLSPAN=2>Quick</TH>
+ <TH COLSPAN=2>Heap</TH>
+<TH COLSPAN=2>Insert</TH></TR>
+<TR><TH>Comparison</TH><TH>Exchange</TH>
+<TH>Comparison</TH><TH>Exchange</TH>
+<TH>Comparison</TH><TH>Exchange</TH></TR>
+<TR><TD ALIGN=center>100</TD>
+<TD ALIGN=center>712</TD><TD ALIGN=center>148</TD><TD ALIGN=center>2,842</TD><TD ALIGN=center>581</TD><TD ALIGN=center>2,595</TD><TD ALIGN=center>899</TD></TR>
+<TR><TD ALIGN=center>200</TD>
+<TD ALIGN=center>1,682</TD><TD ALIGN=center>328</TD><TD ALIGN=center>9,736</TD><TD ALIGN=center>1,366</TD><TD ALIGN=center>10,307</TD><TD ALIGN=center>3,503</TD></TR>
+<TR><TD ALIGN=center>500</TD>
+<TD ALIGN=center>5,102</TD><TD ALIGN=center>919</TD><TD ALIGN=center>53,113</TD><TD ALIGN=center>4,042</TD><TD ALIGN=center>62,746</TD><TD ALIGN=center>21,083</TD></TR>
+ </TABLE></CENTER>
+<P> 
+ Thus, when an occasional "blowout" to <B>O(<I>n</I><SUP>2</SUP>)</B>
+ is tolerable, we can expect that, on average, quick sort will 
+ provide considerably better performance - especially if one of the modified
+ pivot choice procedures is used.
+ <P>
+ Most commercial applications would use quicksort for its better average
+ performance:
+ they can tolerate an occasional long run 
+ (which just means that a report takes slightly longer to produce
+ on full moon days in leap years) in return for shorter runs most of the
+ time.
+ <P>
+ However, quick sort should <B><FONT COLOR=red>never</FONT></B> be used in applications which
+ require a guarantee of response time,
+ unless it is treated as an <B>O(<I>n</I><SUP>2</SUP>)</B> algorithm
+ in calculating the worst-case response time. 
+ If you have to assume <B>O(<I>n</I><SUP>2</SUP>)</B> time,
+ then - if <B>n</B> is small,
+ you're better off using insertion sort - which has simpler
+ code and therefore smaller constant factors.
+ <P>
+ And if <B>n</B> is large, you should obviously be using heap sort,
+ for its <I>guaranteed</I> <B>O(nlog n)</B> time.
+Life-critical (medical monitoring, life support in aircraft and space craft) and
+mission-critical (monitoring and control in industrial and research plants
+handling dangerous materials,
+control for aircraft, defence, etc) software
+will generally have a response time as part of the system
+specifications.
+In all such systems, it is not acceptable to design based on
+average performance, you must always allow for the worst case,
+and thus treat quicksort as <B>O(n<SUP>2</SUP>)</B>.
+<P>
+So far, our best sorting algorithm has <B>O(<I>n</I>log <I>n</I>)</B>
+performance:
+can we do any better?
+<P>
+<I>In general,</I> the answer is <B><FONT COLOR=red>no</FONT></B>.
+<P>
+However, if we know something about the items to be sorted,
+then we may be able to do better.
+
+
+<P>
+But first, we should look at squeezing the last drop of performance
+out of quicksort.
+
+<TABLE CELLPADDING=5 WIDTH="100%" BGCOLOR="#00f0f0" CELLSPACING=4>
+<TR><TD WIDTH=50%><FONT FACE=arial,helvetica>
+Continue on to <A HREF="qsort_perf.html">The last drop of performance!</A></TD>
+<TD><FONT FACE=arial,helvetica>
+Back to the <A HREF="ds_ToC.html">Table of Contents</A>
+</TD></TR></TABLE>
+<SMALL>
+&copy; <A HREF=mailto:morris@ee.uwa.edu.au>John Morris</A>, 1998
+</SMALL>
+</BODY>
+</HTML>
+

@@ -1,0 +1,163 @@
+<HTML><HEAD>
+<TITLE>Data Structures and Algorithms: Sorting</TITLE>
+
+<META name="description" content="Data Structures and Algorithms Course Notes,
+PLDS210 University of Western Australia">
+<META name="keywords" content="data structures,algorithms,abstract data types,
+sorting, bubble sort, selection sort, insertion sort">
+</HEAD>
+<BODY BGCOLOR="#ffffff">
+<TABLE BGCOLOR="#00c0f0" WIDTH="100%" CELLSPACING=0 CELLPADDING=0>
+<TR BGCOLOR="#00f0f0"><TD ALIGN=right>
+<FONT FACE=helvetica SIZE=+1><I>Data Structures and Algorithms</I></FONT>
+</TD></TR>
+
+<TR><TD><FONT FACE=helvetica SIZE=+2><B>7 Sorting</B></FONT>
+</TD></TR>
+</TABLE>
+<P>
+
+Sorting is one of the most important operations performed
+by computers.
+In the days of magnetic tape storage before modern data-bases,
+it was almost certainly the <I>most</I> common operation
+performed by computers as most "database" updating was done
+by sorting transactions and merging them with a master file.
+It's still important for presentation of data extracted from
+databases: most people prefer to get reports sorted into some
+relevant order before wading through pages of data!
+
+<A NAME=bubble></A>
+<H3>7.1 Bubble, Selection, Insertion Sorts</H3>
+There are a large number of variations of one basic
+strategy for sorting.
+It's the same strategy that you use for sorting your
+bridge hand. You pick up a card, 
+start at the beginning of your hand and find the place
+to insert the new card, insert it and move all the others
+up one place.
+<FONT COLOR=green>
+<PRE>/* Insertion sort for integers */
+
+void insertion( int a[], int n ) {
+/* Pre-condition: a contains n items to be sorted */
+    int i, j, v;
+    /* Initially, the first item is considered 'sorted' */
+    /* i divides a into a sorted region, x&lt;i, and an
+       unsorted one, x &gt;= i */
+    for(i=1;i&lt;n;i++) {
+        /* Select the item at the beginning of the
+           as yet unsorted section */
+        v = a[i];
+        /* Work backwards through the array, finding where v 
+           should go */
+        j = i;
+        /* If this element is greater than v,
+              move it up one */
+        while ( a[j-1] &gt; v ) {
+          a[j] = a[j-1]; j = j-1;
+          if ( j &lt;= 0 ) break;
+          }
+        /* Stopped when a[j-1] &lt;= v, so put v at position j */
+        a[j] = v;
+        }
+    }    
+</PRE></FONT>
+
+<A NAME=insert_anim>
+<TABLE BGCOLOR="#00f0f0" WIDTH="100%"> 
+<TR><TD >
+<FONT COLOR=blue FACE=helvetica>
+<B>Insertion Sort Animation</B><BR>
+This animation was written by Woi Ang.</FONT></TD>
+<TD ALIGN=center>
+  <TABLE BORDER=0>
+  <TR><TD>
+    <applet CODEBASE="Java/ins_sort" code = "AlgAnimApp.class" width = 200 height = 35>
+    <param name = "filename" value = "AlgThread.java">
+    <param name = "buttonname" value = "Run the Animation">
+    <param name = "algname" value = "Insertion Sort">
+    </applet>
+    </TD>
+  </TR>
+</TABLE>
+</TD>
+<TD><FONT FACE=helvetica>Please email comments to:<BR>
+<A HREF=mailto:morris@ee.uwa.edu.au>morris@ee.uwa.edu.au</A>
+</TR>
+</TABLE>
+<P>
+<H3>Bubble Sort</H3>
+
+Another variant of this procedure, called bubble sort, is commonly taught:
+<FONT COLOR=green>
+<PRE>/* Bubble sort for integers */
+#define SWAP(a,b)   { int t; t=a; a=b; b=t; }
+
+void bubble( int a[], int n )
+/* Pre-condition: a contains n items to be sorted */
+    {
+    int i, j;
+    /* Make n passes through the array */
+    for(i=0;i&lt;n;i++)
+        {
+        /* From the first element to the end
+           of the unsorted section */
+        for(j=1;j&lt;(n-i);j++)
+           {
+           /* If adjacent items are out of order, swap them */
+           if( a[j-1]&gt;a[j] ) SWAP(a[j-1],a[j]);
+           }
+        }
+    }    
+</PRE></FONT>
+
+<H3>Analysis</H3>
+
+Each of these algorithms requires <B><I>n</I></B>-1 passes:
+each pass places one item in its correct place.
+(The <B><I>n<SUP>th</SUP></I></B> is then in the correct place also.)
+The <B><I>i<SUP>th</SUP></I></B> pass makes either <B><I>i</I></B>or 
+<B><I>n - i</I></B> comparisons and moves.
+So:
+<BLOCKQUOTE>
+<IMG SRC="fig/sumi.gif"></IMG>
+</BLOCKQUOTE>
+or <B>O(<I>n</I><SUP>2</SUP>)</B> -
+but we already know we can use heaps to get an
+<B>O(<I>n</I> log<I>n</I>)</B>
+algorithm.
+Thus these algorithms are only suitable for small
+problems where their simple code makes them faster than
+the more complex code of the
+<B>O(<I>n</I> log<I>n</I>)</B>
+algorithm.
+As a rule of thumb, expect to find an
+<B>O(<I>n</I> log<I>n</I>)</B>
+algorithm faster for <I>n</I>&gt;10 -
+<I>but the exact value depends very much on individual machines!</I>.
+<P>
+They can be used to squeeze a little bit more performance out
+of fast sort algorithms - <A HREF=qsort_perf.html>see later</A>.
+
+<P>
+<TABLE WIDTH="100%" BGCOLOR="#00c0f0">
+<TR><TD><H3>Key terms</H3></TD></TR></TABLE>
+<DL>
+<DT><FONT COLOR="#fa0000"><B>Bubble, Insertion, Selection Sorts</B></FONT>
+   <DD>Simple sorting algorithms with <B><I>O(n<SUP>2</SUP>)</I></B>
+      complexity - suitable for sorting small numbers of items only.
+</DL>
+
+<P>
+
+<TABLE CELLPADDING=5 WIDTH="100%" BGCOLOR="#00f0f0" CELLSPACING=0>
+<TR><TD>
+Continue on to <A HREF="heapsort.html">Heap Sort</A><BR>
+Back to the <A HREF="ds_ToC.html">Table of Contents</A>
+</TD></TR></TABLE>
+<SMALL>
+&copy; <A HREF=mailto:morris@ee.uwa.edu.au>John Morris</A>, 1998
+</SMALL>
+</BODY>
+</HTML>

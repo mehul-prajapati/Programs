@@ -1,0 +1,152 @@
+<HTML><HEAD>
+<TITLE>Data Structures and Algorithms: Ada exceptions</TITLE>
+
+<META name="description" content="Data Structures and Algorithms Course Notes,
+PLDS210 University of Western Australia">
+<META name="keywords" content="Ada, exceptions">
+</HEAD>
+<BODY BGCOLOR="#ffffff">
+<TABLE BGCOLOR="#00c0f0" WIDTH="100%" CELLSPACING=0 CELLPADDING=0>
+<TR BGCOLOR="#00f0f0"><TD ALIGN=right>
+<FONT FACE=helvetica SIZE=+1><I>Data Structures and Algorithms</I></FONT>
+</TD></TR>
+
+<TR><TD><FONT FACE=helvetica SIZE=+2><B>Ada Exceptions</B></FONT>
+</TD></TR>
+</TABLE>
+<P>
+
+Ada defines an <TT><FONT COLOR=green>EXCEPTION</FONT></TT> which may be processed in an
+exception handler at any level in the program above that where the
+exception was generated or <TT><FONT COLOR=green>RAISE</FONT></TT>d.
+<FONT COLOR=green><PRE>PACKAGE adtX IS
+    TYPE X IS PRIVATE;
+    EXCEPTION out_of_range;
+
+    PROCEDURE f( a: INOUT X; b: INTEGER );
+END adtX;
+
+PACKAGE BODY adtX IS
+
+    PROCEDURE f( a: INOUT X; b: INTEGER ) IS
+        BEGIN
+        ......
+        IF b < some_limit THEN
+            -- Normal processing
+        ELSE
+            RAISE out_of_range;
+        END IF;
+END adtX;
+</PRE></FONT>
+This package exports the exception <TT><FONT COLOR=green>out_of_range</FONT></TT>
+which may be caught in any routine that uses <TT><FONT COLOR=green>f</FONT></TT>.
+<FONT COLOR=green><PRE>
+WITH adtX; USE adtX;  -- Import adtX
+
+PROCEDURE g( ... ) IS
+    
+    BEGIN
+    ...
+    f( a, n );   -- Invoke method f
+    ...          -- Continue here if exception not raised
+
+    ....         -- Return from here if no errors
+    EXCEPTION
+        WHEN out_of_range =>
+            ...  -- process the exception
+    END g;
+</PRE></FONT>
+In this example, the exception was processed in the
+procedure, <TT><FONT COLOR=green>g</FONT></TT>, which called the function, 
+<TT><FONT COLOR=green>f</FONT></TT>, in which it was raised.
+The code processing the exception is any set of Ada
+statements: it could even raise another exception.
+<P>
+If the exception is not 'caught' it is propagated
+up the call stack until it encounters an 
+exception handler prepared to process it.
+(If there are no exception handlers, then it
+will propagate to the highest level and cause the
+program to abort. However an implementation would be
+expected to print out the name of the exception 
+causing the abort.)
+<P>
+Because they are propagated to arbitrarily high levels
+of an Ada program,
+it is easy to arrange for Ada exceptions to be caught
+at some level where there is an appropriate interface
+for dealing with them.
+For example, in a GUI program, 
+the routines which handle interaction with a user through
+the windows, mouse events, keyboard input, etc, are
+generally at the highest level in the program.
+These routines "know" how to pop up the alert box
+that tells the user that a problem has occurred
+and force him or her to take some action to correct
+the problem.
+Alternatively, in an embedded processor,
+they would "know" to send a message via 
+a communications channel to some master processor.
+<P>
+Lower level, re-usable code should be able to function
+correctly in any environment - GUI, text terminal, 
+embedded system, etc.
+Ada's ability to propagate exceptions to a level at
+which the program knows sufficient about the environment
+to output the appropriate messages
+makes life simple for the writer of re-usable software.
+Exceptions are defined which correspond to all the
+errors that could occur.
+Re-usable code simply raises the exceptions.
+The users of the code then have the flexibility to decide
+when (<I>ie</I> at what level) to process the exceptions.
+<P>
+An added benefit of Ada's exception mechanism is that
+it provides a uniform method of handling errors.
+Left to their own devices, programmers are able to define a
+large grab-bag of styles of error raising
+and processing, for example,
+we can:
+<UL>
+<LI> use the return values of functions,
+<LI> add a call-by-reference error parameter to a function,
+<LI> set a global variable,
+<LI> call an error handling module,
+<LI> notify a separate process,
+<LI> ...
+</UL>
+In Ada, a disciplined group of programmers will use
+Ada's in-built exception handling uniformly to propagate
+exceptions to some agreed level in programs where 
+code which "knows" the current environment can
+handle the problem appropriately.
+<P>
+Ada further standardises behaviour by pre-defining a
+number of exceptions for commonly encountered problems,
+such as <TT><FONT COLOR=green>constraint_error</FONT></TT> when 
+an attempt is made to assign a value to
+a variable is outside the permitted range for its type.
+
+<P>
+<TABLE WIDTH="100%" BGCOLOR="#00c0f0">
+<TR><TD><H3>Key terms</H3></TD></TR></TABLE>
+<DL>
+<DT><FONT COLOR="#fa0000"><B>Exception</B></FONT>
+   <DD>An exception is raised by a program or program module when some event
+occurs which should be handled by some other program or module.
+</DL>
+
+<P>
+
+<TABLE CELLPADDING=5 WIDTH="100%" BGCOLOR="#00f0f0" CELLSPACING=0>
+<TR><TD>
+Continue on to <A HREF="C++_throw.html">C++ exception handling</A><BR>
+Back to the <A HREF="ds_ToC.html">Table of Contents</A>
+</TD></TR></TABLE>
+<SMALL>
+&copy; <A HREF=mailto:morris@ee.uwa.edu.au>John Morris</A>, 1998
+</SMALL>
+</BODY>
+</HTML>
+
+

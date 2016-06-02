@@ -1,0 +1,58 @@
+<HTML><HEAD>
+<TITLE>Data Structures and Algorithms: Quick vs Heap Sort</TITLE>
+
+<META name="description" content="Data Structures and Algorithms Course Notes,
+PLDS210 University of Western Australia">
+<META name="keywords" content="data structures,algorithms,abstract data types,
+sorting, quick sort">
+</HEAD>
+<BODY BGCOLOR="#ffffff">
+<TABLE BGCOLOR="#00c0f0" WIDTH="100%" CELLSPACING=0 CELLPADDING=0>
+<TR BGCOLOR="#00f0f0"><TD ALIGN=right>
+<FONT FACE=helvetica SIZE=+1><I>Data Structures and Algorithms</I></FONT>
+</TD></TR>
+
+<TR><TD><FONT FACE=helvetica SIZE=+2><B>Quick Sort - the last drop of performance</B></FONT>
+</TD></TR>
+</TABLE>
+<P>
+ 
+The recursive calls in quick sort are generally expensive on most
+architectures - the overhead of <I>any</I> procedure call is 
+significant and reasonable improvements can be obtained with
+equivalent 
+<FONT COLOR="#fa0000">iterative algorithms</FONT>.
+<P>
+Two things can be done to eke a little more performance out
+of your processor when sorting:
+<OL TYPE=a>
+<LI>
+Quick sort - in its usual recursive form -
+has a reasonably high constant factor relative to a simpler
+sort such as <A HREF=sorting.html>insertion sort</A>.
+Thus, when the partitions become small (<B><I>n</I> < ~10</B>), 
+a switch to insertion sort for the small partition will
+usually show a measurable speed-up.
+(The point at which it becomes effective to switch to
+the insertion sort is extremely sensitive to architectural
+features and needs to be determined for any target
+processor: although a value of ~10 is a reasonable 
+guess!)
+<LI>
+Write the whole algorithm in an iterative form.
+This is left for a tutorial exercise!
+</OL>
+<P>
+
+<TABLE CELLPADDING=5 WIDTH="100%" BGCOLOR="#00f0f0" CELLSPACING=4>
+<TR><TD WIDTH=50%>
+<FONT FACE=arial,helvetica>Continue on to <A HREF="binsort.html">Bin and radix sorting</A></TD>
+<TD>
+<FONT FACE=arial,helvetica>Back to the <A HREF="ds_ToC.html">Table of Contents</A>
+</TD></TR></TABLE>
+<SMALL>
+&copy; <A HREF=mailto:morris@ee.uwa.edu.au>John Morris</A>, 1998
+</SMALL>
+</BODY>
+</HTML>
+

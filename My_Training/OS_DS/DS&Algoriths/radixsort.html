@@ -1,0 +1,236 @@
+<HTML><HEAD>
+<TITLE>Data Structures and Algorithms: Radix Sort</TITLE>
+
+<META name="description" content="Data Structures and Algorithms Course Notes,
+PLDS210 University of Western Australia">
+<META name="keywords" content="data structures,algorithms,abstract data types,
+sorting, radix sort">
+</HEAD>
+<BODY BGCOLOR="#ffffff">
+<TABLE BGCOLOR="#00c0f0" WIDTH="100%" CELLSPACING=0 CELLPADDING=0>
+<TR BGCOLOR="#00f0f0"><TD ALIGN=right>
+<FONT FACE=helvetica SIZE=+1><I>Data Structures and Algorithms</I></FONT>
+</TD></TR>
+
+<TR><TD><FONT FACE=helvetica SIZE=+2><B>7.5 Radix Sorting</B></FONT>
+</TD></TR>
+</TABLE>
+<P>
+ 
+The bin sorting approach can be generalised in a technique that
+is known as <I>radix sorting</I>.
+<P>
+<H4>An example</H4>
+
+Assume that we have <B>n</B> integers in the range (0,<B>n</B><SUP>2</SUP>)
+to be sorted.
+(For a bin sort, <B>m</B> = <B>n</B><SUP>2</SUP>, and
+we would have an <B>O(n+m)</B> = <B>O(n<SUP>2</SUP>)</B> algorithm.)
+Sort them in two phases:
+<OL>
+<LI> Using <B>n</B> bins, place <B>a<SUB>i</SUB></B> into bin
+<B>a<SUB>i</SUB></B> mod <B>n</B>,
+<LI> Repeat the process using <B>n</B> bins,
+placing <B>a<SUB>i</SUB></B> into bin
+floor(<B>a<SUB>i</SUB></B>/<B>n</B>),
+<I>being careful to append to the end of each bin</I>.
+</OL>
+This results in a sorted list.
+<P>
+
+As an example, consider the list of integers:
+<CENTER><BLOCKQUOTE><PRE>
+36 9 0 25 1 49 64 16 81 4
+</PRE></BLOCKQUOTE></CENTER>
+<B>n</B> is 10 and the numbers all lie in (0,99).
+After the first phase, we will have:
+<P>
+<CENTER><TT>
+<TABLE BORDER=2>
+<TR><TH>Bin</TH><TH WIDTH="9%">0</TH><TH WIDTH="9%">1</TH>
+<TH WIDTH="9%">2</TH><TH WIDTH="9%">3</TH>
+<TH WIDTH="9%">4</TH><TH WIDTH="9%">5</TH>
+<TH WIDTH="9%">6</TH><TH WIDTH="9%">7</TH>
+<TH WIDTH="9%">8</TH><TH WIDTH="9%">9</TH></TR>
+<TR>
+<TD>Content</TD>
+<TD VALIGN=top ALIGN=center><TT>0</TT></TD>
+<TD VALIGN=top ALIGN=center><TT>1<BR>81</TT></TD><TD>-</TD><TD>-</TD>
+<TD VALIGN=top ALIGN=center><TT>64<BR>4</TT></TD>
+<TD VALIGN=top ALIGN=center><TT>25</TT></TD>
+<TD VALIGN=top ALIGN=center><TT>36<BR>16</TT></TD>
+<TD VALIGN=top ALIGN=center>-</TD>
+<TD VALIGN=top ALIGN=center>-</TD>
+<TD VALIGN=top ALIGN=center><TT>9<BR>49</TT></TD>
+</TR>
+</TABLE></TT></CENTER>
+<P>
+Note that in this phase, we placed each item in a bin indexed by the
+least significant decimal digit.
+<P>
+Repeating the process, will produce:
+<P> <CENTER><TABLE BORDER=1>
+<TR><TH>Bin</TH><TH WIDTH="9%">0</TH><TH WIDTH="9%">1</TH>
+<TH WIDTH="9%">2</TH><TH WIDTH="9%">3</TH>
+<TH WIDTH="9%">4</TH><TH WIDTH="9%">5</TH>
+<TH WIDTH="9%">6</TH><TH WIDTH="9%">7</TH>
+<TH WIDTH="9%">8</TH><TH WIDTH="9%">9</TH></TR>
+<TR>
+<TD>Content</TD>
+<TD  VALIGN=top ALIGN=center><TT>0<BR>1<BR>4<BR>9</TT></TD>
+<TD  VALIGN=top ALIGN=center><TT>16</TT></TD>
+<TD  VALIGN=top ALIGN=center><TT>25</TT></TD>
+<TD  VALIGN=top ALIGN=center><TT>36</TT></TD>
+<TD  VALIGN=top ALIGN=center><TT>49</TT></TD>
+<TD  VALIGN=top ALIGN=center><TT>-</TT></TD>
+<TD  VALIGN=top ALIGN=center><TT>64</TT></TD>
+<TD  VALIGN=top ALIGN=center><TT>-</TT></TD>
+<TD  VALIGN=top ALIGN=center><TT>81</TT></TD>
+<TD  VALIGN=top ALIGN=center><TT>-</TT></TD></TR>
+</TABLE></CENTER>
+<P>
+In this second phase, we used the leading decimal digit to allocate items
+to bins, being careful to add each item to the end of the bin.
+<P>
+We can apply this process to numbers of any size expressed to any suitable
+base or <I>radix</I>.
+<H4>7.5.1 Generalised Radix Sorting</H4>
+We can further observe that it's not necessary to use the same radix
+in each phase, suppose that the sorting key is a sequence of
+fields, each with bounded ranges,
+<I>eg</I> the key is a date using the structure:
+<FONT COLOR=green><PRE>typedef struct t_date {
+    int day;
+    int month;
+    int year; 
+} date;
+</PRE></FONT>
+If the ranges for <TT><FONT COLOR=green>day</FONT></TT> and
+<TT><FONT COLOR=green>month</FONT></TT> are limited in the obvious way, 
+and the range for <TT><FONT COLOR=green>year</FONT></TT>
+is suitably constrained,
+<I>eg</I> 1900 &lt; <TT><FONT COLOR=green>year</FONT></TT> &lt;= 2000,
+then we can apply the same procedure except that we'll employ a
+different number of bins in each phase.
+In all cases, we'll sort first using the least significant "digit"
+(where "digit" here means a field with a limited range), then
+using the next significant "digit", placing each item after all the items
+already in the bin, and so on.
+<P>
+Assume that the key of the item to be sorted has <B>k</B> fields,
+<B>f<SUB>i</SUB></B>|<B>i</B>=0..<B>k-1</B>,
+and that each <B>f<SUB>i</SUB></B> has <B>s<SUB>i</SUB></B>
+discrete values,
+then a generalised radix sort procedure can be written:
+<P>
+<CENTER><TABLE BORDER=1 CELLPADDING=2>
+<TR><TD WIDTH=450><FONT COLOR=green><PRE>
+radixsort( A, n ) {
+    for(i=0;i&lt;k;i++) {
+        for(j=0;j&lt;s<SUB>i</SUB>;j++) bin[j] = EMPTY;
+</PRE></FONT></TD>
+<TD WIDTH=50><B>O(s<SUB>i</SUB>)</B></TD></TR>
+<TR><TD ><FONT COLOR=green><PRE>
+        for(j=0;j&lt;n;j++) {
+            move A<SUB>i</SUB> 
+            to the end of bin[A<SUB>i</SUB>->f<SUB>i</SUB>]
+            }</PRE></FONT></TD>
+<TD><B>O(n)</B></TD></TR></TR>
+<TR><TD ><FONT COLOR=green><PRE>
+        for(j=0;j&lt;s<SUB>i</SUB>;j++) 
+            concatenate bin[j] onto the end of A;
+        }
+}</PRE></FONT></TD>
+<TD><B>O(s<SUB>i</SUB>)</B></TD>
+</TR>
+</TABLE>
+<TABLE BORDER=1>
+<TR>
+<TD WIDTH=100>Total</TD>
+<TD WIDTH=400 >
+<IMG SRC=latex/radixsort.gif></TD></TR>
+</TABLE>
+</CENTER>
+<P>
+Now if, for example, the keys are integers in (0,<B>b<SUP>k</SUP></B>-1),
+for some constant <B>k</B>,
+then the keys can be viewed as <B>k</B>-digit base-<B>b</B> integers.<BR>
+Thus, <B>s<SUB>i</SUB> = b</B> for all <B>i</B> and
+the time complexity becomes
+<B>O(n+kb)</B> or <B>O(n)</B>.
+<I><FONT COLOR=red>This result depends on <B>k</B> being constant.</FONT></I>
+<P>
+If <B>k</B> is allowed to increase with <B>n</B>,
+then we have a different picture.
+For example,
+it takes
+log<SUB><FONT SIZE=-1>2</FONT></SUB><B>n</B>
+binary digits to represent an integer &lt;<B>n</B>.
+If the key length were allowed to increase with <B>n</B>,
+so that <B>k</B> = log<B>n</B>,
+then we would have:<BR>
+<IMG SRC=latex/rsort1.gif>. 
+<P>
+Another way of looking at this is to note that if the range of the
+key is restricted to
+(0,<B>b<SUP>k</SUP></B>-1),
+then we will be able to use the radixsort approach effectively
+<FONT COLOR=blue>if we allow duplicate keys when <B>n</B>&gt;<B>b<SUP>k</SUP></B>.</FONT>
+However, if we need to have unique keys, 
+then <B>k</B> must increase to at least 
+log<SUB><FONT SIZE=-1>b</FONT></SUB><B>n</B>.
+Thus, as <B>n</B> increases, we need to have log<B>n</B> phases,
+each taking <B>O(n)</B> time,
+and the radix sort is the same as quick sort!
+<P>
+<H3>Sample code </H3>
+This sample code sorts arrays of integers on various radices:
+the number of bits used for each radix can be set with the
+call to SetRadices. The <TT>Bins</TT> class is used in each 
+phase to collect the items as they are sorted.
+<TT>ConsBins</TT> is called to set up a set of bins:
+each bin must be large enough to accommodate the whole array,
+so RadixSort can be very expensive in its memory usage!
+<UL>
+<LI><A HREF=source/RadixSort.h TARGET=source>RadixSort.h</A>
+<LI><A HREF=source/RadixSort.c TARGET=source>RadixSort.c</A>
+<LI><A HREF=source/Bins.h TARGET=source>Bins.h</A>
+<LI><A HREF=source/Bins.c TARGET=source>Bins.c</A>
+</UL>
+
+<P>
+
+<P>
+<A NAME=radix_sort_anim>
+<TABLE BGCOLOR="#00f0f0" WIDTH="100%"> 
+<TR><TD >
+<FONT COLOR=blue FACE=helvetica>
+<B>Radix Sort Animation</B><BR>
+This animation was written by Woi Ang.</FONT></TD>
+<TD ALIGN=center>
+  <TABLE BORDER=0>
+  <TR><TD>
+    <applet CODEBASE="Java/radix_sort" code = "AlgAnimApp.class" width = 200 height = 35>
+    <param name = "filename" value = "AlgThread.java">
+    <param name = "buttonname" value = "Run the Animation">
+    <param name = "algname" value = "Radix Sort">
+    </applet>
+    </TD>
+  </TR>
+</TABLE>
+</TD>
+<TD><FONT FACE=helvetica>Please email comments to:<BR>
+<A HREF=mailto:morris@ee.uwa.edu.au>morris@ee.uwa.edu.au</A>
+</TR>
+</TABLE>
+
+<TABLE CELLPADDING=5 WIDTH="100%" BGCOLOR="#00f0f0" CELLSPACING=4>
+<TR><TD WIDTH=50%>
+Continue on to <A HREF="search_trees.html">Search Trees</A></TD>
+<TD>Back to the <A HREF="ds_ToC.html">Table of Contents</A>
+</TD></TR></TABLE>
+<SMALL>
+&copy; <A HREF=mailto:morris@ee.uwa.edu.au>John Morris</A>, 1998
+</SMALL>
+</BODY>
+</HTML>

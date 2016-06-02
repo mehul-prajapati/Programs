@@ -1,0 +1,46 @@
+<HTML>
+<HEAD><TITLE>assert</TITLE></HEAD>
+<BODY>
+<PRE>
+ASSERT(3V)             C LIBRARY FUNCTIONS             ASSERT(3V)
+
+NAME
+     assert - program verification
+
+SYNOPSIS
+     #include &lt;assert.h&gt;
+
+     assert(expression)
+
+DESCRIPTION
+     assert() is a macro that indicates <B>expression</B> is expected to
+     be  true  at  this  point  in the program.  If <B>expression</B> is
+     false (0), it displays a diagnostic message on the  standard
+     output  and exits (see exit(2V)).  Compiling with the cc(1V)
+     option -DNDEBUG, or placing the preprocessor control  state-
+     ment
+
+          #define NDEBUG
+
+     before the  ``#include  &lt;assert.h&gt;''  statement  effectively
+     deletes assert() from the program.
+
+SYSTEM V DESCRIPTION
+     The System V version of assert() calls abort(3) rather  than
+     exit().
+
+SEE ALSO
+     cc(1V), exit(2V), abort(3)
+
+DIAGNOSTICS
+     Assertion failed: file <B>f</B> line <B>n</B>
+          The expression passed to the assert() statement at line
+          <B>n</B> of source file <B>f</B> was false.
+
+SYSTEM V DIAGNOSTICS
+     Assertion failed: <B>expression</B>, file <B>f</B>, line <B>n</B>
+          The <B>expression</B> passed to the assert() statement at line
+          <B>n</B> of source file <B>f</B> was false.
+</PRE>
+</BODY>
+</HTML>

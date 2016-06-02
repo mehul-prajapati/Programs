@@ -1,0 +1,161 @@
+<HTML><HEAD>
+<TITLE>Data Structures and Algorithms: Error Handling</TITLE>
+
+<META name="description" content="Data Structures and Algorithms Course Notes,
+PLDS210 University of Western Australia">
+<META name="keywords" content="data structures,algorithms,abstract data types,
+error handling">
+</HEAD>
+<BODY BGCOLOR="#ffffff">
+<TABLE BGCOLOR="#00c0f0" WIDTH="100%" CELLSPACING=0 CELLPADDING=0>
+<TR BGCOLOR="#00f0f0"><TD ALIGN=right>
+<FONT FACE=helvetica SIZE=+1><I>Data Structures and Algorithms</I></FONT>
+</TD></TR>
+
+<TR><TD><FONT FACE=helvetica SIZE=+2><B>2.7 Error Handling</B></FONT>
+</TD></TR>
+</TABLE>
+<P>
+
+No program or program fragment can be considered complete
+until appropriate error handling has been added.
+Unexpected program failures are a disaster - 
+at the best, they cause frustration because the program
+user must repeat minutes or hours of work,
+but in life-critical applications,
+even the most trivial program error, if not processed
+correctly, has the potential to kill someone.
+<P>
+If an error is fatal, in the sense that a program cannot
+sensibly continue, then the program must be able to
+"die gracefully". This means that it must
+<UL>
+<LI> inform its user(s) <I>why</I> it died, and
+<LI> save as much of the program state as possible.
+</UL>
+
+<P>
+<H4>2.7.1 Defining Errors</H4>
+The first step in determining how to handle errors is to
+define precisely what is considered to be an error.
+Careful specification of each software component is part
+of this process.
+The pre-conditions of an ADT's methods will specify the states of 
+a system (the input states) which a method is able to process.
+The post-conditions of each method should
+clearly specify the result of processing <I>each</I> acceptable
+input state. 
+Thus, if we have a method:
+<FONT COLOR=green><PRE>int f( some_class a, int i )
+/* PRE-CONDITION: i >= 0 */
+/* POST-CONDITION:
+    if ( i == 0 )
+        return 0 and a is unaltered
+    else
+        return 1 and update a's i-th element by .... */ 
+</PRE></FONT>
+<UL>
+<LI>This specification tells us that i==0 is a meaningless input
+that <FONT COLOR=green><TT>f</TT></FONT> should flag by returning 0 but otherwise
+ignore.
+<LI><FONT COLOR=green><TT>f</TT></FONT> is expected to handle correctly all positive values of 
+<FONT COLOR=green><TT>i</TT></FONT>.
+<LI>The behaviour of <FONT COLOR=green><TT>f</TT></FONT> is <B>not</B> specified for negative
+values of <FONT COLOR=green><TT>i</TT></FONT>,
+<I>ie</I> it also tells us that  
+<LI>It is an error for a client to call
+<FONT COLOR=green><TT>f</TT></FONT> with a 
+negative value of <FONT COLOR=green><TT>i</TT></FONT>.
+</UL>
+Thus, a complete specification will specify
+<UL>
+<LI> all the acceptable input states, <I>and</I>
+<LI> the action of a method when presented with each
+acceptable input state.
+</UL>
+By specifying the acceptable input states in 
+pre-conditions,
+it will also divide responsibility for errors unambiguously.
+<UL>
+<LI> The client is responsible for the pre-conditions: 
+it is an error for the client to call the method with an unacceptable
+input state, and
+<LI> The method is responsible for establishing the post-conditions
+and for reporting errors which occur in doing so.
+</UL>
+<P>
+<H4>2.7.2 Processing errors</H4>
+
+Let's look at an error which
+must be handled by the constructor for any dynamically allocated
+object:
+the system may not be able to allocate enough memory for the
+object.
+<P>
+A good way to create a disaster is to do this:
+<FONT COLOR=green><PRE>
+X ConsX( .... )
+    {
+    X x = malloc( sizeof(struct t_X) );
+    if ( x == NULL ) {
+        printf("Insuff mem\n"); exit( 1 );
+        }
+    else
+       .....
+    }
+</PRE></FONT>
+Not only is the error message so cryptic that it is 
+likely to be little help in locating the cause of the
+error (the message should at least be "Insuff mem for X"!),
+but the program will simply exit,
+possibly leaving the system in some unstable, partially
+updated, state.
+This approach has other potential problems:
+<UL>
+<LI> What if we've built this code into some elaborate GUI
+program with no provision for "standard output"?
+We may not even see the message as the program exits!
+<LI> We may have used this code in a system, such as
+an embedded processor (a control computer), which has
+no way of processing an output stream of characters at all.
+<LI> The use of 
+<FONT COLOR=green><TT>exit</TT></FONT> assumes the presence of
+some higher level program, <I>eg</I> a Unix shell,
+which will capture and process the error code 1.
+</UL>
+<CENTER>
+<BLOCKQUOTE><FONT COLOR=red SIZE=+1>
+As a general rule, I/O is non-portable!
+</FONT></BLOCKQUOTE>
+</CENTER>
+
+A function like <FONT COLOR=green><TT>printf</TT></FONT>
+will produce error messages on
+the 'terminal' window of your modern workstation,
+but if you are running a GUI program like Netscape,
+where will the messages go?
+<P>
+So, the same function may not produce useful diagnostic output
+for two programs running in different environments on the <B>same</B>
+processor!
+How can we expect it to be useful if we transport this program
+to another system altogether, <I>eg</I> a Macintosh or a Windows
+machine?
+<P>
+Before looking at what we can do in ANSI C, let's look at how some 
+other languages tackle this problem.
+
+
+<P>
+
+<TABLE CELLPADDING=5 WIDTH="100%" BGCOLOR="#00f0f0" CELLSPACING=0>
+<TR><TD>
+Continue on to <A HREF="ada_exceptions.html">Ada Exceptions</A><BR>
+Back to the <A HREF="ds_ToC.html">Table of Contents</A>
+</TD></TR></TABLE>
+<SMALL>
+&copy; <A HREF=mailto:morris@ee.uwa.edu.au>John Morris</A>, 1998
+</SMALL>
+</BODY>
+</HTML>
+

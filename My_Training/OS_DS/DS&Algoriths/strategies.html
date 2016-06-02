@@ -1,0 +1,135 @@
+
+<HTML><HEAD>
+<TITLE>Data Structures and Algorithms: Programming Strategies</TITLE>
+
+<META name="description" content="Data Structures and Algorithms Course Notes,
+PLDS210 University of Western Australia">
+<META name="keywords" content="data structures,algorithms,abstract data types,
+computer science,course notes">
+</HEAD>
+<BODY BGCOLOR="#ffffff">
+
+<TABLE BGCOLOR="#00c0f0" WIDTH="100%" CELLSPACING=0 CELLPADDING=0>
+<TR BGCOLOR="#00f0f0"><TD ALIGN=right>
+<FONT FACE=helvetica SIZE=+1><I>Data Structures and Algorithms</I></FONT>
+</TD></TR>
+
+<A NAME=Strategies>
+<TR><TD><FONT FACE=helvetica SIZE=+2><B>2. Programming Strategies</B></FONT>
+</TD></TR>
+</TABLE>
+
+<P>
+It is necessary to have some formal way of constructing a program so that it
+can be built efficiently and reliably.
+Research has shown that this can be best
+done by decomposing a program into suitable small modules, which can themselves
+be written and tested before being incorporated into larger modules, which are
+in turn constructed and tested. The alternative is create what was often called
+"sphaghetti code" because of its tangled of statements and jumps. Many
+expensive, failed projects have demonstrated that, however much you like to eat
+sphaghetti, using it as a model for program construction is not a good idea!<p>
+It's rather obvious that if we split any task into a number of smaller tasks
+which can be completed individually, then the management of the larger task
+becomes easier. However, we need a formal basis for partitioning our large task
+into smaller ones. The notion of <i>abstraction</i> is extremely useful here.
+Abstractions are high level views of objects or functions which enable us to
+forget about the low level details and concentrate on the problem at hand.<p>
+To illustrate, a truck manufacturer uses a computer to control the engine
+operation - adjusting fuel and air flow to match the load. The computer is
+composed of a number of silicon chips, their interconnections and a program.
+These details are irrelevant to the manufacturer - the computer is a black box
+to which a host of sensors (for engines speed, accelerator pedal position, air
+temperature, etc) are connected. The computer reads these sensors and adjusts
+the engine controls (air inlet and fuel valves, valve timing, etc)
+appropriately. Thus the manufacturer has a high level or <i>abstract</i> view
+of the computer. He has specified its behaviour with statements like:
+<P><BQ>
+<BLOCKQUOTE><FONT COLOR=blue>
+"When the accelerator pedal is 50% depressed, air and fuel valves should be
+opened until the engine speed reaches 2500rpm".
+</BLOCKQUOTE></FONT COLOR>
+</BQ>
+<P>
+He doesn't care how the computer calculates
+the optimum valve settings - for instance it could use either integer
+or floating point arithmetic - he is only interested in behaviour that matches
+his specification.
+<p>
+In turn, the manager of a transport company has an even higher level or <i>more
+abstract</i> view of a truck. It's simply a means of transporting goods from
+point A to point B in the minimum time allowed by the road traffic laws. His
+specification contains statements like:
+<p>
+<BLOCKQUOTE><FONT COLOR=blue>
+"The truck, when laden with 10 tonnes, shall need no more than 20l/100km of
+fuel when travelling at 110kph."
+</FONT></BLOCKQUOTE>
+<p>
+How this specification is achieved is irrelevant to him: it matters little
+whether there is a control computer or some mechanical engineer's dream of cams,
+rods, gears, <I>etc.</I><p>
+There are two important forms of abstraction: functional abstraction and
+structural abstraction. In functional abstraction, we specify a function for a
+module, <I>i.e.</I>
+<p>
+<BLOCKQUOTE><FONT COLOR=blue>
+"This module will sort the items in its input stream into ascending order based
+on an ordering rule for the items and place them on its output
+stream."
+</BLOCKQUOTE></FONT>
+<p>
+As we will see later, there are many ways to sort items - some more efficient
+than others. At this level, we are not concerned with how the sort is
+performed, but simply that the output is sorted according to our ordering
+rule.
+<p>
+<TABLE CELLPADDING=0>
+<TR><TD VALIGN=top>
+The second type of abstraction - structural abstraction - is better known as
+object orientation. In this approach, we construct software models of the
+behaviour of real world items, i.e. our truck manufacturer, in analysing the
+performance of his vehicle, would employ a software model of the control
+computer. For him, this model is abstract - it could mimic the behaviour of the
+real computer by simply providing a behavioural model with program statements
+like:</TD><TD>
+<PRE><FONT COLOR=green>if ( pedal_pos &gt; 50.0 ) {
+	set_air_intake( 0.78*pedal_pos);
+	set_fuel_valve( 0.12 + 0.32*pedal_pos);
+	}
+</FONT></PRE>
+</TD></TR>
+</TABLE>
+Alternatively, his model could incorporate details of the computer and
+its program.
+<p>
+However, he isn't concerned: the computer is a "black box" to him and he's
+solely concerned with its <i>external</i> behaviour. <i>To simplify the
+complexity of his own model</i> (the vehicle as a whole), he doesn't want to
+concern himself with the internal workings of the control computer; he wants to
+assume that someone else has correctly constructed a reliable model of it for
+him.
+
+
+<P>
+<TABLE WIDTH="100%" BGCOLOR="#00f0ff">
+<TR><TD><H3>Key terms</H3></TD></TR></TABLE>
+<DL>
+<DT><FONT COLOR="#fa0000"><B>hacking</B></FONT>
+   <DD>Producing a computer program rapidly, without thought and without any
+       design methodology. 
+</DL>
+
+<P>
+
+<TABLE CELLPADDING=5 WIDTH="100%" BGCOLOR="#00f0f0" CELLSPACING=0>
+<TR><TD>
+Continue on to <a href=objects.html>Objects and ADTs</a><br>
+Back to the <A HREF="ds_ToC.html">Table of Contents</A>
+</TD></TR></TABLE>
+<SMALL>
+&copy; <A HREF=mailto:morris@ee.uwa.edu.au>John Morris</A>, 1998
+</SMALL>
+</BODY>
+</HTML>
+

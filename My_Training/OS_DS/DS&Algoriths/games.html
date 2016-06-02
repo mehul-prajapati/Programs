@@ -1,0 +1,63 @@
+<HTML><HEAD>
+<TITLE>Data Structures and Algorithms: Games</TITLE>
+
+<META name="description" content="Data Structures and Algorithms Course Notes,
+PLDS210 University of Western Australia">
+<META name="keywords" content="data structures,algorithms,abstract data types ">
+</HEAD>
+<BODY BGCOLOR="#ffffff">
+<TABLE BGCOLOR="#00c0f0" WIDTH="100%" CELLSPACING=0 CELLPADDING=0>
+<TR BGCOLOR="#00f0f0"><TD ALIGN=right>
+<FONT FACE=helvetica SIZE=+1><I>Data Structures and Algorithms</I></FONT>
+</TD></TR>
+
+<TR><TD><FONT FACE=helvetica SIZE=+2><B>14 Games</B></FONT>
+</TD></TR>
+</TABLE>
+<P>
+
+<H3>Naive Solutions</H3>
+
+A naive program attempting to play a game like chess will:
+<OL TYPE=a>
+<LI> Determine the number of moves which can be made from the current position,
+<LI> For each of these moves,
+<OL TYPE=i>
+<LI> Apply the move to the current position,
+<LI> Calculate a "score" for the new position,
+<LI> If the maximum search "depth" has been reached, 
+       return with this score as the score for this move,
+<LI> else recursively call the program with the new position.
+</OL>
+<LI> Choose the move with the best score and return its score
+     and the move generating it to the calling routine.
+</OL>
+Because there are usually at least 20 possible moves from any given chess
+position, to search to a depth of <B>m</B> requires ~20<SUP>m</SUP></B>
+moves.
+Since good human players usually look 10 or more moves ahead,
+the simple algorithm would severely tax the capabilities of even the
+fastest modern computer.
+<P>
+However, with a little cunning, the number of moves which needs to be
+searched can be dramatically reduced - enabling a computer to search
+deeper in a reasonable time and, as recent events have shown, 
+enable a computer to finally be a match for even the best human players.
+
+<H3>Alpha-Beta Algorithm</H3>
+
+The Alpha-Beta algorithm reduces the number of moves which need to be
+explored by "cutting off" regions of the game tree which cannot produce
+a better result than has already been obtained in some part of the 
+tree which has already been searched.
+
+<TABLE CELLPADDING=5 WIDTH="100%" BGCOLOR="#00f0f0" CELLSPACING=4>
+<TR><TD WIDTH=50%>
+Appendices: <A HREF=ANSI_C.html>A ANSI C</A></TD>
+<TD>Back to the <A HREF="ds_ToC.html">Table of Contents</A>
+</TD></TR></TABLE>
+<SMALL>
+&copy; <A HREF=mailto:morris@ee.uwa.edu.au>John Morris</A>, 1998
+</SMALL>
+</BODY>
+</HTML>

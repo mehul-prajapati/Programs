@@ -1,0 +1,346 @@
+<HTML><HEAD>
+<TITLE>Data Structures and Algorithms: Hard Problems</TITLE>
+
+<META name="description" content="Data Structures and Algorithms Course Notes,
+PLDS210 University of Western Australia">
+<META name="keywords" content="data structures,algorithms,abstract data types,
+hard problems, intractable problems, NP-complete problems,
+Euler's problem, Hamiltonian cycle, Travelling Salesman Problem,
+class P, class NP">
+</HEAD>
+<BODY BGCOLOR="#ffffff">
+<TABLE BGCOLOR="#00c0f0" WIDTH="100%" CELLSPACING=0 CELLPADDING=0>
+<TR BGCOLOR="#00f0f0"><TD ALIGN=right>
+<FONT FACE=helvetica SIZE=+1><I>Data Structures and Algorithms</I></FONT>
+</TD></TR>
+
+<TR><TD><FONT FACE=helvetica SIZE=+2><B>13 Hard or Intractable Problems</B></FONT>
+</TD></TR>
+</TABLE>
+<P>
+
+If a problem has an <B>O(n<SUP>k</SUP>)</B> time algorithm 
+(where <B>k</B> is a constant), then we class it 
+as having 
+<FONT COLOR="#fa0000"><B>polynomial time complexity</B></FONT>
+and as being efficiently solvable.
+<P>
+If there is no known polynomial time algorithm, then the problem is classed as 
+<FONT COLOR="#fa0000"><B>intractable</B></FONT>.
+<P>
+The dividing line is not always obvious. 
+<A NAME=euler></A>
+Consider two apparently similar problems:
+<CENTER>
+<TABLE WIDTH=80%>
+<TR><TD VALIGN=top><B>Euler's problem</B> <BR>
+(often characterized as the Bridges of 
+K&ouml;nigsberg - a popular 18th C puzzle)</TD>
+<TD>asks whether there is a path through a graph which 
+traverses each edge only once.</TD></TR>
+<TR><TD VALIGN=top>
+<B>Hamilton's problem</B></TD>
+<TD> asks whether there is a path through a 
+graph which visits each vertex exactly once.
+</TD></TR>
+</TABLE>
+</CENTER>
+
+<H3>Euler's problem</H3>
+<TABLE>
+<TR>
+<TD><IMG SRC=fig/konigsberg.gif></TD>
+<TD>The 18th century German city of K&ouml;nigsberg  was situated on the river Pregel. 
+Within a park built on the banks of the river, there were two islands joined by seven 
+bridges.
+<P>
+The puzzle asks whether it is possible to take a tour through the park,
+crossing each bridge only once.
+</TD></TR>
+</TABLE> 
+<P> 
+An exhaustive search requires starting at every possible point and traversing all the 
+possible paths from that point - an <B>O(n!)</B> problem. 
+However Euler showed that an 
+<FONT COLOR="#fa0000"><B>Eulerian path</B></FONT> existed <I>iff</I>
+<UL>
+<LI>it is possible to go from any vertex to any other by following 
+the edges (the graph must be connected) <I>and</I>
+<LI>every vertex must have an even number of edges connected 
+to it, with at most two exceptions (which constitute the 
+starting and ending points).
+</UL>
+It is easy to see that these are necessary conditions: 
+to complete the tour, one needs to enter 
+and leave every point except the start and end points.
+The proof that these are sufficient 
+conditions may be found in the literature . 
+Thus we now have a <B>O(n)</B> problem to determine 
+whether a path exists.
+<P>
+<TABLE><TR><TD>
+<CENTER>
+<FONT SIZE=-1>Transform the map into a graph in which<BR>
+the nodes represent the "dry land" points<BR>
+and the arcs represent the bridges.<BR>
+<IMG SRC=fig/euler.gif><BR>
+</TD>
+<TD>We can now easily see that the Bridges of K&ouml;nigsberg does not have a solution.<P>
+A quick inspection shows that it does have a Hamiltonian path. </TD>
+</TR>
+</TABLE>
+<P>
+<BLOCKQUOTE><FONT COLOR=red>However there is no 
+known efficient algorithm for determining whether a Hamiltonian path exists.</FONT>
+</BLOCKQUOTE>
+But if a path was found, then it can be verified to be a solution in polynomial time: 
+we simply verify that each edge in the path is actually an edge 
+(<B>O(e)</B> if the edges are stored in an adjacency matrix) 
+and that each vertex is visited only once (<B>O(n<SUP>2</SUP>)</B> in the worst case).
+<P>
+<H3>Classes P and NP</H3>
+<TABLE>
+<TR>
+<TD WIDTH="30%">
+Euler's problem lies in the <FONT COLOR="#fa0000"><B>class P</B></FONT>:
+problems solvable in Polynomial time. 
+Hamilton's problem is <I>believed</I>
+to lie in <FONT COLOR="#fa0000"><B>class NP</B></FONT> (Non-deterministic Polynomial).
+<P>
+Note that I wrote "believed" in the previous sentence. 
+No-one has succeeded in proving that efficient (<I>ie</I> polynomial time)
+algorithms <B>don't</B> exist yet!
+</TD><TD BGCOLOR="#ffffcc">
+
+<H4>What does NP mean?</H4>
+
+At each step in the algorithm,
+you <B>guess</B> which possibility to try next.
+This is the non-deterministic part: it doesn't matter which possibility
+you try next.
+There is no information used from previous attempts
+(other than not trying something that you've already tried)
+to determine which alternative should be tried next.
+However, having made a guess, you can determine in polynomial
+time whether it is a solution or not.
+<P>
+Since nothing from previous trials helps you to determine which
+alternative should be tried next, 
+you are forced to investigate <B>all</B> possibilities to find
+a solution.
+So the only systematic thing you can do is use some strategy for
+systematically working through all possibilities, 
+<I>eg</I> setting out all permutations of the cities for the
+travelling salesman's tour.
+
+</TD>
+</TR>
+</TABLE>
+<P>
+Many other problems lie in <B>class NP</B>. Some examples follow.
+
+<H4>Composite Numbers</H4>
+
+Determining whether a number can be written as the product 
+of two other numbers is the composite numbers problem.
+If a solution is found, it is simple to verify it, but no efficient 
+method of finding the solution exists.
+<H4>Assignment</H4>
+Assignment of compatible room-mates: assume we have a number of students to be 
+assigned to rooms in a college. They can be represented as the vertices on a graph with 
+edges linking compatible pairs. If we have two per room, a class P algorithm exists, but if 
+three are to be fitted in a room, we have a class NP problem.
+<H4>Boolean satisfiability</H4>
+Given an arbitrary boolean expression in <B>n</B> variables:
+<BLOCKQUOTE>
+<B>a<SUB>1</SUB></B> <I>op</I>
+<B>a<SUB>2</SUB></B> <I>op</I> ...
+<I>op</I> <B>a<SUB>n</SUB></B>
+</BLOCKQUOTE>
+where <I>op</I> are boolean operators, <I>and</I>, <I>or</I>, ..
+<P>
+Can we find an assignment of (<I>true</I>,<I>false</I>) to the
+<B>a<SUB>i</SUB></B> so that the expression is <I>true</I>?
+This problem is equivalent to the <B>circuit-satisfiability problem</B>
+which asks can we find a set of inputs which will produce a <I>true</I>
+at the output of a circuit composed of arbitrary logic gates.
+<P>
+A solution can only be found by trying <B>all</B> 2<SUP>n</SUP> possible
+assignments.
+
+<H4>Map colouring</H4>
+
+<TABLE>
+<TR><TD>
+The three-colour map colouring problem asks if we can colour a map so that no 
+adjoining countries have the same colour. 
+Once a solution has been guessed, then it is 
+readily proved. 
+<P>[This problem is easily answered if there are only 2 colours - there must be 
+no point at which an odd number of countries meet - or 4 colours - there is a proof that 4 
+colours suffice for any map.]</TD>
+<TD><IMG SRC=fig/map.gif></TD></TR>
+</TABLE>
+<P>This problem has a graph equivalent: 
+each vertex represents a country and an edge 
+is drawn between two vertices if they share a common border.
+<P>	
+Its solution has a more general application. 
+If we are scheduling work in a factory: 
+each vertex can represent a task to be performed - they are linked by an edge if they share a 
+common resource, <I>eg</I> require a particular machine. 
+A colouring of the vertices with 3 colours then provides a 3-shift schedule for the factory.
+<P>
+Many problems are reducible to others: map colouring can be reduced to graph 
+colouring. 
+A solution to a graph colouring problem is effectively a solution to the 
+equivalent map colouring or scheduling problem.
+The map or graph-colouring problem may be reduced to the boolean satisfiability
+problem.
+To give an informal description of this process,
+assume the three colours are red, blue and green.
+Denote the partial solution, "A is red" by <B>a<SUB>r</SUB></B> so that we have
+a set of boolean variables:
+<CENTER>
+<TABLE BORDER=1 CELLPADDING=5><TR>
+<TD><B>a<SUB>r</SUB></B></TD><TD>A is red</TD>
+</TR>
+<TD><B>a<SUB>b</SUB></B></TD><TD>A is blue</TD></TR>
+<TD><B>a<SUB>g</SUB></B></TD><TD>A is green</TD></TR>
+<TD><B>b<SUB>r</SUB></B></TD><TD>B is red</TD></TR>
+<TD><B>b<SUB>b</SUB></B></TD><TD>B is blue</TD></TR>
+<TD><B>b<SUB>g</SUB></B></TD><TD>B is green</TD></TR>
+<TD><B>c<SUB>r</SUB></B></TD><TD>C is red</TD></TR>
+<TD HALIGN=center>...</TD><TD HALIGN=center>...</TR>
+</TABLE>
+</CENTER>
+<P>
+Now a solution to the problem may be found by finding values for
+<B>a<SUB>r</SUB></B>,
+<B>a<SUB>b</SUB></B>,
+<I>etc</I> which make the expression true:
+<BLOCKQUOTE>
+((<B>a<SUB>r</SUB></B> <I>and</I>
+<I>not</I> <B>a<SUB>b</SUB></B> <I>and</I>
+<I>not</I> <B>a<SUB>g</SUB></B>)
+<I>and</I> (
+(<B>b<SUB>b</SUB></B> <I>and</I>
+(<B>c<SUB>b</SUB></B> <I>and</I>
+(<B>d<SUB>g</SUB></B> ....
+</BLOCKQUOTE>
+<P>
+Thus solving the map colouring problem is equivalent to finding an
+assignment to the variables which results in a <I>true</I> value for 
+the expression - the boolean satisfiability problem.
+<P>
+There is a special class of problems in <B>NP</B>: the <B>NP-complete</B> problems. 
+All the problems in <B>NP</B> are efficiently reducible to them. 
+By efficiently, we mean in polynomial time, 
+so the term polynomially reducible provides a more precise definition.
+<P>
+In 1971, Cook was able to prove that the boolean satisfiability problem was <B>NP-complete</B>.
+Proofs now exist showing that many problems in <B>NP</B> are efficiently reducible 
+to the satisfiability problem. 
+Thus we have a large class of problems which will are all 
+related to each other: finding an efficient solution to one will result in an efficient solution 
+for them all.
+<P>
+An efficient solution has so far eluded a very large number of researchers but there 
+is also no proof that these problems cannot be solved in polynomial time,
+so the search continues.
+
+<P>
+Class <B>NP</B> problems are solvable by non-deterministic algorithms: these algorithms 
+consist of deterministic steps alternating with non-deterministic steps in which a random 
+choice (a guess) must be made.
+A deterministic algorithm must, given a possible solution,
+<UL>
+<LI> have at least one set of guessing steps which lead to the 
+acceptance of that solution, and
+<LI> always reject an invalid solution.
+</UL>
+<P>
+We can also view this from the other aspect: that of trying to determine a solution. 
+At each guessing stage, the algorithm randomly selects another element to add to the 
+solution set: this is basically building up a "game" tree. Various techniques exist for 
+pruning the tree - backtracking when an invalid solution is found and trying another 
+branch, but this is where the exponential time complexity starts to enter!
+<H4>Travelling salesman</H4>
+<A NAME=TSP></A>
+It's possible to cast this problem - which is basically an optimality one, we're 
+looking for the best tour - into a yes-no one also by simply asking:
+<BLOCKQUOTE>Can we find a tour with a cost less than <B>x</B>?
+</BLOCKQUOTE>
+<P>
+By asking this question until we find a tour with a cost <B>x</B> for which the answer is 
+provably no, we have found the optimal tour.
+This problem can also be proved to be in <B>NP</B>. (It is reducible to the Hamiltonian 
+circuit problem.)
+<P>
+Various <B>heuristics</B> have been developed to find near optimal solutions with efficient 
+algorithms.
+<P>
+One simple approach is the find the minimum spanning tree. 
+One possible tour simple traverses the MST twice. 
+So we can find a tour which is at most twice as long as the 
+optimum tour in polynomial time. Various heuristics can now be applied to reduce this 
+tour, eg by taking shortcuts.
+<P>
+An algorithm due to Christofides can be shown to produce a tour which is no more 
+than 50% longer than the optimal tour. 
+<TABLE>
+<TR><TD><IMG SRC=fig/tsp_mst.gif></TD>
+<TD>
+It starts with the MST and singles out all cities 
+which are linked to an odd number of cities. <BR>
+These are linked in pairs by a variant of the  procedure used to find compatible room-mates. 
+</TD></TR>
+<TR><TD><IMG SRC=fig/tsp.gif></TD>
+<TD> This can then be improved by taking shortcuts.</TD></TR>
+</TABLE>
+<P>
+Another strategy which works well in practice is to divide the "map" into many 
+small regions and to generate the optimum tour by exhaustive search within those small 
+regions. 
+A greedy algorithm can then be used to link the regions. 
+While this algorithm will 
+produce tours as little as 5% longer than the optimum tour in acceptable times, it is still not 
+guaranteed to produce the optimal solution.
+
+
+<P>
+<TABLE WIDTH="100%" BGCOLOR="#00c0f0">
+<TR><TD><H3>Key terms</H3></TD></TR></TABLE>
+<DL>
+<DT><FONT COLOR="#fa0000"><B>Polynomial Time Complexity</B></FONT>
+   <DD>Problems which have solutions with time complexity <B>O(n<SUP>k</SUP>)</B>
+       where <B>k</B> is a constant are said to have polynomial time complexity.
+<DT><FONT COLOR="#fa0000"><B>Class P</B></FONT>
+   <DD>Set of problems which have solutions with polynomial time complexity.
+<DT><FONT COLOR="#fa0000"><B>Non-deterministic Polynomial (NP)</B></FONT>
+   <DD>A problem which can be solved by a series of guessing (non-deterministic) steps
+		but whose solution can be verified as correct in polynomial time is said to
+     lie in class NP.
+<DT><FONT COLOR="#fa0000"><B>Eulerian Path</B></FONT>
+   <DD>Path which traverses each arc of a graph exactly once.
+<DT><FONT COLOR="#fa0000"><B>Hamiltonian Path</B></FONT>
+   <DD>Path which passes through each node of a graph exactly once.
+<DT><FONT COLOR="#fa0000"><B>NP-Complete Problems</B></FONT>
+   <DD>Set of problems which are all related to each other in the sense
+   that if any one of them can be shown to be in class P, all the others
+   are also in class P.
+</DL>
+
+<P>
+
+<TABLE CELLPADDING=5 WIDTH="100%" BGCOLOR="#00f0f0" CELLSPACING=4>
+<TR><TD WIDTH=50%>
+Continue on to <A HREF="games.html">Games</A></TD>
+<TD>Back to the <A HREF="ds_ToC.html">Table of Contents</A>
+</TD></TR></TABLE>
+<SMALL>
+&copy; <A HREF=mailto:morris@ee.uwa.edu.au>John Morris</A>, 1998
+</SMALL>
+</BODY>
+</HTML>
+

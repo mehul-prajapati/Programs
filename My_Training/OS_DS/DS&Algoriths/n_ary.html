@@ -1,0 +1,100 @@
+<HTML><HEAD>
+<TITLE>Data Structures and Algorithms: n-ary trees</TITLE>
+
+<META name="description" content="Data Structures and Algorithms Course Notes,
+PLDS210 University of Western Australia">
+<META name="keywords" content="data structures,algorithms,abstract data types,
+n-ary trees, B-trees, B+-trees">
+</HEAD>
+<BODY BGCOLOR="#ffffff">
+<TABLE BGCOLOR="#00c0f0" WIDTH="100%" CELLSPACING=0 CELLPADDING=0>
+<TR BGCOLOR="#00f0f0"><TD ALIGN=right>
+<FONT FACE=helvetica SIZE=+1><I>Data Structures and Algorithms</I></FONT>
+</TD></TR>
+
+<TR><TD><FONT FACE=helvetica SIZE=+2><B>8.2 General n-ary trees</B></FONT>
+</TD></TR>
+</TABLE>
+<P>
+
+If we relax the restriction that each node can have only one key,
+we can reduce the height of the tree.
+<TABLE>
+<TR>
+<TD>
+An <FONT COLOR="#fa0000"><B>m-way search tree</B></FONT>
+<OL TYPE=a>
+<LI>is empty or
+<LI>consists of a root containing <B>j</B> (1&lt;=<B>j</B>&lt;<B>m</B>) keys, <B>k<SUB>j</SUB></B>, 
+and<BR>
+a set of sub-trees, <B>T<SUB>i</SUB></B>, (<B>i</B> = 0..<B>j</B>), such that
+<OL TYPE=i>
+<LI>if <B>k</B> is a key in <B>T<SUB>0</SUB></B>, then <B>k</B> &lt;= <B>k<SUB>1</SUB></B>
+<LI>if <B>k</B> is a key in <B>T<SUB>i</SUB></B> (0&lt;<B>i</B>&lt;<B>j</B>), then <B>k<SUB>i</SUB></B> &lt;= <B>k</B> &lt;= <B>k<SUB>i+1</SUB></B>
+<LI>if <B>k</B> is a key in <B>T<SUB>j</SUB></B>, then <B>k</B> &gt; <B>k<SUB>j</SUB> </B>and
+<LI>all <B>T<SUB>i</SUB></B> are nonempty m-way search trees or all <B>T<SUB>i</SUB> </B>are empty
+</OL>
+</OL>
+</TD>
+<TD>
+<FONT COLOR=blue SIZE=-1>
+Or in plain English ..
+<OL TYPE=a>
+<LI VALUE=2>A node generally has <B>m-1</B> keys and <B>m</B> children.<BR>
+Each node has alternating sub-tree pointers and keys:<BR>
+<FONT FACE="helvetica">sub-tree | key | sub-tree | key | ... | key | sub_tree
+</FONT>
+<P>
+<OL TYPE=i>
+<LI>All keys in a sub-tree to the left of a key are smaller than it.
+<LI>All keys in the node <I>between</I> two keys are between those 
+two keys.
+<LI>All keys in a sub-tree to the right of a key are greater than it.
+<LI>This is the "standard" recursive part of the definition.
+</OL>
+</OL>
+</TD>
+</TABLE>
+<IMG SRC="fig/n_ary.gif">
+<P>
+The height of a complete m-ary tree with <B>n</B> nodes is ceiling(<B>log<SUB>m</SUB>n</B>).
+<P>
+A <B>B-tree of order m</B> is an m-way tree in which
+<OL TYPE=a>
+<LI> all leaves are on the same level and
+<LI>all nodes except for the root and the leaves have
+at least <B>m</B>/2  children and at most <B>m</B> children.
+The root has at least 2 children and at most <B>m</B> children.
+</OL>
+A variation of the B-tree, known as a <B>B+-tree</B>
+considers all the keys in nodes except the leaves as dummies.
+All keys are duplicated in the leaves.
+This has the advantage that is all the leaves are linked together sequentially,
+the entire tree may be scanned without visiting the higher nodes at all.
+
+<P>
+<TABLE WIDTH="100%" BGCOLOR="#00c0f0">
+<TR><TD><H3>Key terms</H3></TD></TR></TABLE>
+<DL>
+<DT><FONT COLOR="#fa0000"><B>n-ary trees (or n-way trees)</B></FONT>
+   <DD>Trees in which each node may have up to <B><I>n</I></B> children.
+<DT><FONT COLOR="#fa0000"><B>B-tree</B></FONT>
+   <DD>Balanced variant of an <B><I>n</I></B>-way tree.
+<DT><FONT COLOR="#fa0000"><B>B+-tree</B></FONT>
+   <DD>B-tree in which all the leaves are linked to facilitate fast
+       in order traversal.
+</DL>
+
+<P>
+
+<TABLE CELLPADDING=5 WIDTH="100%" BGCOLOR="#00f0f0" CELLSPACING=4>
+<TR><TD WIDTH=50%>
+Continue on to <A HREF="hash_tables.html">Hash Tables</A></TD>
+<TD>Back to the <A HREF="ds_ToC.html">Table of Contents</A>
+</TD></TR></TABLE>
+<SMALL>
+&copy; <A HREF=mailto:morris@ee.uwa.edu.au>John Morris</A>, 1998
+</SMALL>
+</BODY>
+</HTML>
+

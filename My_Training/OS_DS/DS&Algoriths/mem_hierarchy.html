@@ -1,0 +1,132 @@
+<HTML><HEAD>
+<TITLE>Data Structures and Algorithms - Memory Hierarchy</TITLE>
+</HEAD>
+<BODY BGCOLOR="#ffffff">
+<H1>Data Structures and Algorithms</H1>
+<HR>
+
+<H3>The Memory Hierarchy in Modern Processors</H3>
+<P>
+<CENTER><TABLE BORDER=1><FONT COLOR=RED>
+<TR><TD><FONT COLOR=RED><CENTER>All the figures in this section are typical of<BR>
+commercially available high-performance processors in September, 1996.<BR>
+<I>There is a distinct possibility that they will be somewhat
+out of date<BR> by the time you are reading this (even if it is only October, 1996!).<BR></I>
+Even in 1996, some very large machines were larger or faster<BR>
+than the figures below would indicate.</CENTER></FONT></TD></TR>
+</FONT></TABLE></CENTER>
+<P> 
+One of the most important considerations in understanding the
+performance capabilities of a modern processor is the
+memory hierarchy.
+We can classify memory based on its "distance" from the
+processor: here distance is measured by the number of
+machine cycles required to access it.
+As memory becomes further away from the main processor
+(<I>ie</I> becomes slower to access) the number of words in a 
+typical system increases. 
+Some indicative numbers for 1996 processors would be:
+<CENTER><TABLE>
+<TH>Name</TH><TH>Access Time<BR>(cycles)</TH><TH>Number of words</TH>
+<TR><TD>Register</TD><TD ALIGN=CENTER>1</TD><TD ALIGN=CENTER>32</TD></TR>
+<TR><TD>Cache<BR>Level 1</TD><TD ALIGN=CENTER>2</TD><TD ALIGN=CENTER>16x10<SUP>3</SUP></TD></TR>
+<TR><TD>Cache<BR>Level 2</TD><TD ALIGN=CENTER>5</TD><TD ALIGN=CENTER>0.25x10<SUP>6</SUP></TD></TR>
+<TR><TD>Main memory</TD><TD ALIGN=CENTER>30</TD><TD ALIGN=CENTER>10<SUP>8</SUP></TD></TR>
+<TR><TD>Disc</TD><TD ALIGN=CENTER>10<SUP>6</SUP></TD><TD ALIGN=CENTER>10<SUP>9</SUP></TD></TR>
+</TABLE></CENTER>
+<P>
+In 1996, high performance processors had clock frequencies of
+of 200-400 MHz or cycle times of 2.5-5.0 nanoseconds.
+
+<P>
+<H4>Registers</H4>
+Registers are a core part of the processor itself.
+A RISC processor performs all operations except loads and stores
+on operands stored in the registers. In a typical RISC processor,
+there will be 32 32-bit integer registers and 32 64-bit floating point
+registers. 
+(True 64-bit machines with 64-bit registers are starting to appear.) 
+<H4>Cache</H4>
+Cache memory sits between the processor and main memory.
+It stores recently accessed memory words "closer" to the processor
+than the main memory.
+Cache is transparent to a programmer (or compiler writer!):
+cache hardware will intercept all memory requests from the processor
+and satisfy the request from the cache if possible - otherwise it
+is forwarded to the main memory.
+<P>
+Many high performance systems will have a number of levels of
+cache: a small <I>level 1</I> cache "close" the processor (typically
+needing 2 cycles to access) and as many as 2 more levels of successively
+lower and larger caches built from high performance 
+(but expensive!) memory chips.
+<P>
+For state-of-the-art (2 cycle access) performance, a processor needs to have
+the level 1 cache on the same die as the processor itself. 
+Sizes of 16 Kwords (64 Kbytes, often separated into instruction and
+data cache) were common.
+<P>
+The bus between the cache and main memory is a significant bottleneck:
+system designers usually organise the cache as a set of "lines" of,
+typically, 8 words.
+A whole line of 8 contiguous memory locations will be fetched into the
+cache each time it is updated. (8 words will be fetched in a 4-cycle <I>burst</I>
+-  2 words in each cycle on a 64-bit bus.)
+This means that when one memory word is fetched into the cache,
+7 of its neighbours will also be fetched.
+A program which is able to use this factor (by, for instance, keeping
+closely related data in contiguous memory locations) will make more
+effective use of the cache and see a reduced effective memory access time.
+<P>
+At least one processor (DEC's Alpha) has a larger level 2 cache on the
+processor die.
+Other systems place the level 2 cache on a separate die within the same
+physical package (such packages are sometimes referred to as
+<I>multi-chip modules</I>).
+<H4>Level <I>x</I> Cache</H4>
+Systems with more than 1 Mbyte of Level 2 cache - built from fast,
+but expensive and less dense, static RAM (SRAM) memory devices are becoming
+common.
+The SRAM memories have access times of 10 ns (or slightly less), but the
+total access time in a system would be of the order of 5 cycles or more.
+<P>
+<H4>Main memory</H4>
+High density dynamic RAM (DRAM) technology provides the cheapest and densest
+semiconductor memory available. Chip access times are about 60 ns, but system
+access times will be 25-30 cycles (and perhaps more for high clock frequency
+systems). DRAM manufacturers have tended to concentrate on increasing
+capacity rather than increasing speed,
+so that access times measured in processor cycles are increasing as
+processor clock speeds increase faster than DRAM access times decrease.
+However DRAM capacities are increasing at similar rates to 
+processor clock speeds.
+<P>
+<H4>Disc</H4>
+Some forecasters have been suggesting that magnetic discs will be obsolete soon
+for some years now. 
+Although the cost and density gap between DRAM and disc memory has been narrowing,
+some heroic efforts by disc manufacturers have seen disc capacities 
+increase and prices drop, so that the point at which magnetic disc becomes
+obsolete is still a way off.
+Discs with 4 GByte (10<SUP>9</SUP> words) are commonplace and access times
+are of the order of 10 ms or 10<SUP>6</SUP> processor cycles.
+<P>
+The large gap between access times (a factor of 10<SUP>4</SUP>) for the last
+two levels of the hierarchy is probably one of the factor that is driving
+DRAM research and development towards higher density rather than higher speed.
+However work on cache-DRAMs and synchronous DRAM is pushing its access time
+down.
+<P>
+
+
+<P>
+
+<TABLE CELLPADDING=5 WIDTH="100%" BGCOLOR="#00f0f0" CELLSPACING=4>
+<TR><TD>
+Back to the <A HREF="ds_ToC.html">Table of Contents</A>
+</TD></TR></TABLE>
+<SMALL>
+&copy; <A HREF=mailto:morris@ee.uwa.edu.au>John Morris</A>, 1998
+</SMALL>
+</BODY>
+</HTML>

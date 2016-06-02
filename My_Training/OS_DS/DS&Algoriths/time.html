@@ -1,0 +1,57 @@
+<HTML>
+<HEAD><TITLE>Time functions</TITLE>
+</HEAD>
+<BODY><PRE>
+TIME(3V)               C LIBRARY FUNCTIONS               TIME(3V)
+
+NAME
+     time, ftime - get date and time
+
+SYNOPSIS
+     #include &lt;sys/types.h&gt;
+     #include &lt;sys/time.h&gt;
+
+     time_t time(tloc)
+     time_t *tloc;
+
+     #include &lt;sys/timeb.h&gt;
+
+     int ftime(tp)
+     struct timeb *tp;
+
+DESCRIPTION
+     time() returns the time since 00:00:00 GMT,  Jan.  1,  1970,
+     measured in seconds.
+
+     If <B>tloc</B> is non-NULL, the return value is also stored in  the
+     location to which <B>tloc</B> points.
+
+     ftime() fills in a structure pointed to by <B>tp</B>, as defined in
+     &lt;sys/timeb.h&gt;:
+          struct timeb
+          {
+               time_t   time;
+               unsigned short millitm;
+               short    timezone;
+               short    dstflag;
+          };
+
+     The structure contains the time since the epoch in  seconds,
+     up  to 1000 milliseconds of more-precise interval, the local
+     time  zone  (measured  in  minutes  of  time  westward  from
+     Greenwich), and a flag that, if nonzero, indicates that Day-
+     light Saving time applies  locally  during  the  appropriate
+     part of the year.
+
+RETURN VALUES
+     time() returns the value of time on success.  On failure, it
+     returns (time_t) -1.
+
+     On success, ftime() returns no useful value.  On failure, it
+     returns -1.
+
+SEE ALSO
+     date(1V), gettimeofday(2), ctime(3V)
+</PRE>
+</BODY>
+</HTML>

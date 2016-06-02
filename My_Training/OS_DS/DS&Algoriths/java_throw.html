@@ -1,0 +1,92 @@
+<HTML><HEAD>
+<TITLE>Data Structures and Algorithms: Java Exceptions</TITLE>
+
+<META name="description" content="Data Structures and Algorithms Course Notes,
+PLDS210 University of Western Australia">
+<META name="keywords" content="data structures,algorithms,abstract data types,
+error handling, Java, exceptions">
+</HEAD>
+<BODY BGCOLOR="#ffffff">
+<TABLE BGCOLOR="#00c0f0" WIDTH="100%" CELLSPACING=0 CELLPADDING=0>
+<TR BGCOLOR="#00f0f0"><TD ALIGN=right>
+<FONT FACE=helvetica SIZE=+1><I>Data Structures and Algorithms</I></FONT>
+</TD></TR>
+
+<TR><TD><FONT FACE=helvetica SIZE=+2><B>Java Exceptions</B></FONT>
+</TD></TR>
+</TABLE>
+<P>
+
+Java, somewhat unfortunately,
+follows C++ and has the 
+<FONT COLOR=green><TT>try, throw, catch</TT></FONT>
+mechanism.
+<P>
+However, Java defines a class hierarchy for errors,
+all of which are specialisations of the 
+<FONT COLOR=green><TT>exception</TT></FONT>
+class.
+<P>
+Java exceptions, like Ada exceptions, are thrown
+from one class method to the invoking method,
+until it reaches a <FONT COLOR=green><TT>try</TT></FONT> block.
+However Java methods explicitly list the
+exceptions that they throw.
+<FONT COLOR=green>
+<PRE>void readFromFile( String s ) throws IOException,
+                     InterruptedException {
+       ......
+       }
+
+try {
+    readFromFile( "abc" );
+    }
+catch( FileNotFoundException e ) { ..... }
+catch( IOException e) { .... }
+catch( Exception e ) {
+    // catches any other error (Exception is the "superclass")
+    ....
+    }
+finally {
+    // Cleanup code - always executed
+    }
+</PRE></FONT>
+The
+<TT><FONT COLOR=green>finally</FONT></TT>
+is executed whether an exception is thrown or not.
+<P>
+Despite inheriting a mess,
+Java's designers have managed to simplify it to a
+useable system.
+<TT><FONT COLOR=green>catch</FONT></TT> <I>appears</I> (my text is not clear on
+this point - a problem with Java's instant fame!)
+to accept a single parameter belonging to the 
+<TT><FONT COLOR=green>exception</FONT></TT> class.
+As in Ada, many exceptions are pre-defined, 
+but you can also define your own.
+<P>
+Note the problem of a precise definition of Java
+is a perennial problem in the computer industry:
+the tendency to instantly adopt "fads" before they
+have a chance to be defined thoroughly
+and unambiguously. 
+This has lead to enormous porting problems and
+enormous, <B>avoidable</B> costs for users.
+<CENTER>
+No professional engineer would design any system
+using screws with non-standard threads!
+</CENTER>
+
+
+<P>
+
+<TABLE CELLPADDING=5 WIDTH="100%" BGCOLOR="#00f0f0" CELLSPACING=0>
+<TR><TD>
+Continue on to <A HREF="C_errors.html">C ADT errors</A><BR>
+Back to the <A HREF="ds_ToC.html">Table of Contents</A>
+</TD></TR></TABLE>
+<SMALL>
+&copy; <A HREF=mailto:morris@ee.uwa.edu.au>John Morris</A>, 1998
+</SMALL>
+</BODY>
+</HTML>

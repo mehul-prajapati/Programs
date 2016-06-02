@@ -1,0 +1,90 @@
+%
+% comp2.tex Complexity section - Properties
+%
+% This is part of the common section of the complexity section -
+% used in both HTML and PS versions
+%
+
+\subsection{Properties of the \Ohx\ notation}
+The following general properties of \Ohx\ notation expressions may
+be derived:
+\begin{enumerate}
+\item Constant factors may be ignored:
+
+For all $k > 0$, {\bf kf} is \Oh{f}.
+
+\EG $a n^2$ and $b n^2$ are both \Oh{n^2}.
+
+
+\item Higher powers of \nx\ grow faster than lower powers:
+\label{higher}
+
+$n^r$ is \Oh{n^s} if $0 \leq r \leq s$.
+
+\item The growth rate of a sum of terms is the growth rate of its
+fastest growing term:
+\label{sum}
+
+If \varx{f} is \Oh{g}, then \varx{f + g} is \Oh{g}.
+
+\EG $an^3 + bn^2$ is \Oh{n^3}.
+
+\item The growth rate of a polynomial is given by the growth
+rate of its leading term (\CF (2), (3)):
+
+If \varx{f} is a polynomial of degree \varx{d},
+then \varx{f} is \Oh{n^d}.
+
+\item If \varx{f} grows faster than \varx{g}, which grows faster
+than \varx{h}, then \varx{f} grows faster than \varx{h}.
+
+\item The product of upper bounds of functions gives an upper
+bound for the product of the functions:
+
+If \varx{f} is \Oh{g} and \varx{h} is \Oh{r}, then
+$fh$ is \Oh{gr}
+
+\EG if \varx{f} is \Oh{n^2} and \varx{g} is \Oh{\log{n}},
+then \varx{fg} is \Oh{n^2\log{n}}.
+
+\item Exponential functions grow faster than powers:
+
+$n^k$ is \Oh{b^n}, for all $b > 1, k \geq 0$,
+
+\EG $n^4$ is \Oh{2^n} and
+$n^4$ is \Oh{exp(n)}.
+
+\item Logarithms grow more slowly than powers:
+
+$\log_b{n}$ is \Oh{n^k} for all $b > 1, k > 0$
+
+\EG $\log_2{n}$ is \Oh{n^{0.5}}.
+
+
+\item All logarithms grow at the same rate: 
+
+$\log_b{n}$ is $\Theta(\log_d{n})$ for all $b, d > 1$.
+
+\item The sum of the first \nx\ $r^{th}$ powers grows as
+the $(r+1)^{th}$ power:
+
+\[ \sum_{k=1}^{n} k^{r} is \Theta(n^{r+1})  \]
+\begin{center}
+\EG \( \sum_{k=1}^{n} i = \frac{(n+1)n}{2} is \Theta(n^2))  \)
+\end{center}
+
+\end{enumerate}
+
+\subsection{Polynomial and Intractable Algorithms}
+
+\subsubsection{Polynomial time complexity}
+
+An algorithm is said to have {\it polynomial time complexity}
+{\it iff} it is \Oh{n^d} for some integer \varx{d}.
+
+\subsubsection{Intractable Algorithms}
+A problem is said to be {\it intractable} if no algorithm 
+with polynomial time complexity is known for it.
+We will briefly examine some intractable problems in
+a later section.
+

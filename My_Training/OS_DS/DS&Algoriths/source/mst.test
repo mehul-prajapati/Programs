@@ -1,0 +1,25 @@
+9 	/* Number of nodes */
+a	/* Node labels */
+b
+c
+d
+e
+f
+g
+h
+i
+a b 4.0  /* Edge a->b has cost 4.0 */
+b c 8.0 
+c d 7.0
+d e 9.0
+d f 14.0
+e f 10.0
+c f 4.0
+g f 2.0
+c i 2.0
+g i 6.0
+i h 7.0
+g h 1.0
+b h 11.0
+a h 8.0
+

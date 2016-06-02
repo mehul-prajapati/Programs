@@ -1,0 +1,195 @@
+<HTML><HEAD>
+<TITLE>Data Structures and Algorithms: Matrix Chain Multiplication</TITLE>
+
+<META name="description" content="Data Structures and Algorithms Course Notes,
+PLDS210 University of Western Australia">
+<META name="keywords" content="data structures,algorithms,abstract data types,
+matrix chain multiplication, dynamic algorithms">
+</HEAD>
+<BODY BGCOLOR="#ffffff">
+<TABLE BGCOLOR="#00c0f0" WIDTH="100%" CELLSPACING=0 CELLPADDING=0>
+<TR BGCOLOR="#00f0f0"><TD ALIGN=right>
+<FONT FACE=helvetica SIZE=+1><I>Data Structures and Algorithms</I></FONT>
+</TD></TR>
+
+<TR><TD><FONT FACE=helvetica SIZE=+2><B>Matrix Chain Multiplication</B></FONT>
+</TD></TR>
+</TABLE>
+<P>
+<H4>Problem</H4>
+We are given a sequence of matrices to multiply:
+<CENTER>
+<B>
+A<SUB>1</SUB>
+A<SUB>2</SUB>
+A<SUB>3</SUB>
+...
+A<SUB>n</SUB>
+</B>
+</CENTER>
+Matrix multiplication is associative, so 
+<CENTER>
+<B>
+A<SUB>1</SUB> ( A<SUB>2</SUB> A<SUB>3</SUB> ) =
+( A<SUB>1</SUB> A<SUB>2</SUB> ) A<SUB>3</SUB> 
+</B>
+</CENTER>
+that is, we can can generate the product in two ways.
+<P>
+
+The cost of multiplying an
+<B><I>n</I></B><FONT FACE=helvetica,arial>x</FONT><B><I>m</I></B>
+by an
+<B><I>m</I></B><FONT FACE=helvetica,arial>x</FONT><B><I>p</I></B>
+one is <B><I>O(nmp)</I></B> (or
+<B><I>O(n</I><SUP>3</SUP><I>)</I></B> for two
+<B><I>n</I></B><FONT FACE=helvetica,arial>x</FONT><B><I>n</I></B>
+ones).
+A poor choice of parenthesisation can be expensive:
+<I>eg</I> if we have
+<CENTER>
+<TABLE>
+<TR><TH>Matrix</TH><TH>Rows</TH><TH>Columns</TH></TR>
+<TR><TD ALIGN=center><B>A<SUB>1</SUB></B></TD><TD ALIGN=center>10</TD><TD ALIGN=center>100</TD></TR>
+<TR><TD ALIGN=center><B>A<SUB>2</SUB></B></TD><TD ALIGN=center>100</TD><TD ALIGN=center>5</TD></TR>
+<TR><TD ALIGN=center><B>A<SUB>3</SUB></B></TD><TD ALIGN=center>5</TD><TD ALIGN=center>50</TD></TR>
+</TABLE>
+</CENTER>
+the cost for 
+
+<B>( A<SUB>1</SUB> A<SUB>2</SUB> ) A<SUB>3</SUB></B> is
+<CENTER>
+<TABLE>
+<TR><TD><B>A<SUB>1</SUB>A<SUB>2</SUB> </TD><TD>10x100x5</TD><TD>= 5000</TD>
+<TD>=> <B>A<SUB>1</SUB> A<SUB>2</SUB></B> (10x5)</TD></TR>
+<TR><TD><B>(A<SUB>1</SUB>A<SUB>2</SUB>) A<SUB>3</SUB> </TD><TD>10x5x50</TD><TD>= 2500</TD>
+<TD>=> <B>A<SUB>1</SUB>A<SUB>2</SUB>A<SUB>3</SUB></B> (10x50)</TD></TR>
+<TR><TD> Total<TD>&nbsp;</TD><TD><FONT COLOR=red>&nbsp;&nbsp;7500</TD><TD>&nbsp;</TD></TR>
+</TABLE>
+</CENTER>
+but for
+<B>A<SUB>1</SUB> ( A<SUB>2</SUB> A<SUB>3</SUB> )</B>
+<CENTER>
+<TABLE>
+<TR><TD><B>A<SUB>2</SUB>A<SUB>3</SUB> </TD><TD>100x5x50</TD><TD>= 25000</TD>
+<TD>=> <B>A<SUB>2</SUB>A<SUB>3</SUB></B> (100x5)</TD></TR>
+<TR><TD><B>A<SUB>1</SUB>(A<SUB>2</SUB>A<SUB>3</SUB>) </TD><TD>10x100x50</TD><TD>= 50000</TD>
+<TD>=> <B>A<SUB>1</SUB>A<SUB>2</SUB>A<SUB>3</SUB></B> (10x50)</TD></TR>
+<TR><TD> Total<TD>&nbsp;</TD><TD><FONT COLOR=red>&nbsp;&nbsp;75000</TD><TD>&nbsp;</TD></TR>
+</TABLE>
+</CENTER>
+Clearly demonstrating the benefit of calculating the optimum order
+before commencing the product calculation!
+
+<H3>Optimal Sub-structure</H3>
+
+As with the optimal binary search tree, we can observe that
+if we divide a chain of matrices to be multiplied into two optimal
+sub-chains:
+<CENTER>
+<B>
+(A<SUB>1</SUB>
+A<SUB>2</SUB>
+A<SUB>3</SUB>
+...
+A<SUB>j</SUB>)
+(A<SUB>j+1</SUB>
+...
+A<SUB>n</SUB>
+)
+</B>
+</CENTER>
+then the optimal parenthesisations of the sub-chains must be 
+composed of optimal chains.
+If they were not, then we could replace them with cheaper parenthesisations.
+<P>
+This property, known as <FONT COLOR="#fa0000"><B>optimal sub-structure</B></FONT>
+is a hallmark of dynamic algorithms:
+it enables us to solve the small problems (the sub-structure) and use those
+solutions to generate solutions to larger problems.
+<P>
+For matrix chain multiplication, the procedure is now almost identical to
+that used for constructing an optimal binary search tree.
+We gradually fill in two matrices,
+<UL><LI>one containing the costs of multiplying all the sub-chains.
+The diagonal below the main diagonal contains the costs of all
+pair-wise multiplications:
+<TT>cost[1,2]</TT> contains the cost of generating product
+<B>A<SUB>1</SUB>A<SUB>2</SUB></B>, <I>etc</I>.
+The diagonal below that contains the costs of triple products:
+<I>eg</I> <TT>cost[1,3]</TT> contains the cost of generating product
+<B>A<SUB>1</SUB>A<SUB>2</SUB>A<SUB>3</SUB></B>, which we derived
+from comparing <TT>cost[1,2]</TT> and <TT>cost[2,3]</TT>, <I>etc</I>.
+<LI>one containing the index of last array in the left parenthesisation
+(similar to the root of the optimal sub-tree in the optimal binary
+search tree, but there's no root here - the chain is divided into
+left and right sub-products), so that 
+<TT>best[1,3]</TT> might contain 2 to indicate that the
+left sub-chain contains
+<B>A<SUB>1</SUB>A<SUB>2</SUB></B> and the right one is
+<B>A<SUB>3</SUB></B> in the optimal parenthesisation of
+<B>A<SUB>1</SUB>A<SUB>2</SUB>A<SUB>3</SUB></B>.
+</UL>
+As before, if we have <B><i>n</I></B> matrices to multiply,
+it will take <B><I>O(n)</I></B> time to generate each of the
+<B><I>O(n<SUP>2</SUP>)</I></B> costs and entries in the
+<TT>best</TT> matrix for an overall complexity of 
+<B><I>O(n<SUP>3</SUP>)</I></B> time 
+at a cost of
+<B><I>O(n<SUP>2</SUP>)</I></B> space.
+
+<H3>Animation</H3>
+
+<A NAME=mat_chain_anim>
+<TABLE BGCOLOR="#00f0f0" WIDTH="100%"> 
+<TR><TD >
+<FONT COLOR=blue FACE=helvetica>
+<B>Matrix Chain Multiplication Animation</B><BR>
+This animation was written by Woi Ang.</FONT></TD>
+<TD ALIGN=center>
+  <TABLE BORDER=0>
+  <TR><TD>
+    <applet CODEBASE="Java/matmult" code = "AlgAnimApp.class" width = 200 height = 35>
+    <param name = "filename" value = "AlgThread.java">
+    <param name = "buttonname" value = "Run the Animation">
+    <param name = "algname" value = "Matrix Chain Multiplication">
+		<param name = "algfile" value = "graph.dij">
+    </applet>
+    </TD>
+  </TR>
+</TABLE>
+</TD>
+<TD><FONT FACE=helvetica>Please email comments to:<BR>
+<A HREF=mailto:morris@ee.uwa.edu.au>morris@ee.uwa.edu.au</A>
+</TR>
+</TABLE>
+
+
+<P>
+<TABLE WIDTH="100%" >
+<TR><TD BGCOLOR="#00c0f0"><FONT FACE=helvetica,arial SIZE=+2><B>Key terms</B></TD></TR>
+<TR>
+<TD>
+<DL>
+<DT><FONT COLOR="#fa0000"><B>optimal sub-structure</B></FONT>
+   <DD>a property of optimisation problems in which the sub-problems
+       which constitute the solution to the problem itself are themselves
+       optimal solutions to those sub-problems.
+       This property permits the construction of dynamic algorithms to
+       solve the problem.
+</DL>
+</TD></TR>
+</TABLE>
+
+<P>
+
+<TABLE CELLPADDING=5 WIDTH="100%" BGCOLOR="#00f0f0" CELLSPACING=4>
+<TR><TD WIDTH=50%>
+Continue on to <A HREF="lcom_subseq.html">Longest Common Subsequence</A></TD>
+<TD>Back to the <A HREF="ds_ToC.html">Table of Contents</A>
+</TD></TR></TABLE>
+<SMALL>
+&copy; <A HREF=mailto:morris@ee.uwa.edu.au>John Morris</A>, 1998
+</SMALL>
+</BODY>
+</HTML>

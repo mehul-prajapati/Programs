@@ -1,0 +1,176 @@
+<HTML><HEAD>
+<TITLE>Data Structures and Algorithms: Trees</TITLE>
+
+<META name="description" content="Data Structures and Algorithms Course Notes,
+PLDS210 University of Western Australia">
+<META name="keywords" content="data structures,algorithms,abstract data types,
+trees">
+</HEAD>
+<BODY BGCOLOR="#ffffff">
+<TABLE BGCOLOR="#00c0f0" WIDTH="100%" CELLSPACING=0 CELLPADDING=0>
+<TR BGCOLOR="#00f0f0"><TD ALIGN=right>
+<FONT FACE=helvetica SIZE=+1><I>Data Structures and Algorithms</I></FONT>
+</TD></TR>
+
+<TR><TD><FONT FACE=helvetica SIZE=+2><B>4.3 Trees</B></FONT>
+</TD></TR>
+</TABLE>
+<P>
+
+<H3>4.3.1 Binary Trees</H3>
+
+The simplest form of tree is a 
+<FONT COLOR="#fa0000"><B>binary tree</B></FONT>.
+A binary tree consists of
+<OL type="a">
+<LI>a <I>node</I> (called the <FONT COLOR="#fa0000"><B>root</B></FONT> node) and
+<LI>left and right sub-trees.<BR>
+Both the sub-trees are themselves binary trees.
+</OL>
+<P>
+You now have a <I>recursively defined data structure</I>.
+(It is also possible to define a list recursively:
+<A HREF=recur_list.html>can you see how?</A>)
+<P>
+<IMG SRC="fig/tree.gif" ALIGN=bottom><BR>
+<CENTER>A binary tree</CENTER>
+<P>
+The nodes at the lowest levels of the tree
+(the ones with no sub-trees) are called 
+<FONT COLOR="#fa0000"><B>leaves</B></FONT>.
+
+<P>
+In an <I>ordered binary tree</I>,
+<OL>
+<LI>
+the keys of all the nodes in the left sub-tree are 
+less than that of the root,
+<LI>
+the keys of all the nodes in the right sub-tree are
+greater than that of the root,
+<LI>
+the left and right sub-trees are themselves 
+ordered binary trees.
+</OL>
+
+<H3>Data Structure</H3>
+The data structure for the tree implementation simply
+adds left and right pointers in place of the next pointer 
+of the linked list implementation.
+[<A HREF="source/tree_struct.c" TARGET="tree struct">Load the tree struct</A>.]
+<P>
+The <TT><FONT color=green>AddToCollection</FONT></TT> method
+is, naturally, recursive.
+[<A HREF="source/tree_add.c" TARGET="tree add">
+Load the <TT>AddToCollection</TT> method</A>.]
+<P>
+Similarly, the
+<TT><FONT color=green>FindInCollection</FONT></TT> method
+is recursive.
+[<A HREF="source/tree_find.c" TARGET="tree find">
+Load the <TT>FindInCollection</TT> method</A>.]
+
+<H3>Analysis</H3>
+<H4>Complete Trees</H4>
+Before we look at more general cases,
+let's make the optimistic assumption that we've managed to
+fill our tree neatly, <I>ie</I> that each leaf is the same
+'distance' from the root.
+<TABLE>
+<TR><TD><IMG SRC="fig/complete.gif"><BR>
+<CENTER>A complete tree</CENTRE></TD>
+<TD>
+This forms a <I>complete tree</I>, whose <I>height</I>
+is defined as the number of links from the root to the
+deepest leaf.</TD></TR>
+</TABLE>
+<P>
+First, we need to work out how many nodes,
+<I><B>n</B></I>,
+we have in such a tree of height,
+<I><B>h</B></I>.
+<P>
+Now,<BR>
+<BLOCKQUOTE>
+<I><B>n</B></I> = 1 + 2<SUP>1</SUP> + 2<SUP>2</SUP> + .... + 2<SUP><I><B>h</B></I></SUP><BR>
+</BLOCKQUOTE>
+From which we have,
+<BLOCKQUOTE>
+<I><B>n</B></I> = 2<SUP><I><B>h</B></I>+1</SUP> - 1<BR>
+</BLOCKQUOTE>
+and
+<BLOCKQUOTE>
+<I><B>h</B></I> = <B>floor( log<SUB>2</SUB><I>n</I> )</B>
+</BLOCKQUOTE>
+<P>
+Examination of the <TT>Find</TT> method shows that in the worst case,
+<I><B>h</B></I>+1 or
+<B>ceiling( log<SUB>2</SUB><I>n</I> )</B> comparisons are
+needed to find an item.
+This is the same as for binary search.
+<P>
+However, <TT>Add</TT> also requires
+<B>ceiling( log<SUB>2</SUB><I>n</I> )</B> comparisons 
+to determine where to add an item.
+Actually adding the item takes a constant number of operations,
+so we say that a binary tree requires
+<B>O(log<I>n</I>)</B> operations for <I>both</I>
+adding and finding an item - a considerable
+improvement over binary search for a <I>dynamic</I>
+structure which often requires addition of new items.
+<P>
+Deletion is also an
+<B>O(log<I>n</I>)</B> operation.
+
+<H4>General binary trees</H4>
+
+However, in general addition of items to an ordered tree will
+not produce a complete tree.
+The worst case occurs if we add an ordered list of items
+to a tree.
+<P>
+What will happen? Think before you click
+<A HREF="unbalanced.html">here</A>!
+<P>
+This problem is readily overcome: we use a structure 
+known as a <A HREF="heaps.html">heap</A>.
+However, before looking at heaps, 
+we should formalise our ideas about the
+complexity of algorithms by defining carefully
+what <B>O(f(<I>n</I>))</B> means.
+
+
+
+<P>
+<TABLE WIDTH="100%" BGCOLOR="#00c0f0">
+<TR><TD><H3>Key terms</H3></TD></TR></TABLE>
+<DL>
+<DT><FONT COLOR="#fa0000"><B>Root Node</B></FONT>
+   <DD>Node at the "top" of a tree - the one from which all operations
+       on the tree commence. The root node may not exist (a NULL tree with
+       no nodes in it) or have 0, 1 or 2 children in a binary tree.
+<DT><FONT COLOR="#fa0000"><B>Leaf Node</B></FONT>
+   <DD>Node at the "bottom" of a tree - farthest from the root.
+        Leaf nodes have no children.
+<DT><FONT COLOR="#fa0000"><B>Complete Tree</B></FONT>
+   <DD>Tree in which each leaf is at the same distance from the root.
+	A more precise and formal definition of a <A HREF=heaps.html#complete_tree>
+complete tree</A> is set out later.
+<DT><FONT COLOR="#fa0000"><B>Height</B></FONT>
+   <DD>Number of nodes which must be traversed from the root to reach
+       a leaf of a tree.
+</DL>
+
+<P>
+
+<TABLE CELLPADDING=5 WIDTH="100%" BGCOLOR="#00f0f0" CELLSPACING=0>
+<TR><TD>
+Continue on to <A HREF="latex/complexity.ps">Complexity (PS)</A><BR>
+Continue on to <A HREF="complexity.html">Complexity (HTML)</A><BR>
+Back to the <A HREF="ds_ToC.html">Table of Contents</A>
+</TD></TR></TABLE>
+<SMALL>
+&copy; <A HREF=mailto:morris@ee.uwa.edu.au>John Morris</A>, 1998
+</SMALL>
+</BODY>
+</HTML>

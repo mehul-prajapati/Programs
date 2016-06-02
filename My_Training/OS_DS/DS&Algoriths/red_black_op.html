@@ -1,0 +1,94 @@
+<HTML><HEAD>
+<TITLE>Data Structures and Algorithms: Red-Black Trees</TITLE>
+
+<META name="description" content="Data Structures and Algorithms Course Notes,
+PLDS210 University of Western Australia">
+<META name="keywords" content="data structures,algorithms,abstract data types ">
+</HEAD>
+<BODY BGCOLOR="#ffffff">
+<TABLE BGCOLOR="#00c0f0" WIDTH="100%" CELLSPACING=0 CELLPADDING=0>
+<TR BGCOLOR="#00f0f0"><TD ALIGN=right>
+<FONT FACE=helvetica SIZE=+1><I>Data Structures and Algorithms</I></FONT>
+</TD></TR>
+
+<TR><TD><FONT FACE=helvetica SIZE=+2><B>8.2 Red-Black Tree Operation</B></FONT>
+</TD></TR>
+</TABLE>
+<P>
+
+Here's an example of insertion into a red-black tree
+(taken from Cormen, p269).
+
+<TABLE>
+<TR>
+<TD><IMG SRC=fig/rb_tree1a.gif></TD>
+<TD>Here's the original tree ..<BR>
+Note that in the following diagrams, the 
+black sentinel nodes have been omitted to keep 
+the diagrams simple.</TD>
+</TR>
+<TR>
+<TD><IMG SRC=fig/rb_tree_ins1.gif></TD>
+<TD>The tree insert routine has just been called to insert
+node "4" into the tree.<P>
+This is no longer a red-black tree -
+there are two successive red nodes on the path<BR>
+11 - 2 - 7 - 5 - 4<P>
+Mark the new node, x, and
+it's <B>uncle</B>, y.<P>
+y is red, so we have case 1 ...</TD>
+</TR>
+<TR>
+<TD><IMG SRC=fig/rb_tree_ins2.gif></TD>
+<TD>Change the colours of nodes 4, 7 and 8.</TD>
+<P>
+
+</TR>
+<TR>
+<TD><IMG SRC=fig/rb_tree_ins3.gif></TD>
+<TD>Move x up to its grandparent, 7.
+<P>
+x's parent (2) is still red, so this isn't
+a red-black tree yet.
+<P>
+Mark the uncle, y.
+<P>
+In this case, the uncle is black,
+so we have case 2 ...</TD>
+</TR>
+<TR>
+<TD><IMG SRC=fig/rb_tree_ins4.gif></TD>
+<TD>Move x up and rotate left.</TD>
+</TR>
+<TR>
+<TD><IMG SRC=fig/rb_tree_ins5.gif></TD>
+<TD>Still not a red-black tree ..
+the uncle is black,
+but x's parent is to the left ..</TD>
+</TR>
+<TR>
+<TD><IMG SRC=fig/rb_tree_ins7.gif></TD>
+<TD>Change the colours of 7 and 11 and
+rotate right ..
+</TR>
+<TR>
+<TD><IMG SRC=fig/rb_tree_ins8.gif></TD>
+<TD>This is now a red-black tree,
+so we're finished!
+<P>
+<B><I>O(</I>log<I>n)</I></B> time!
+</TR>
+
+</TABLE>
+<P>
+
+<TABLE CELLPADDING=5 WIDTH="100%" BGCOLOR="#00f0f0" CELLSPACING=4>
+<TR><TD WIDTH=50%>
+Back to <A HREF="red_black.html">Red Black Trees</A></TD>
+<TD>Back to the <A HREF="ds_ToC.html">Table of Contents</A>
+</TD></TR></TABLE>
+<SMALL>
+&copy; <A HREF=mailto:morris@ee.uwa.edu.au>John Morris</A>, 1998
+</SMALL>
+</BODY>
+</HTML>

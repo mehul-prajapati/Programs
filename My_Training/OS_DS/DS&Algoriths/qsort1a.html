@@ -1,0 +1,138 @@
+<HTML><HEAD>
+<TITLE>Data Structures and Algorithms: Quick Sort</TITLE>
+
+<META name="description" content="Data Structures and Algorithms Course Notes,
+PLDS210 University of Western Australia">
+<META name="keywords" content="data structures,algorithms,abstract data types,
+sorting, quick sort, QuickSort">
+</HEAD>
+<BODY BGCOLOR="#ffffff">
+<TABLE BGCOLOR="#00c0f0" WIDTH="100%" CELLSPACING=0 CELLPADDING=0>
+<TR BGCOLOR="#00f0f0"><TD ALIGN=right>
+<FONT FACE=helvetica SIZE=+1><I>Data Structures and Algorithms</I></FONT>
+</TD></TR>
+
+<TR><TD><FONT FACE=helvetica SIZE=+2><B>Quick Sort: Partition in place</B></FONT>
+</TD></TR>
+</TABLE>
+<P>
+
+Most implementations of quick sort make use of the fact that you
+can partition in place by keeping two pointers:
+one moving in from the left and a second moving in from the right.
+They are moved towards the centre until the left pointer finds an
+element greater than the pivot and the right one finds an
+element less than the pivot. 
+These two elements are then swapped.
+The pointers are then moved inward again until they
+"cross over". The pivot is then swapped into the
+slot to which the right pointer points and the partition
+is complete.
+ <TABLE>
+ <TR>
+<TD><FONT COLOR=green><PRE>int partition( void *a, int low, int high )
+  {
+  int left, right;
+  void *pivot_item;
+  pivot_item = a[low];
+  pivot = left = low;
+  right = high;
+  while ( left &lt; right ) {
+    /* Move left while item &lt; pivot */
+    while( a[left] &lt;= pivot_item ) left++;
+    /* Move right while item &gt; pivot */
+    while( a[right] &gt;= pivot_item ) right--;
+    if ( left < right ) SWAP(a,left,right);
+    }
+  /* right is final position for the pivot */
+  a[low] = a[right];
+  a[right] = pivot_item;
+  return right;
+  }
+</PRE></FONT>
+ </TD>
+ <TD><IMG SRC="fig/qsort_part.gif"></TD>
+ </TR>
+ </TABLE>
+<TT><FONT COLOR=green>partition</FONT></TT> ensures that all items less than the pivot precede it and returns the position of the pivot.
+This meets our condition for dividing the problem:
+all the items in the lower half are known to be less than the pivot and
+all items in the upper half are known to be greater than it.
+<P>
+Note that we have used our <TT><FONT COLOR=green>ItemCmp</FONT></TT> function in the 
+<TT><FONT COLOR=green>partition</FONT></TT> function. This assumes that there is an external declaration 
+for ItemCmp and that in any one program,
+we only want to sort one type of object.
+Generally this will not be acceptable, so the formal specification
+for quicksort in the <A HREF=qsort_man.html>Unix and ANSI C libraries</A>
+includes a function
+<TT><FONT COLOR=green>compar</FONT></TT> which is supplied to <TT><FONT COLOR=green>qsort</FONT></TT> when it is called.
+Passing the function, <TT><FONT COLOR=green>compar</FONT></TT>, which defines the ordering of objects when 
+<TT><FONT COLOR=green>qsort</FONT></TT> is called avoids this problem in the same way that we
+passed an <TT><FONT COLOR=green>ItemCmp</FONT></TT> function to <TT><FONT COLOR=green>ConsCollection</FONT></TT>
+<H3>Analysis</H3>
+The partition routine examines every item in the array at most once,
+so it is clearly <B>O(<I>n</I>)</B>.
+<P>
+Usually, the partition routine will divide the problem into two roughly equal
+sized partitions. We know that we can divide <B><I>n</I></B> items in half
+<B>log<SUB>2</SUB><I>n</I></B> times.
+This makes quicksort a <B>O(<I>n</I>log<I>n</I>)</B> algorithm -
+equivalent to <A HREF=heapsort.html>heapsort</A>.
+<P>
+However, we have made an unjustified assumption -
+see if you can identify it before you
+<A HREF=qsort2.html>continue</A>.
+<P>
+
+
+
+<A NAME=qsort_anim>
+<TABLE BGCOLOR="#00f0f0" WIDTH="100%"> 
+<TR><TD >
+<FONT COLOR=blue FACE=helvetica>
+<B>QuickSort Animation</B><BR>
+This animation uses the partition in place
+approach; it was written by Chien Wei Tan</FONT></TD>
+<TD ALIGN=center VALIGN=center>
+<applet CODEBASE="Java/q_sort" code = "AlgAnimApp.class" width = 200 height = 35>
+<param name = "filename" value = "AlgThread.java">
+<param name = "buttonname" value = "Click to Execute Quick Sort">
+<param name = "algname" value = "Quick Sort">
+</applet>
+
+</TD>
+<TD><FONT FACE=helvetica>Please email comments to <BR>
+<A HREF=mailto:morris@ee.uwa.edu.au>morris@ee.uwa.edu.au</A>
+</FONT>
+</TD>
+
+</TR>
+</TABLE>
+
+<P>
+<TABLE WIDTH="100%" BGCOLOR="#00c0f0">
+<TR><TD><H3>Key terms</H3></TD></TR>
+<TR><TD BGCOLOR=white>
+<DL>
+<DT><FONT COLOR="#fa0000"><B>Divide and Conquer Algorithms</B></FONT>
+   <DD>Algorithms that solve (conquer) problems by dividing them into
+      smaller sub-problems until the problem is so small that it is
+      trivially solved.
+</DL>
+</TD></TR>
+</TABLE>
+<P>
+
+<TABLE CELLPADDING=5 WIDTH="100%" BGCOLOR="#00f0f0" CELLSPACING=4>
+<TR>
+<TD WIDTH="50%">
+Continue on to <A HREF="qsort2.html">Quick Sort <I>(cont)</I></A></TD>
+<TD>Back to the <A HREF="ds_ToC.html">Table of Contents</A>
+</TD></TR></TABLE>
+<SMALL>
+&copy; <A HREF=mailto:morris@ee.uwa.edu.au>John Morris</A>, 1998
+</SMALL>
+</BODY>
+</HTML>
+

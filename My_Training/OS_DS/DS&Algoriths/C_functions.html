@@ -1,0 +1,121 @@
+<HTML><HEAD>
+<TITLE>Data Structures and Algorithms: Functions as Data Types</TITLE>
+
+<META name="description" content="Data Structures and Algorithms Course Notes,
+PLDS210 University of Western Australia">
+<META name="keywords" content="data structures,algorithms,abstract data types,
+C functions, functions as data types">
+</HEAD>
+<BODY BGCOLOR="#ffffff">
+<TABLE BGCOLOR="#00c0f0" WIDTH="100%" CELLSPACING=0 CELLPADDING=0>
+<TR BGCOLOR="#00f0f0"><TD ALIGN=right>
+<FONT FACE=helvetica SIZE=+1><I>Data Structures and Algorithms</I></FONT>
+</TD></TR>
+
+<TR><TD><FONT FACE=helvetica SIZE=+2><B>Functions as Data Types</B></FONT>
+</TD></TR>
+</TABLE>
+<P>
+
+<H3>2.7.1 C functions</H3>
+C allows a function to be used as a data item.
+This makes it possible to pass functions as arguments to other
+functions.
+This capability, although not often used, is extremely useful
+when it is appropriate.
+For example, as we initially defined the collections, 
+even though we were careful to design our collection so that it
+would handle <I>any</I>  type of data,
+we limited ourselves to collections of only one type of data in
+any one program.
+This is caused by the need to define an external function for
+comparing items.
+Ideally, we would like to specify a general comparison function
+function for the objects in the collection when we constructed the
+collection.
+In C, this is easy (although the syntax is definitely non-intuitive!).
+We want to have a general comparison function which tells
+us what order objects to be stored in our collection should be 
+ranked in, <I>ie</I> we need a function:
+<P><TT><FONT COLOR=green>
+int ItemCmp( void *a, void *b );
+</FONT></TT>
+<P>
+which returns -1, 0 or +1 depending on whether 
+a is less than, equal to or greater than b.
+(Note that we're allowing a very general notion of 'less than':
+the <TT><FONT COLOR=green>ItemCmp</FONT></TT> can order items according to <I>any</I>
+rule which might be appropriate to these items.)
+<P>
+So we add to our collection structure, a comparison function:
+<P><PRE><FONT COLOR=green>
+struct t_collection {
+    int item_cnt;
+    int (*ItemCmp)( void *, void * );
+    ....
+    };
+</PRE></FONT>
+<P>
+<TT><FONT COLOR=green>ItemCmp</FONT></TT> is a <I>pointer</I> to a function which has the
+prototype:
+<P><PRE><FONT COLOR=green>
+    int ItemCmp( void *, void * );
+</PRE></FONT>
+The parentheses are necessary to distinguish this declaration from the
+function prototype and an invocation of the function!
+The <TT><FONT COLOR=green>ConsCollection</FONT></TT> function now becomes:
+<P><PRE><FONT COLOR=green>
+    collection ConsCollection( int max_items, 
+                       int (*ItemCmp)( void *, void * ) );
+</PRE></FONT>
+<P>A use of the collection now looks like:
+<P><PRE><FONT COLOR=green>
+#include "widget.h"     /* import the ADT for widgets */
+    int WidgetComp( widget, widget );
+    collection LotsOfWidgets;
+
+    LotsOfWidgets = ConsCollection( large_no, WidgetComp );
+</PRE></FONT>
+<P>In the body of the ADT, the <TT><FONT COLOR=green>ItemCmp</FONT></TT> function is used
+by de-referencing the pointer to the function and using it normally:
+in <TT><FONT COLOR=green>FindInCollection</FONT></TT>, we might have:
+<P><PRE><FONT COLOR=green>
+int FindInCollection( collection c, void *a )
+    {
+    .....
+    if ( (*(c->ItemCmp))( c->items[i], a ) == 0 )
+        {
+        /* Found match ... */
+    ....
+    }
+</PRE></FONT>
+<P>In the example above, an excessive number of parentheses has been
+used, because I simply don't want to bother to look up the precedence
+rules: why risk making a silly mistake, when a few extra parentheses
+will ensure that the compiler treats the code as you intended?
+
+<P>However, C permits a 'shortcut' - which doesn't require
+de-referencing the pointer to the function:
+in the source code examples, an 
+<TT><FONT COLOR=green>ItemCmp</FONT></TT>
+function has been added to a tree collection.
+<P><A HREF=source/coll_a.h TARGET=source>New collection specification</A><BR>
+<P><A HREF=source/coll_at.c TARGET=source>New tree implementation</A><BR>
+<P>
+<TABLE WIDTH="100%" BGCOLOR="#00c0f0">
+<TR><TD><H3>Key terms</H3></TD></TR></TABLE>
+<DL>
+</DL>
+
+<P>
+
+<TABLE CELLPADDING=5 WIDTH="100%" BGCOLOR="#00f0f0" CELLSPACING=4>
+<TR><TD WIDTH=50%>
+Continue on to <A HREF="ada_adt.html">ADTs in Ada</A></TD>
+<TD>Back to the <A HREF="ds_ToC.html">Table of Contents</A>
+</TD></TR></TABLE>
+<SMALL>
+&copy; <A HREF=mailto:morris@ee.uwa.edu.au>John Morris</A>, 1998
+</SMALL>
+</BODY>
+</HTML>

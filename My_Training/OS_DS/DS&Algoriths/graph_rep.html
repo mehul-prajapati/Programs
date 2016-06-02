@@ -1,0 +1,227 @@
+<HTML><HEAD>
+<TITLE>Data Structures and Algorithms: Graph Representations</TITLE>
+
+<META name="description" content="Data Structures and Algorithms Course Notes,
+PLDS210 University of Western Australia">
+<META name="keywords" content="data structures,algorithms,abstract data types,
+graph algorithms, graph data structures ">
+</HEAD>
+<BODY BGCOLOR="#ffffff">
+<TABLE BGCOLOR="#00c0f0" WIDTH="100%" CELLSPACING=0 CELLPADDING=0>
+<TR BGCOLOR="#00f0f0"><TD ALIGN=right>
+<FONT FACE=helvetica SIZE=+1><I>Data Structures and Algorithms</I></FONT>
+</TD></TR>
+
+<TR><TD><FONT FACE=helvetica SIZE=+2><B>Graph Representations</B></FONT>
+</TD></TR>
+</TABLE>
+<P>
+
+<H4>Node Representations</H4>
+
+Usually the first step in representing a graph is to map
+the nodes to a set of contiguous integers.
+(0,|<B>V</B>|-1) is the most convenient in C programs -
+other, more flexible, languages allow you greater choice!
+The mapping can be performed using any type of search structure:
+binary trees, <B>m</B>-way trees, hash tables, <I>etc</I>.
+
+<H4>Adjacency Matrix</H4>
+
+Having mapped the vertices to integers, 
+one simple representation for the graph
+uses an <FONT COLOR="#fa0000"><B>adjacency matrix</B></FONT>.
+Using a |<B>V</B>| x |<B>V</B>| matrix of booleans,
+we set <B>a<SUB>ij</SUB></B> = <B>true</B> if an
+edge connects <B>i</B> and <B>j</B>.
+Edges can be <I>undirected</I>, in which case
+if <B>a<SUB>ij</SUB></B> = <B>true</B>, then 
+<B>a<SUB>ji</SUB></B> = <B>true</B> also,
+or <B>directed</B>, in which 
+<B>a<SUB>ij</SUB></B> != <B>a<SUB>ji</SUB></B>,
+unless there are <I>two</I> edges, one in
+either direction, between <B>i</B> and <B>j</B>.
+The diagonal elements, <B>a<SUB>ii</SUB></B>,
+may be either ignored or, in cases
+such as state machines, where the presence or 
+absence of a connection from a node to itself 
+is relevant, set to <B>true</B> or <B>false</B>
+as required.
+<P>
+When space is a problem, bit maps can be used for the
+adjacency matrix. In this case, an ADT for the
+adjacency matrix improves the clarity of your code
+immensely by hiding the bit twiddling that this space
+saving requires! 
+In undirected graphs, only one half of the matrix 
+needs to be stored, but you will need to calculate
+the element addresses explicitly yourself. 
+Again an ADT can hide this complexity from a user!
+If the graph is <I>dense</I>, <I>ie</I> most of
+the nodes are connected by edges,
+then the <B>O(|V|<SUP>2</SUP>)</B> cost of initialising
+an adjacency matrix is matched by the cost of inputting
+and setting the edges.
+However, if the graph is <I>sparse</I>, <I>ie</I> 
+|<B>E</B>| is closer to |<B>V</B>|,
+then an adjacency list representation may be more efficient.
+<H4>Adjacency List Representation</H4>
+Adjacency lists are lists of nodes that are connected
+to a given node.
+For each node, a linked list of nodes connected to it 
+can be set up. 
+Adding an edge to a graph will generate two entries in 
+adjacency lists - one in the lists for each of its extremities.
+
+<H4>Traversing a graph</H4>
+
+<H4>Depth-first Traversal</H4>
+
+A <FONT COLOR="#fa0000"><B>depth-first</B></FONT> traverse of a graph
+uses an additional array to flag nodes that it has visited
+already.
+<P>
+Using the adjacency matrix structure:
+<FONT COLOR=green><PRE>struct t_graph {
+  int n_nodes;
+  graph_node *nodes;
+  int *visited;
+  adj_matrix am;
+  }
+
+static int search_index = 0;
+
+void search( graph g ) {
+  int k;
+  for(k=0;k&lt;g-&gt;n_nodes;k++) g-&gt;visited[k] = FALSE;
+  search_index = 0;
+  for(k=0;k&lt;g-&gt;n_nodes;k++) {
+    if ( !g-&gt;visited[k] ) visit( g, k );
+    }
+  }
+</PRE></FONT>
+The <FONT COLOR=green><TT>visit</TT></FONT> function is called recursively:
+<FONT COLOR=green><PRE>void visit( graph g, int k ) {
+  int j;
+  g-&gt;visited[k] = ++search_index;
+  for(j=0;j&lt;g-&gt;n_nodes;j++) {
+    if ( adjacent( g-&gt;am, k, j ) ) {
+      if ( !g-&gt;visited[j] ) visit( g, j );
+  }
+</PRE></FONT>
+
+This procedure checks each of the |<B>V</B>|<SUP>2</SUP> entries
+of the adjacency matrix, so is clearly
+<B>O(</B>|<B>V</B>|<SUP>2</SUP><B>)</B>.
+
+<P>
+Using an adjacency list representation,
+the <TT>visit</TT> function changes slightly:
+<FONT COLOR=green><PRE>struct t_graph {
+  int n_nodes;
+  graph_node *nodes;
+  AdjListNode *adj_list;
+  int *visited;
+  adj_matrix am;
+  }
+
+void search( graph g ) {
+  ... /* As adjacency matrix version */
+  }
+
+void visit( graph g, int k ) {
+  AdjListNode al_node;
+  g-&gt;visited[k] = ++search_index;
+  al_node = ListHead( g-&gt;adj_list[k] );
+  while( n != NULL ) {
+    j = ANodeIndex( ListItem( al_node ) );
+    if ( !g-&gt;visited[j] ) visit( g, j );
+    al_node = ListNext( al_node );
+    }
+  }
+</PRE></FONT>
+Note that I've assumed the existence of a 
+<FONT COLOR=green><TT>List</TT></FONT> ADT
+with methods,
+<UL><LI> <FONT COLOR=green><TT>ListHead</TT></FONT>,
+<LI><FONT COLOR=green><TT>ListItem</TT></FONT>,
+<LI><FONT COLOR=green><TT>ListNext</TT></FONT>
+</UL>
+and also a 
+<FONT COLOR=green><TT>AdjListNode</TT></FONT> ADT with a
+<UL><LI><FONT COLOR=green><TT>ANodeIndex</TT></FONT>
+</UL>
+method.
+<P>
+
+The complexity of this traversal can be readily seen to be 
+<B>O(</B>|<B>V</B>|+|<B>E</B>|<B>)</B>,
+because it sets <FONT COLOR=green><TT>visited</TT></FONT>
+for each node and
+then visits each edge <I>twice</I> (each edge appears in
+two adjacency lists).
+
+<H4>Breadth-first Traversal</H4>
+
+To scan a graph breadth-first,
+we use a FIFO queue.
+<FONT COLOR=green><PRE>static queue q;
+void search( graph g ) {
+  q = ConsQueue( g-&gt;n_nodes );
+  for(k=0;k&lt;g-&gt;n_nodes;k++) g-&gt;visited[k] = 0;
+  search_index = 0;
+  for(k=0;k&lt;g-&gt;n_nodes;k++) {
+    if ( !g-&gt;visited[k] ) visit( g, k );
+  }
+
+void visit( graph g, int k ) {
+  al_node al_node;
+  int j;
+  AddIntToQueue( q, k );
+  while( !Empty( q ) ) {
+    k = QueueHead( q );
+    g-&gt;visited[k] = ++search_index;
+    al_node = ListHead( g-&gt;adj_list[k] );
+    while( al_node != NULL ) {
+      j = ANodeIndex(al_node);
+      if ( !g-&gt;visited[j] ) {
+        AddIntToQueue( g, j );
+        g-&gt;visited[j] = -1; /* C hack, 0 = false! */
+        al_node = ListNext( al_node );
+        }
+      }
+    }
+  }
+</PRE></FONT>
+  
+<P>
+<TABLE WIDTH="100%" BGCOLOR="#00c0f0">
+<TR><TD><H3>Key terms</H3></TD></TR></TABLE>
+<DL>
+<DT><FONT COLOR="#fa0000"><B>Adjacency Matrix</B></FONT>
+   <DD>A structure for representing a graph in which the presence
+     of arcs between nodes is indicated by an entry in a matrix.
+<DT><FONT COLOR="#fa0000"><B>Adjacency Lists</B></FONT>
+	<DD>An alternative structure for representing a graph in which the
+     arcs are stored as lists of connections between nodes.
+<DT><FONT COLOR="#fa0000"><B>Breadth-first Traversal</B></FONT>
+	<DD>Traversing a graph by visiting all the nodes attached directly to
+     a starting node first.
+<DT><FONT COLOR="#fa0000"><B>Depth-first Traversal</B></FONT>
+	<DD>Traversing a graph by visiting all the nodes attached to
+      a node attached to a starting node before visiting a
+       second node attached to the starting node.
+</DL>
+
+<P>
+
+<TABLE CELLPADDING=5 WIDTH="100%" BGCOLOR="#00f0f0" CELLSPACING=4>
+<TR><TD WIDTH=50%>
+Continue on to <A HREF="dijkstra.html">Dijkstra's Algorithm</A></TD>
+<TD>Back to the <A HREF="ds_ToC.html">Table of Contents</A>
+</TD></TR></TABLE>
+<SMALL>
+&copy; <A HREF=mailto:morris@ee.uwa.edu.au>John Morris</A>, 1998
+</SMALL>
+</BODY>
+</HTML>

@@ -1,0 +1,110 @@
+<HTML><HEAD>
+<TITLE>Data Structures and Algorithms: Dijkstra's Algorithm - Proof</TITLE>
+
+<META name="description" content="Data Structures and Algorithms Course Notes,
+PLDS210 University of Western Australia">
+<META name="keywords" content="data structures,algorithms,abstract data types ">
+</HEAD>
+<BODY BGCOLOR="#ffffff">
+<TABLE BGCOLOR="#00c0f0" WIDTH="100%" CELLSPACING=0 CELLPADDING=0>
+<TR BGCOLOR="#00f0f0"><TD ALIGN=right>
+<FONT FACE=helvetica SIZE=+1><I>Data Structures and Algorithms</I></FONT>
+</TD></TR>
+
+<TR><TD><FONT FACE=helvetica SIZE=+2><B>Proof of Dijkstra's Algorithm</B></FONT>
+</TD></TR>
+</TABLE>
+<P>
+
+We use a proof by contradiction again.
+But first, we assert the following Lemma:
+<P>
+<CENTER>
+<TABLE BORDER=1>
+<TR><TD><B>Lemma 1</B>
+<P>
+Shortest paths are composed of shortest paths.
+<P>
+The proof of this is based on the notion that if
+there was a shorter path than any sub-path, then
+the shorter path should replace that sub-path to
+make the whole path shorter.<B>
+</TD></TR>
+<TR><TD><B>Lemma 2</B>
+<P>
+If s ->..-> u -> v is a shortest path from s to v,
+then after u has been added to S and relax(u,v,w)
+called, then d[v] = delta(s,v) and d[v] is not
+changed thereafter.
+<I>For formal proofs, see Cormen or any one
+of the texts which cover this important algorithm.</I>
+<P>
+Proof follows from the fact that at all times
+d[v] >= delta(s,v).
+</TD></TR>
+</TABLE>
+</CENTER>
+<P>
+Denote the distance of the shortest path from <B>s</B> to <B>u</B>
+as <B>delta(s,u)</B>.
+After running Dijkstra's algorithm, we assert that
+<B>d[u] = delta(s,u)</B> for all <B>u</B>.
+<P>
+Note that once <B>u</B> is added to <B>S</B>,
+<B>d[u]</B> is not changed and should be <B>delta(s,u)</B>.
+<P>
+<H4>Proof by contradiction</H4>
+<P>
+Suppose that <B>u</B> is the first vertex added to <B>S</S>
+for which <B>d[u] != delta(s,u)</B>.
+We note:
+<OL>
+<LI> u cannot be s, because d[s] = 0.
+<LI> There must be a path from s to u.
+If there were not, d[u] would be infinity.
+<LI> Since there is a path, there must be a shortest path.
+</OL>
+<TABLE>
+<TR><TD><IMG SRC=fig/dij-proof.gif></TD>
+<TD>
+Let s -(p1)-> x -> y -(p2)-> u be the shortest path
+from s to u.
+Where x is within S and y is the first vertex not within S.
+</TD>
+</TR>
+</TABLE>
+<P>
+When x was inserted into S, d[x] = delta(s,x)
+(since we hypothesise that u was the first vertex
+for which this was not true).
+<P>
+Edge (x,y) was relaxed at that time, so that<BR>
+d[y] = delta(s,y)<BR>
+<= delta(s,u)<BR>
+<= d[u]<BR>
+<P>
+Now both y and u were in V-S when u was chosen,
+so d[u] <= d[y].<P>
+Thus the two inequalities must be equalities,<BR>
+d[y] = delta(s,y) = delta(s,u) = d[u]
+<P>So d[u] = delta(s,u) contradicting our hypothesis.
+<P>
+Thus when each u was inserted,
+d[u] = delta(s,u).
+<P>
+QED
+<P>
+
+
+<P>
+
+<TABLE CELLPADDING=5 WIDTH="100%" BGCOLOR="#00f0f0" CELLSPACING=4>
+<TR><TD WIDTH=50%>
+Continue on to <A HREF="huffman.html">Huffman Encoding</A></TD>
+<TD>Back to the <A HREF="ds_ToC.html">Table of Contents</A>
+</TD></TR></TABLE>
+<SMALL>
+&copy; <A HREF=mailto:morris@ee.uwa.edu.au>John Morris</A>, 1998
+</SMALL>
+</BODY>
+</HTML>

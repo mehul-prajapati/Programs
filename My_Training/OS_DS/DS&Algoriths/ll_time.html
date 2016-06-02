@@ -1,0 +1,60 @@
+<HTML><HEAD>
+<TITLE>Data Structures and Algorithms - Linked List Performance</TITLE>
+</HEAD>
+<BODY BGCOLOR="#ffffff">
+<H1>Data Structures and Algorithms</H1>
+<HR>
+
+<H3>Linked Lists <I>vs</I> Arrays</H3>
+
+This section will be easier to understand if you are
+familiar with
+the <A HREF=mem_hierarchy.html>memory hierarchy</A> on modern processors.
+
+<H4>Performance considerations</H4>
+
+Array based implementations of collections will generally show
+slightly better performance than linked list implementations.
+This will only be in the constant factor: scanning both arrays and
+linked lists is basically an <B>O(n)</B> operation.
+However, a number of factors contribute to slightly better performance
+of arrays:
+<OL>
+<LI> The address of the next element in an array may be calculated from
+a current address and an element size - both held in registers:<BR><CENTER>
+(next)address := (current)address + size
+</CENTER>
+Both addresses may use a single register.
+Since no memory accesses are required, this is a single-cycle operation
+on a modern RISC processor.
+<LI> Using arrays, information is stored in consecutive memory locations:
+this allows the long cache lines of modern processors to be used effectively.
+The part of the cache line which is "pre-fetched" by accessing the current 
+element of an array contains part of the next array element.
+Thus no part of the cache or the CPU<->memory bandwidth is "wasted" by not being
+used. 
+In contrast, with linked list implementations:
+<UL>
+<LI> There is additional overhead
+for pointers (and the overhead normally introduced by memory allocators
+like <TT><FONT COLOR=green>malloc</FONT></TT>). This means that fewer elements
+can fit into a single cache line.
+<LI> There is no guarantee that successive elements in a list occupy successive
+memory locations. This leads to waste of memory band-width,
+because elements pre-fetched into the cache are not necessarily used.
+</UL>
+ 
+</OL>
+
+<P>
+
+<TABLE CELLPADDING=5 WIDTH="100%" BGCOLOR="#00f0f0" CELLSPACING=4>
+<TR><TD WIDTH=50%>
+Back to the <A HREF="ds_ToC.html">Table of Contents</A>
+</TD></TR></TABLE>
+<SMALL>
+&copy; <A HREF=mailto:morris@ee.uwa.edu.au>John Morris</A>, 1998
+</SMALL>
+</BODY>
+</HTML>
+

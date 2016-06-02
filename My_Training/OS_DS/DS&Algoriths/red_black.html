@@ -1,0 +1,255 @@
+<HTML><HEAD>
+<TITLE>Data Structures and Algorithms: Red-Black Trees</TITLE>
+
+<META name="description" content="Data Structures and Algorithms Course Notes,
+PLDS210 University of Western Australia">
+<META name="keywords" content="data structures,algorithms,abstract data types,
+red-black trees, binary trees, balanced trees, search trees, dynamic search trees">
+</HEAD>
+<BODY BGCOLOR="#ffffff">
+<TABLE BGCOLOR="#00c0f0" WIDTH="100%" CELLSPACING=0 CELLPADDING=0>
+<TR BGCOLOR="#00f0f0"><TD ALIGN=right>
+<FONT FACE=helvetica SIZE=+1><I>Data Structures and Algorithms</I></FONT>
+</TD></TR>
+
+<TR><TD><FONT FACE=helvetica SIZE=+2><B>8.2 Red-Black Trees</B></FONT>
+</TD></TR>
+</TABLE>
+<P>
+
+A <I>red-black tree</I> is a binary search tree with
+one extra attribute for each node: the <I>colour</I>,
+which is either red or black.
+We also need to keep track of the parent of each node, 
+so that a red-black tree's node structure would
+be:
+<FONT COLOR=green><PRE>struct t_red_black_node {
+    enum { red, black } colour;
+    void *item;
+    struct t_red_black_node *left,
+                     *right,
+                     *parent;
+    }
+</PRE></FONT>
+
+For the purpose of this discussion,
+the NULL nodes which terminate the tree are considered to
+be the leaves and are coloured black.
+
+<H4>Definition of a red-black tree</H4>
+
+A red-black tree is a binary search tree which has the
+following <I>red-black properties</I>:
+<TABLE>
+<TR><TD WIDTH="60%">
+<OL>
+<LI> Every node is either red or black.
+<LI> Every leaf (NULL) is black.
+<LI> If a node is red, then both its children are black.
+<LI> Every simple path from a node to a descendant leaf
+contains the same number of black nodes.
+</OL>
+</TD>
+<TD><SMALL>
+<OL>
+<LI VALUE=3> implies that on any path from the
+root to a leaf, red nodes must not be adjacent.
+<BR>
+However, any number of black nodes may appear in a sequence.
+
+</TD></TR>
+</TABLE>
+<TABLE>
+<TR>
+<TD><IMG SRC=fig/rb_tree1.gif></TD><TD>A basic red-black tree</TD>
+</TR>
+<TR>
+<TD><IMG SRC=fig/rb_tree1a.gif></TD><TD>Basic red-black tree with the
+<B>sentinel</B> nodes added.
+Implementations of the red-black tree algorithms will usually include
+the sentinel nodes as a convenient means of flagging that you have
+reached a leaf node.<P>
+They are the NULL black nodes of property 2.</TD>
+</TR>
+</TABLE>
+The number of black nodes on any path from,
+but not including, a node <B><I>x</I></B> to a leaf is
+called the <I>black-height</I> of a node,
+denoted <B>bh(x)</B>.
+
+We can prove the following lemma:
+<H5>Lemma</H5>
+A red-black tree with <B><I>n</I></B> internal nodes has
+height at most 2<B>log(<I>n</I>+1)</B>.
+<BR>
+<I>(For a proof, see Cormen, p 264)</I>
+<P>
+This demonstrates why the red-black tree is a good
+search tree: it can always be searched in <B>O(log n)</B> time.
+
+<P>
+As with heaps, additions and deletions from red-black
+trees destroy the red-black property, so we need to restore it.
+To do this we need to look at some operations on
+red-black trees.
+<H4>Rotations</H4>
+<CENTER><TABLE>
+<TR><TD>
+A rotation is a local operation
+in a search tree that preserves 
+<I>in-order</I> traversal key ordering.
+<P>
+Note that in both trees, an in-order
+traversal yields:<P>
+<CENTER><PRE>A x B y C</PRE></CENTER>
+</TD><TD><IMG SRC="fig/rb_tree_rot.gif"></TD></TR>
+</TABLE></CENTER>
+The left_rotate operation may be encoded:
+<FONT COLOR=green><PRE>left_rotate( Tree T, node x ) {
+    node y;
+    y = x->right;
+    /* Turn y's left sub-tree into x's right sub-tree */
+    x->right = y->left;
+    if ( y->left != NULL )
+        y->left->parent = x;
+    /* y's new parent was x's parent */
+    y->parent = x->parent;
+    /* Set the parent to point to y instead of x */
+    /* First see whether we're at the root */
+    if ( x->parent == NULL ) T->root = y;
+    else
+        if ( x == (x->parent)->left )
+            /* x was on the left of its parent */
+            x->parent->left = y;
+        else
+            /* x must have been on the right */
+            x->parent->right = y;
+    /* Finally, put x on y's left */
+    y->left = x;
+    x->parent = y;
+    }
+</PRE></FONT>
+
+<h4>Insertion</H4>
+
+Insertion is somewhat complex and involves a number
+of cases.
+Note that we start by inserting the new node, <TT>x</TT>,
+in the tree just as we would for any other binary tree,
+using the <TT>tree_insert</TT> function.
+This new node is labelled red, and possibly
+destroys the red-black property.
+The main loop moves up the tree,
+restoring the red-black property.
+
+<FONT COLOR=green><PRE>rb_insert( Tree T, node x ) {
+    /* Insert in the tree in the usual way */
+    tree_insert( T, x );
+    /* Now restore the red-black property */
+    x->colour = red;
+    while ( (x != T->root) && (x->parent->colour == red) ) {
+       if ( x->parent == x->parent->parent->left ) {
+           /* If x's parent is a left, y is x's right 'uncle' */
+           y = x->parent->parent->right;
+           if ( y->colour == red ) {
+               /* case 1 - change the colours */
+               x->parent->colour = black;
+               y->colour = black;
+               x->parent->parent->colour = red;
+               /* Move x up the tree */
+               x = x->parent->parent;
+               }
+           else {
+               /* y is a black node */
+               if ( x == x->parent->right ) {
+                   /* and x is to the right */ 
+                   /* case 2 - move x up and rotate */
+                   x = x->parent;
+                   left_rotate( T, x );
+                   }
+               /* case 3 */
+               x->parent->colour = black;
+               x->parent->parent->colour = red;
+               right_rotate( T, x->parent->parent );
+               }
+           }
+       else {
+           /* repeat the "if" part with right and left
+              exchanged */
+       }
+    /* Colour the root black */
+    T->root->colour = black;
+    }
+       
+</PRE></FONT>
+<P>
+<A HREF="red_black_op.html" TARGET=op>Here's an example of the insertion operation</A>.
+<P>
+
+<H3>Animation</H3>
+
+<A NAME=red_black_anim>
+<TABLE BGCOLOR="#00f0f0" WIDTH="100%"> 
+<TR><TD >
+<FONT COLOR=blue FACE=helvetica>
+<B>Red-Black Tree Animation</B><BR>
+This animation was written by Linda Luo, 
+Mervyn Ng and Woi Ang.</FONT></TD>
+<TD ALIGN=center>
+  <TABLE BORDER=0>
+  <TR><TD>
+    <APPLET CODEBASE="Java/red_black" code = "AlgAnimApp.class" width = 200 height = 35>
+    <param name = "filename" value = "AlgThread.java">
+    <param name = "algfile" value = "graph.rb">
+    <param name = "buttonname" value = "Run Red-Black Tree Animation">
+    <param name = "algname" value = "Red Black Tree">
+    </applet>
+    </TD>
+  </TR>
+</TABLE>
+</TD>
+<TD><FONT FACE=helvetica>Please email comments to:<BR>
+<A HREF=mailto:morris@ee.uwa.edu.au>morris@ee.uwa.edu.au</A>
+</TR>
+</TABLE>
+
+<P>
+Examination of the code reveals only one
+loop. 
+In that loop, the node at the root of the sub-tree
+whose red-black property we are trying to restore, <TT>x</TT>,
+may be moved up the tree <I>at least one level</I> in each iteration
+of the loop.
+Since the tree originally has <B>O(log n)</B> height,
+there are <B>O(log n)</B> iterations. 
+The 
+<FONT COLOR=green><TT>tree_insert</TT></FONT>
+routine also has <B>O(log n)</B> complexity,
+so overall the 
+<FONT COLOR=green><TT>rb_insert</TT></FONT>
+routine also has <B>O(log n)</B> complexity.
+<P>
+
+<P>
+<TABLE WIDTH="100%" BGCOLOR="#00c0f0">
+<TR><TD><H3>Key terms</H3></TD></TR></TABLE>
+<DL>
+<DT><FONT COLOR="#fa0000"><B>Red-black trees</B></FONT>
+   <DD>Trees which remain <B>balanced</B> - and thus guarantee
+ <B>O(logn)</B> search times - in a dynamic environment.
+ Or more importantly, since any tree can be re-balanced - but at
+ considerable cost - can be re-balanced in <B>O(logn)</B> time.
+</DL>
+
+<P>
+
+<TABLE CELLPADDING=5 WIDTH="100%" BGCOLOR="#00f0f0" CELLSPACING=4>
+<TR><TD WIDTH=50%>
+Continue on to <A HREF="AVL.html">AVL Trees</A></TD>
+<TD>Back to the <A HREF="ds_ToC.html">Table of Contents</A>
+</TD></TR></TABLE>
+<SMALL>
+&copy; <A HREF=mailto:morris@ee.uwa.edu.au>John Morris</A>, 1998
+</SMALL>
+</BODY>
+</HTML>

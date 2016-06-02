@@ -1,0 +1,189 @@
+<HTML><HEAD>
+<TITLE>Data Structures and Algorithms: Stacks</TITLE>
+
+<META name="description" content="Data Structures and Algorithms Course Notes,
+PLDS210 University of Western Australia">
+<META name="keywords" content="data structures,algorithms,abstract data types,
+stacks, stack frames">
+</HEAD>
+<BODY BGCOLOR="#ffffff">
+<TABLE BGCOLOR="#00c0f0" WIDTH="100%" CELLSPACING=0 CELLPADDING=0>
+<TR BGCOLOR="#00f0f0"><TD ALIGN=right>
+<FONT FACE=helvetica SIZE=+1><I>Data Structures and Algorithms</I></FONT>
+</TD></TR>
+
+<TR><TD><FONT FACE=helvetica SIZE=+2><B>3.3 Stacks</B></FONT>
+</TD></TR>
+</TABLE>
+<P>
+
+Another way of storing data is in a stack.
+A stack is generally
+implemented with only two principle operations (apart from a constructor and
+destructor methods):
+<CENTER><TABLE BORDER=3>
+<TR>
+<TD><FONT COLOR=green><TT>push</tt></FONT></TD>
+	<TD>adds an item to a stack</TD>
+</TR>
+<TR>
+<TD><FONT COLOR=green><TT>pop</tt></FONT></TD>
+	<TD>extracts the most recently pushed item from the stack</TD>
+</TR>
+</TABLE></CENTER>
+Other methods such as
+<CENTER><TABLE BORDER=3>
+<TR>
+<TD><FONT COLOR=green><TT>top</tt></FONT></TD>
+<TD>returns the item at the top <i>without removing it</i>
+<a href="notes.html#note9">[9]</a></TD>
+
+</TR>
+<TR>
+<TD><FONT COLOR=green><tt>isempty</tt></FONT></TD>
+	<TD>determines whether the stack has anything in it</TD>
+</TR>
+</TABLE></CENTER>
+are sometimes added.
+<P>
+<TABLE>
+<TR ALIGN=center><TD>
+<IMG SRC="fig/stack.gif"></TD>
+<TD>A common model of a stack is a
+plate or coin stacker.
+Plates are "pushed" onto to the top and "popped" off the top.
+<P>
+Stacks form Last-In-First-Out (LIFO) queues and have many applications from the
+parsing of algebraic expressions to ...
+</TD>
+</TR>
+</TABLE>
+<P>
+A formal specification of a stack class would look like:
+<PRE><TT><FONT COLOR=green>typedef struct t_stack *stack;
+
+stack ConsStack( int max_items, int item_size );
+/* Construct a new stack
+   Pre-condition: (max_items &gt; 0) &amp;&amp; (item_size &gt; 0)
+   Post-condition: returns a pointer to an empty stack
+*/
+
+void Push( stack s, void *item );
+/* Push an item onto a stack
+   Pre-condition: (s is a stack created by a call to ConsStack) &amp;&amp;
+                  (existing item count &lt; max_items) &amp;&amp;
+                  (item != NULL)
+   Post-condition: item has been added to the top of s
+*/
+
+void *Pop( stack s );
+/* Pop an item of a stack
+   Pre-condition: (s is a stack created by a call to 
+                  ConsStack) &amp;&amp;
+                  (existing item count &gt;= 1)
+   Post-condition: top item has been removed from s
+*/
+</FONT></TT></PRE>
+
+Points to note:
+<OL TYPE="a">
+<LI> A stack is simply another collection of data items and thus it would be
+possible to use exactly the same specification as the one used for our general
+collection. However, collections with the LIFO semantics of stacks are so
+important in computer science that it is appropriate to set up a limited
+specification appropriate to stacks only.
+<LI> Although a linked list implementation of a stack is possible
+<NOTE>(adding and deleting from the head of a linked list produces exactly
+the LIFO semantics of a stack)</NOTE>,
+the most common applications for stacks have a space
+restraint so that using an array implementation is a natural and efficient
+one
+<NOTE>(In most operating systems, allocation and de-allocation of memory is a
+relatively expensive operation, there is a penalty for the flexibility of
+linked list implementations.</NOTE>).
+</OL>
+
+<P>
+<H3> <a name="stack-frames">3.3.1 Stack Frames </a></h3>
+
+Almost invariably, programs compiled from modern high level languages (even C!)
+make use of a stack frame for the working memory of each procedure or function
+invocation. When any procedure or function is called, a number of words - the
+stack frame - is pushed onto a program stack. When the procedure or function
+returns, this frame of data is popped off the stack.
+<P>
+As a function calls
+ another function, first its arguments, then the
+return address and finally space for local variables is pushed onto the stack.
+Since each function runs in its own "environment" or 
+<FONT COLOR+"#fa0000"><B>context</B></FONT>,
+it becomes
+possible for a function to call itself - a technique known as <i>recursion</i>.
+This capability is extremely useful and extensively used - because many
+problems are elegantly specified or solved in a recursive way.
+<P>
+<TABLE>
+<TR>
+<TD><IMG SRC="fig/stackframe.gif" ALIGN=left></TD>
+<TD>Program stack after executing a pair of mutually recursive functions:
+<PRE><FONT COLOR=green>function f(int x, int y) {
+    int a;
+    if ( term_cond ) return ...;
+    a = .....;
+    return g(a);
+    }
+
+function g(int z) {
+    int p,q;
+    p = ...; q = ...;
+    return f(p,q);
+    }
+</FONT></PRE>
+Note how all of function 
+<FONT COLOR=green><TT>f</TT></FONT>
+and <FONT COLOR=green><TT>g</TT></FONT>'s environment
+(their parameters and local
+variables) are found in the stack frame.
+When 
+<FONT COLOR=green><TT>f</TT></FONT>
+is called a second time from
+<FONT COLOR=green><TT>g</TT></FONT>, a new frame for the second
+invocation of 
+<FONT COLOR=green><TT>f</TT></FONT>
+is created.</TD>
+</TR>
+</TABLE>
+
+
+<P>
+<TABLE WIDTH="100%" BGCOLOR="#00c0f0">
+<TR><TD><H3>Key terms</H3></TD></TR></TABLE>
+<DL>
+<DT><FONT COLOR="#fa0000"><B>push, pop</B></FONT>
+   <DD>Generic terms for adding something to, or removing something
+ from a stack
+<DT><FONT COLOR="#fa0000"><B>context</B></FONT>
+   <DD>The environment in which a function executes: includes
+         argument values, local variables and global variables.
+        All the context except the global variables is stored in a
+       stack frame. 
+<DT><FONT COLOR="#fa0000"><B>stack frames</B></FONT>
+   <DD>The data structure containing all the data (arguments, 
+local variables, return address, <I>etc</I>) 
+needed each time a procedure or function is called.
+
+</DL>
+
+<P>
+
+<TABLE CELLPADDING=5 WIDTH="100%" BGCOLOR="#00f0f0" CELLSPACING=0>
+<TR><TD>
+Continue on to <A HREF="recursion.html">Recursion</A><BR>
+Back to the <A HREF="ds_ToC.html">Table of Contents</A>
+</TD></TR></TABLE>
+<SMALL>
+&copy; <A HREF=mailto:morris@ee.uwa.edu.au>John Morris</A>, 1998
+</SMALL>
+</BODY>
+</HTML>
+

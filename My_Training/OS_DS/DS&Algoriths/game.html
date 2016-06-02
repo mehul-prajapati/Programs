@@ -1,0 +1,66 @@
+<HTML><HEAD>
+<TITLE>Data Structures and Algorithms: Games</TITLE>
+
+<META name="description" content="Data Structures and Algorithms Course Notes,
+PLDS210 University of Western Australia">
+<META name="keywords" content="data structures,algorithms,abstract data types ">
+</HEAD>
+<BODY BGCOLOR="#ffffff">
+<TABLE BGCOLOR="#00c0f0" WIDTH="100%" CELLSPACING=0 CELLPADDING=0>
+<TR BGCOLOR="#00f0f0"><TD ALIGN=right>
+<FONT FACE=helvetica SIZE=+1><I>Data Structures and Algorithms</I></FONT>
+</TD></TR>
+
+<TR><TD><FONT FACE=helvetica SIZE=+2><B>13 Games</B></FONT>
+</TD></TR>
+</TABLE>
+<P>
+
+Although games like chess require analysis of extraordinarily
+large numbers of moves - and thus are placed in the 
+intractable class - dramatic improvements can be made 
+in the running time with the best algorithm.
+
+<H4>The Naive Approach</H4>
+
+A naive chess program simply determines the moves that can be made 
+from any position and then,
+for each of the possible moves:
+<UL>
+<LI>applies the move to the current position,
+<LI>evaluates the new position and then
+<LI>determines how many moves can be made from the new position
+      and applies the same procedure ..
+</UL>
+This algorithm is set to terminate at some fixed depth -
+the search depth - and return a "score" for the best position it
+can get to at that depth.
+With of the order of 20 moves able to be made at any position,
+the number of moves which need to be evaluated for a search depth
+of <B><I>m</I></B> is ~20<SUP><B><I>m</I></B></SUP>.
+For reasonable <B><I>m</I></B> - good human players manage to
+"look ahead" 10 or more moves - this number soon becomes 
+prohibitively large - beyond the capabilities of any modern
+computer in any reasonable time.
+
+<H4>The Alpha-Beta Algorithm</H4>
+
+Application of the Alpha-Beta algorithm enables many "unprofitable"
+branches in the tree of moves which need to be considered to be
+<FONT COLOR="#fa0000"><B>cut off</B></FONT> and not considered
+further.
+This dramatically improves the time taken to determine the best 
+move and has the effect that a much deeper search can be made
+in the same time.
+
+
+
+<TABLE CELLPADDING=5 WIDTH="100%" BGCOLOR="#00f0f0" CELLSPACING=4>
+<TR><TD WIDTH=50%>The End</TD>
+<TD>Back to the <A HREF="ds_ToC.html">Table of Contents</A>
+</TD></TR></TABLE>
+<SMALL>
+&copy; <A HREF=mailto:morris@ee.uwa.edu.au>John Morris</A>, 1998
+</SMALL>
+</BODY>
+</HTML>

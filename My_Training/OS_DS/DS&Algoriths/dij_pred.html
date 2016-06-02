@@ -1,0 +1,71 @@
+<HTML><HEAD>
+<TITLE>Data Structures and Algorithms: Dijkstra's Algorithm - Predecessors</TITLE>
+
+<META name="description" content="Data Structures and Algorithms Course Notes,
+PLDS210 University of Western Australia">
+<META name="keywords" content="data structures,algorithms,abstract data types,
+shortest paths, Dijkstra's algorithm, graph algorithms ">
+</HEAD>
+<BODY BGCOLOR="#ffffff">
+<TABLE BGCOLOR="#00c0f0" WIDTH="100%" CELLSPACING=0 CELLPADDING=0>
+<TR BGCOLOR="#00f0f0"><TD ALIGN=right>
+<FONT FACE=helvetica SIZE=+1><I>Data Structures and Algorithms</I></FONT>
+</TD></TR>
+
+<TR><TD><FONT FACE=helvetica SIZE=+2><B>10.2.1 Predecessor Lists</B></FONT>
+</TD></TR>
+</TABLE>
+<P>
+
+The <FONT COLOR="#fa0000">predecessor list</FONT> is an array of indices,
+one for each vertex of a graph.
+Each vertex' entry contains the index of its predecessor in a path through
+the graph.
+
+<TABLE>
+<TR>
+<TD><IMG SRC="fig/dij3.gif"></TD>
+<TD>In this example, the red arrows show the predecessor relations,
+so the predecessor list would be:
+<CENTER>
+<TABLE BORDER CELLPADDING=3>
+<TR><TH>Vertex</TH><TH>Predecessor</BR>pi</TH></TR>
+<TR><TD ALIGN=center>s</TD><TD ALIGN=center>s<FONT COLOR=red>*</FONT></TD></TR>
+<TR><TD ALIGN=center>u</TD><TD ALIGN=center>x</TD></TR>
+<TR><TD ALIGN=center>v</TD><TD ALIGN=center>x</TD></TR>
+<TR><TD ALIGN=center>x</TD><TD ALIGN=center>s</TD></TR>
+<TR><TD ALIGN=center>y</TD><TD ALIGN=center>x</TD></TR>
+</TABLE>
+</CENTER>
+<TABLE><TR><TD VALIGN=top><FONT COLOR=red>*</FONT> </TD>
+<TD>Any convention to indicate a vertex with no predecessor will do:
+it can point to itself, as here, or be set to -1.
+</TD></TR>
+</TABLE>
+</TR>
+</TABLE>
+
+
+<P>
+<TABLE WIDTH="100%">
+<TR><TD BGCOLOR="#00c0f0"><H3>Key terms</H3></TD></TR>
+</TD></TR>
+<TR><TD><DL>
+
+</DL>
+</TD></TR>
+</TABLE>
+
+<P>
+
+<TABLE CELLPADDING=5 WIDTH="100%" BGCOLOR="#00f0f0" CELLSPACING=4>
+<TR><TD WIDTH=50%>
+<FONT FACE=arial,helvetica>Back to <A HREF="dijkstra.html">Dijkstra's algorithm</A></TD>
+<TD><FONT FACE=arial,helvetica>Back to the <A HREF="ds_ToC.html">Table of Contents</A>
+</TD></TR></TABLE>
+<SMALL>
+&copy; <A HREF=mailto:morris@ee.uwa.edu.au>John Morris</A>, 1998
+</SMALL>
+</BODY>
+</HTML>
+

@@ -1,0 +1,73 @@
+%
+% comp1.tex Complexity section
+%
+% This is the common section of the complexity section - used in
+% both HTML and PS versions
+%
+% Fast inline math
+
+\setcounter{section}{4}
+\section{Complexity}
+
+We have already used the \Ohx\ notation to 
+denote the general behaviour of an algorithm as a 
+function of the problem size.
+We have said that an algorithm is
+\Oh{\log{n}}
+if its running time, $T(n)$, to solve a 
+problem of size \nx\ is proportional
+to \logn.
+
+% \begin{rawhtml}
+% <H3>4.1 The O Notation</H3>
+% \end{rawhtml}
+\subsection{The \Ohx\ notation}
+
+Formally, 
+$O(g(n))$ is the {\em set}
+of functions, $f$, such that
+for some $c > 0$,
+\[ f(n) < c g(n) \]
+for all positive integers, $n > N$,
+ie for all sufficiently large $N$.
+Another way of writing this is:
+\[ \displaystyle{ \lim_{n \rightarrow \infty}} \frac{f(n)}{g(n)} \leq c \]
+
+Informally, we say the $O(g)$ is the set of
+all functions which grow {\it no faster} than $g$. 
+The function $g$ is an {\em upper bound} to functions in $O(g)$.
+
+We are interested in the set of functions defined by the $O$
+notation because we want to argue about the relative merits of
+algorithms - independent of their implementations.
+That is, we are not concerned with the language or machine used;
+we want a means of comparing algorithms which is relevant to 
+{\it any} implementation.
+
+We can define two other functions: $\Omega(g)$
+and $\Theta(g)$ .
+
+$\Omega(g)$ the set of functions $f(n)$ for which
+$f(n) \geq c g(n)$ for all positive integers, $n > N$, and
+
+\[ \Theta(g) = \Omega(g) \cap O(g) \]
+
+We can derive:
+
+\[ f \in \Theta(g) \]
+
+if
+
+\[ \displaystyle{ \lim_{n \rightarrow \infty}} \frac{f(n)}{g(n)} = c \]
+
+Thus, $\Omega(g)$ is a lower bound - functions in $\Omega(g)$ grow
+{\it faster} than $g$ and
+$\Theta(g)$ are functions that grow {\it at the same rate} as $g$.
+In these last two statements - as in most of the discussion on
+complexity theory - "within a constant factor" is understood.
+Different languages, compilers, machines, operating systems, etc
+will produce different constant factors: it is the general behaviour
+of the running time as $n$ increases to very large values that
+we're concerned with.
+
+

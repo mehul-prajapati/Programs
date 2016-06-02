@@ -1,0 +1,218 @@
+<html><head>
+<HTML><HEAD>
+<TITLE>Data Structures and Algorithms: Introduction</TITLE>
+
+<META name="description" content="Data Structures and Algorithms Course Notes,
+PLDS210 University of Western Australia">
+<META name="keywords" content="data structures,algorithms,abstract data types ">
+</HEAD>
+<BODY BGCOLOR="#ffffff">
+<TABLE BGCOLOR="#00c0f0" WIDTH="100%" CELLSPACING=0 CELLPADDING=0>
+<TR BGCOLOR="#00f0f0"><TD ALIGN=right>
+<FONT FACE=helvetica SIZE=+1><I>Data Structures and Algorithms</I></FONT>
+</TD></TR>
+
+<TR><TD><FONT FACE=helvetica SIZE=+2><B>3.2 Lists</B></FONT>
+</TD></TR>
+</TABLE>
+<P>
+
+The array implementation of our collection has one serious drawback: you must
+know the maximum number of items in your collection when you create it. This
+presents problems in programs in which this maximum number cannot be predicted
+accurately when the program starts up. Fortunately, we can use a structure
+called a linked list to overcome this limitation.
+
+<H3>3.2.1 Linked lists</H3>
+
+The linked list is a very flexible
+<FONT COLOR="#fa0000"><B>dynamic data structure</B></FONT>:
+items may be added to it or deleted from it at will.
+A programmer need not worry about how many items a program will have to
+accommodate: 
+this allows us to write robust programs which require much less
+maintenance.
+A very common source of problems in program maintenance is the
+need to increase the capacity of a program to handle larger
+collections: 
+even the most generous allowance for growth tends to prove 
+inadequate over time!
+<P>
+In a linked list, each item
+is allocated space as it is added to the list.
+A link is kept with each item to the next item in the list.
+<P>
+<TABLE>
+<TR>
+<TD>
+<IMG SRC="fig/llist.gif" ALIGN=left>
+</TD>
+<TD>
+Each node of the list has two elements
+<OL>
+<li> the item being stored in the list <i>and</i>
+<li> a pointer to the next item in the list
+</OL>
+The last node in the list contains a NULL pointer to indicate that it
+is the end or <i>tail</i> of the list.
+</TD>
+</TABLE>
+<P>
+As items are added to a list,
+memory for a node is dynamically allocated.
+Thus the number of items that may be added to a list is limited only
+by the amount of memory available.
+
+<H3>Handle for the list</H3>
+The variable (or handle) which represents the list is simply a pointer
+to the node at the <i>head</i> of the list.
+
+<H3>Adding to a list</H3>
+The simplest strategy for adding an item to a list is to:
+<OL TYPE="a">
+<li> allocate space for a new node,
+<li> copy the item into it,
+<li> make the new node's <tt><FONT COLOR=green>next</FONT></TT>
+pointer point to the current head of the list <i>and</I>
+<li> make the head of the list point to the newly allocated
+node.
+</OL>
+This strategy is fast and efficient, but each item is added to 
+the head of the list.
+<P>
+An alternative is to create a structure for the list which
+contains both head and tail pointers:
+<PRE><TT><FONT COLOR=green>	struct fifo_list {
+		struct node *head;
+		struct node *tail;
+		};
+</FONT></TT></PRE>
+<P>
+The code for <TT><FONT COLOR=green>AddToCollection</FONT></TT>
+is now trivially modified to make a list in which the 
+item most recently added to the list is the list's tail.
+<P>
+The specification remains identical to that used for the array implementation:
+the <tt><FONT COLOR=green>max_item</FONT></tt> parameter to <tt><FONT COLOR=green>ConsCollection</FONT></tt> is simply ignored
+<a href="notes.html#note7">[7]</A>
+<p>
+Thus we only need to change the implementation. As a consequence, applications
+which use this object will need no changes. The ramifications for the cost of
+software maintenance are significant.
+<p>
+The data structure is changed, but since the details (the attributes of the
+object or the elements of the structure) are hidden from the user, there is no
+impact on the user's program.
+<P>
+<A HREF="source/collection_ll.c" TARGET="collection_ll.c">
+Select here to load collection_ll.c</A>
+<P>
+Points to note:
+<OL type="a">
+<li>	This implementation of our collection can be substituted for the first one
+with no changes to a client's program. With the exception of the added
+flexibility that any number of items may be added to our collection, this
+implementation provides exactly the same high level behaviour as the previous
+one.
+<li>	The linked list implementation has exchanged flexibility for efficiency 
+- on most systems, the system call to allocate memory is relatively expensive.
+Pre-allocation in the array-based implementation is generally more efficient.
+More examples of such trade-offs will be found later.
+</OL>
+<p>
+The study of data structures and algorithms will enable you to make the
+implementation decision which most closely matches your users'
+specifications.
+
+<H3>3.2.2 List variants</H3>
+
+<H4>Circularly Linked Lists</H4>
+
+By ensuring that the tail of the list is always pointing to the
+head, we can build a circularly linked list.
+If the external pointer (the one in <TT><FONT COLOR=green>struct t_node</FONT>
+</TT> in our implementation),
+points to the current "tail" of the list,
+then the "head" is found trivially via
+<TT><FONT COLOR=green>tail->next</FONT></TT>,
+permitting us to have either LIFO or FIFO lists with only
+one external pointer. 
+In modern processors, the few bytes of memory saved in this way would
+probably not be regarded as significant.
+A circularly linked list would more likely be used in an application
+which required "round-robin" scheduling or processing.
+
+<H4>Doubly Linked Lists</H4>
+
+<TABLE>
+<TR>
+<TD>
+<IMG SRC="fig/dllist.gif" ALIGN=left>
+</TD>
+<TD>
+Doubly linked lists have a pointer to the preceding item as well as
+one to the next.
+</TD></TR>
+</TABLE>
+They permit scanning or searching of the list in both directions.
+(To go backwards in a simple list, it is necessary to go back to the
+start and scan forwards.)
+Many applications require searching backwards and forwards through 
+sections of a list: for example, searching for a common name like 
+"Kim" in a Korean telephone directory would probably need much
+scanning backwards and forwards through a small region of the
+whole list, so the backward links become very useful.
+
+In this case, the node structure is altered to have two links:
+<PRE><FONT COLOR=green>struct t_node {
+     void *item;
+     struct t_node *previous;
+     struct t_node *next;
+     } node;
+</FONT></PRE>
+
+<H4>Lists in arrays</H4>
+
+Although this might seem pointless (Why impose a structure which has the
+overhead of the "next" pointers on an array?), this is just what memory
+allocators do to manage available space. 
+<P>
+Memory is just an array of words. After a series of
+memory allocations and de-allocations, there are blocks of free memory
+scattered throughout the available heap space. In order to be able to
+re-use this memory, memory allocators will usually link freed blocks
+together in a <I>free list</I> by writing pointers to the next free
+block in the block itself. An external free list pointer pointer points
+to the first block in the free list.
+When a new block of memory is requested, the allocator will generally
+scan the free list looking for a freed block of suitable size and 
+delete it from the free list (re-linking the free list around the 
+deleted block).
+Many variations of memory allocators have been proposed: refer to a text
+on operating systems or implementation of functional languages for
+more details. The entry in the index under <I>garbage collection</I>
+will probably lead to a discussion of this topic.
+
+<P>
+<TABLE WIDTH="100%" BGCOLOR="#00c0f0">
+<TR><TD><H3>Key terms</H3></TD></TR></TABLE>
+<DL>
+<DT><FONT COLOR="#fa0000"><B>Dynamic data structures</B></FONT>
+   <DD>Structures which grow or shrink as the data they hold changes.
+Lists, <A HREF=stacks.html>stacks</A>
+ and <A HREF=trees.html>trees</A> are all dynamic structures.
+</DL>
+
+<P>
+
+<TABLE CELLPADDING=5 WIDTH="100%" BGCOLOR="#00f0f0" CELLSPACING=0>
+<TR><TD>
+Continue on to <A HREF="stacks.html">Stacks</A><BR>
+Back to the <A HREF="ds_ToC.html">Table of Contents</A>
+</TD></TR></TABLE>
+<SMALL>
+&copy; <A HREF=mailto:morris@ee.uwa.edu.au>John Morris</A>, 1998
+</SMALL>
+</BODY>
+</HTML>
+

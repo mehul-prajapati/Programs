@@ -1,0 +1,135 @@
+<HTML><HEAD>
+<TITLE>Data Structures and Algorithms: Arrays</TITLE>
+
+<META name="description" content="Data Structures and Algorithms Course Notes,
+PLDS210 University of Western Australia">
+<META name="keywords" content="data structures,algorithms,abstract data types,
+computer science,course notes, searching">
+</HEAD>
+<BODY BGCOLOR="#ffffff">
+
+<TABLE BGCOLOR="#00c0f0" WIDTH="100%" CELLSPACING=0 CELLPADDING=0>
+<TR BGCOLOR="#00f0f0"><TD ALIGN=right>
+<FONT FACE=helvetica SIZE=+1><I>Data Structures and Algorithms</I></FONT>
+</TD></TR>
+
+<TR><TD><FONT FACE=helvetica SIZE=+2><B>3 Data Structures</B></FONT>
+</TD></TR>
+</TABLE>
+<P>
+
+In this section, we will examine some fundamental data structures:
+arrays, lists, stacks and trees.
+
+<a name="arrays">
+<H3>3.1 Arrays</H3>
+
+The simplest way to implement our collection is to use an array to hold the
+items.
+Thus the implementation of the collection object becomes:
+
+<PRE><FONT COLOR=green>
+<TT>/* Array implementation of a collection */
+#include &lt;assert.h&gt;		/* Needed for assertions */
+#include "collection.h"	/* import the specification */
+
+struct t_collection {
+	int item_cnt;
+	int max_cnt;	/* Not strictly necessary */
+	int item_size;	/* Needed by FindInCollection */
+	void *items[];
+	};
+</TT>
+</FONT></PRE>
+<p>
+Points to note:<p>
+<ol type="a">
+<LI> We have imported the specification of this object into the implementaton -
+this enables the compiler to verify that the implementation and the
+specification match. Although it's not necessary to include the specification
+(<A href="ANSI_C.html#fn_prototypes"><i>cf</i> function prototypes</A>),
+it is much safer to do so as it enables the compiler
+to detect some common errors and ensures that the specification and its
+implementation remain consistent when the object is changed.<p>
+<LI> <TT><FONT COLOR=green>items</FONT></TT>
+is typed as an array of <TT><FONT COLOR=green>void *</FONT></TT> in the struct.
+It is an array of <TT>item</TT>'s which happen to be pointers - but remember
+that we are trying to hide this from users of the class. Many C programmers
+would write the equivalent <TT><FONT COLOR=green>void **</FONT></TT> here.
+</OL>
+<p>
+A question:<p>
+<UL>
+<LI>	Why is the attribute <TT><FONT COLOR=green>max_cnt</FONT></TT> not strictly necessary?<BR>
+Hint: it's related to the pre- and post-conditions specified
+for methods on this object.
+</UL>
+<P>
+The implementations of the methods are:<p>
+<A HREF=source/collection.c TARGET=collection.c REL=parent>Select here to load collection.c</A>
+<p>
+Points to note:<p>
+<OL TYPE="a">
+<LI>	<TT><FONT COLOR=green>ConsCollection</FONT></TT> uses
+the <A HREF=malloc.html REL=parent>memory allocator</A>
+<TT><FONT COLOR=green>calloc</FONT></TT> to
+dynamically allocate memory off the program's heap for the collection.
+Two calls are necessary -
+one to allocate space for the "header" structure itself
+and one to allocate space for the array of item pointers.<p>
+<LI>	<TT><FONT COLOR=green>assert</FONT></TT> calls have been added for the pre-conditions (<i>cf</i> full
+description of
+<A HREF="assert.html" TARGET=assert><TT><FONT COLOR=green>assert</FONT></TT></A>). Note that the pre-conditions here are
+expressed as a number of conditions linked by <TT><FONT COLOR=green>&amp;&amp;</FONT></TT>. Since <TT><FONT COLOR=green>assert</FONT></TT>
+requires a single boolean expression as its argument, one <TT><FONT COLOR=green>assert</FONT></TT> would
+suffice. However, we have chosen to implement each individual condition as a
+separate <TT><FONT COLOR=green>assert</FONT></TT>. This is done to assist de-bugging: if the
+pre-conditions are not satisfied, it is more helpful to know which one of
+multiple conditions has not been satisfied!<p>
+<LI>	<TT><FONT COLOR=green>memcmp</FONT></TT> is a standard function which compares blocks of memory byte
+by byte [<A HREF=memcmp.html TARGET=memcmp>man page for memcmp</A>].
+<P>
+<LI> The use of <TT><FONT COLOR=green>memcp</FONT></TT> and 
+<TT><FONT COLOR=green>ItemKey</FONT></TT> severely constrain the
+form of the key - it must be in a contiguous string of characters
+in the item. There are ways of providing more flexible keys
+(<I>eg</I> ones having multiple fields within <TT><FONT COLOR=green>item</FONT></TT> or
+ones calculated from <TT><FONT COLOR=green>item</FONT></TT>.
+These rely on C capabilities which will be discussed in a later section.
+<p>
+<LI>	There is no treatment of errors, <i>e.g.</i> if no memory is available on
+the heap for <TT><FONT COLOR=green>calloc</FONT></TT>.
+<p><CENTER>
+<STRONG><FONT COLOR=red>This is a serious shortcoming.</FONT></STRONG>
+</CENTER>
+<p>
+No software without a consistent strategy for detecting, reporting and
+recovering from errors can be  considered well engineered. It is difficult to
+debug, prone to crashes from faults which are difficult to correct because
+there is no indication of the source of the error.
+<P>
+Error handling is addressed in a 
+<A HREF="notyet.html">later section</A>.
+</OL>
+
+
+<P>
+<TABLE WIDTH="100%" BGCOLOR="#00c0f0">
+<TR><TD><H3>Key terms</H3></TD></TR></TABLE>
+<DL>
+<DT><FONT COLOR="#fa0000"><B>hacking</B></FONT>
+   <DD>producing a computer program rapidly, without thought and
+</DL>
+
+<P>
+
+<TABLE CELLPADDING=5 WIDTH="100%" BGCOLOR="#00f0f0" CELLSPACING=0>
+<TR><TD>
+Continue on to <A HREF="lists.html">Lists</A><BR>
+Back to the <A HREF="ds_ToC.html">Table of Contents</A>
+</TD></TR></TABLE>
+<SMALL>
+&copy; <A HREF=mailto:morris@ee.uwa.edu.au>John Morris</A>, 1998
+</SMALL>
+</BODY>
+</HTML>

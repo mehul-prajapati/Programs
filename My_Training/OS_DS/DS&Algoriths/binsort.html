@@ -1,0 +1,176 @@
+<HTML><HEAD>
+<TITLE>Data Structures and Algorithms: Bin Sort</TITLE>
+
+<META name="description" content="Data Structures and Algorithms Course Notes,
+PLDS210 University of Western Australia">
+<META name="keywords" content="data structures,algorithms,abstract data types,
+sorting, bin sort">
+</HEAD>
+<BODY BGCOLOR="#ffffff">
+<TABLE BGCOLOR="#00c0f0" WIDTH="100%" CELLSPACING=0 CELLPADDING=0>
+<TR BGCOLOR="#00f0f0"><TD ALIGN=right>
+<FONT FACE=helvetica SIZE=+1><I>Data Structures and Algorithms</I></FONT>
+</TD></TR>
+
+<TR><TD><FONT FACE=helvetica SIZE=+2><B>7.4 Bin Sort</B></FONT>
+</TD></TR>
+</TABLE>
+<P>
+ 
+ Assume that
+ <OL> 
+ <LI> the keys of the items that we wish to
+ sort lie in a small fixed range and 
+ <LI> that there is
+ only one item with each value of the key.
+ </OL>
+ Then we can sort with the following procedure:
+ <OL>
+ <LI> Set up an array of "bins" - one for each value of the key -
+ in order,
+ <LI> Examine each item and use the value of the key to place
+ it in the appropriate bin.
+ </OL>
+ Now our collection is sorted and it only took <B>n</B>
+ operations, so this is an <B>O(n)</B> operation.
+ However, note that it will only work under very restricted
+ conditions.
+ <P>
+
+<H4>Constraints on bin sort</H4>
+
+To understand these restrictions,
+let's be a little more precise about the specification of the
+ problem and assume that there are <B>m</B> values of the
+ key. To recover our sorted collection, we need to examine each
+ bin.
+ This adds a third step to the algorithm above,
+<OL START=3>
+<LI> Examine each bin to see whether there's an item in it.
+</OL>
+which requires 
+ <B>m</B> operations. So the algorithm's time becomes:
+ <CENTER>
+ <B>T(n) = c<SUB>1</SUB>n + c<SUB>2</SUB>m</B>
+ </CENTER>
+ and it is strictly <B>O(n + m)</B>.
+ Now if <B>m &lt;= n</B>, this is clearly <B>O(n)</B>.
+ However if <B>m &gt;&gt; n</B>, then it is <B>O(m)</B>.
+ <P>
+ For example, if we wish to sort 10<SUP>4</SUP> 32-bit integers,
+ then <B>m</B> = 2<SUP>32</SUP> and we need 2<SUP>32</SUP> operations
+ (and a rather large memory!).
+ <BR>
+ For <B>n</B> = 10<SUP>4</SUP>:<BR>
+ <CENTER>
+<B>nlogn</B> &#126; 10<SUP>4</SUP> x 13 &#126; 2<SUP>13</SUP> x 2<SUP>4</SUP>
+ &#126; 2<SUP>17</SUP>
+</CENTER>
+So quicksort or heapsort would clearly be preferred.
+<P>
+An implementation of bin sort might look like:
+<P><FONT COLOR=green>
+<PRE>#define EMPTY	-1 /* Some convenient flag */
+void bin_sort( int *a, int *bin, int n ) {
+    int i;
+    /* Pre-condition: for 0&lt;=i&lt;n : 0 &lt;= a[i] &lt; M */
+    /* Mark all the bins empty */
+    for(i=0;i&lt;M;i++) bin[i] = EMPTY;
+    for(i=0;i&lt;n;i++)
+        bin[ a[i] ] = a[i];
+    }
+
+main() {
+    int a[N], bin[M];    /* for all i: 0 &lt;= a[i] &lt; M */
+    .... /* Place data in a */
+    bin_sort( a, bin, N );
+
+</PRE></FONT>
+<P>
+If there are duplicates, then each bin can be replaced by a linked list.
+The third step then becomes:
+<OL START=3>
+<LI>Link all the lists into one list. 
+</OL>
+We can add an item to a linked list in <B>O(1)</B> time.
+There are <B>n</B> items requiring <B>O(n)</B> time.
+Linking a list to another list simply involves making the
+tail of one list point to the other, so it is <B>O(1)</B>. 
+Linking <B>m</B> such lists obviously takes <B>O(m)</B> time,
+so the algorithm is still <B>O(n+m)</B>.
+<P>
+In contrast to the other sorts, which sort <I>in place</I> and don't 
+require additional memory,
+bin sort requires additional memory for the bins and is a good example of
+trading space for performance.
+<P>
+<CENTER><TABLE BORDER=2>
+<TR><TD>
+<CENTER>Although memory tends to be cheap in modern processors - <BR>
+so that we would normally use memory rather profligately to
+obtain performance,<BR>
+<FONT COLOR=red>memory consumes power</FONT><BR>
+and in some circumstances, 
+<I>eg</I> computers in space craft,<BR>
+power might be a higher constraint than performance.</CENTER>
+</TD></TR>
+</TABLE></CENTER>
+<P>
+Having highlighted this constraint, there is a version of 
+bin sort which can sort in place:
+<FONT COLOR=green>
+<PRE>#define EMPTY	-1 /* Some convenient flag */
+void bin_sort( int *a, int n ) {
+    int i;
+    /* Pre-condition: for 0&lt;=i&lt;n : 0 &lt;= a[i] &lt; n */
+    for(i=0;i&lt;n;i++)
+	if ( a[i] != i )
+            SWAP( a[i], a[a[i]] );
+    }
+</PRE></FONT>
+However, this assumes that there are <B>n</B> distinct keys
+in the range 0 .. <B>n</B>-1.
+In addition to this restriction, the SWAP operation is relatively
+expensive, so that this version trades space for time.
+<P>
+The bin sorting strategy may appear rather limited,
+but it can be generalised into a strategy known as
+<A HREF=radixsort.html>Radix sorting</A>.
+
+
+<P>
+<A NAME=bin_sort_anim>
+<TABLE BGCOLOR="#00f0f0" WIDTH="100%"> 
+<TR><TD >
+<FONT COLOR=blue FACE=helvetica>
+<B>Bin Sort Animation</B><BR>
+This animation was written by Woi Ang.</FONT></TD>
+<TD ALIGN=center>
+  <TABLE BORDER=0>
+  <TR><TD>
+    <applet CODEBASE="Java/bin_sort" code = "AlgAnimApp.class" width = 200 height = 35>
+    <param name = "filename" value = "AlgThread.java">
+    <param name = "buttonname" value = "Run Bin Sort Animation">
+    <param name = "algname" value = "Bin Sort">
+    </applet>
+    </TD>
+  </TR>
+</TABLE>
+</TD>
+<TD><FONT FACE=helvetica>Please email comments to:<BR>
+<A HREF=mailto:morris@ee.uwa.edu.au>morris@ee.uwa.edu.au</A>
+</TR>
+</TABLE>
+
+<P>
+
+<TABLE CELLPADDING=5 WIDTH="100%" BGCOLOR="#00f0f0" CELLSPACING=4>
+<TR><TD WIDTH=50%>
+Continue on to <A HREF="radixsort.html">Radix sorting</A></TD>
+<TD>Back to the <A HREF="ds_ToC.html">Table of Contents</A>
+</TD></TR></TABLE>
+<SMALL>
+&copy; <A HREF=mailto:morris@ee.uwa.edu.au>John Morris</A>, 1998
+</SMALL>
+</BODY>
+</HTML>

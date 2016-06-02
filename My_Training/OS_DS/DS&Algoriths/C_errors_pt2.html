@@ -1,0 +1,108 @@
+<HTML><HEAD>
+<TITLE>Data Structures and Algorithms: C errors</TITLE>
+
+<META name="description" content="Data Structures and Algorithms Course Notes,
+PLDS210 University of Western Australia">
+<META name="keywords" content="data structures,algorithms,abstract data types,
+error handling, C language">
+</HEAD>
+<BODY BGCOLOR="#ffffff">
+<TABLE BGCOLOR="#00c0f0" WIDTH="100%" CELLSPACING=0 CELLPADDING=0>
+<TR BGCOLOR="#00f0f0"><TD ALIGN=right>
+<FONT FACE=helvetica SIZE=+1><I>Data Structures and Algorithms</I></FONT>
+</TD></TR>
+
+<TR><TD><FONT FACE=helvetica SIZE=+2><B>Errors in C ADTs <I>(cont)</I></B></FONT>
+</TD></TR>
+</TABLE>
+<P>
+An approach that models reasonably closely the exception handlers of
+Ada, Java or C++ adds one extra function to each class.
+As in these languages, the exception can be "caught" at any
+appropriate level in the program
+(where enough is known about the operating environment
+to determine how the error should be handled)
+by invoking the error function there.
+
+<H5>Add an Error function to each class</H5>
+
+With this approach, we
+add to each class a function which can be called
+<I>at the appropriate level</I> to 
+determine whether an error occurred.
+<FONT COLOR=green><PRE>/* vector.h */
+typedef struct vector_t *vector;
+typedef enum( NoError, SizeMisMatch, NoMemory ) vector_error;
+
+vector ConsVector( int dimension );
+vector_error DeleteVector( vector a );
+vector_error VectorError();
+
+double DotProduct( vector a, vector b );
+</PRE></FONT>
+The implementation is simple:
+<FONT COLOR=green>
+<PRE>#include "vector.h"
+static vector_error ve = NoError;
+
+vector_error VectorError() {
+    vector_error err;
+    err = ve;
+    ve = NoError;
+    return err;
+    }
+
+char *VectorErrorString( vector_error ve ) {
+    switch( ve ) {
+    	case NoError: return "No Error";
+    	case SizeMisMatch: return "Vector size mismatch";
+      case NoMemory: return "Insuff memory for Vector";
+    	default: return "Unknown Vector Error";
+    	}
+    }
+
+double DotProduct( vector a, vector b ) {
+    if ( LengthVector(a) == LengthVector(b) ) {
+        ....
+        }
+    else {
+        ve = SizeMisMatch;
+        return 0.0;
+        }
+    }
+</PRE></FONT>
+
+Note the additional (optional) <FONT COLOR=green><TT>VectorErrorString</TT>
+</FONT> method which produces a printable string explaining the error.
+This is similar to the <FONT COLOR=green><TT>perror()</TT></FONT>
+method which prints out the latest I/O error as a string.
+(But note that <FONT COLOR=green><TT>perror()</TT></FONT> violates
+the re-usability rule being suggested here as it outputs the
+string to standard output and thus is useless in environments,
+<I>eg</I> most GUI environments, where the notion of
+<TT>stdout</TT> may not be useful.)
+<P>
+Now the <FONT COLOR=green><TT>VectorError()</TT></FONT> method
+can be called at any point in the program after the
+vector class methods have been invoked and the 
+environment is known well enough to determine what action
+should be taken in response to the error.
+<FONT COLOR=green>
+<PRE>double dp;
+...
+dp = DotProduct( a, b );
+if( (ve = VectorError()) != NoError ) {
+    printf("Dot product error: %s\n", VectorErrorString( ve ) );
+    }
+</PRE></FONT>
+
+<TABLE CELLPADDING=5 WIDTH="100%" BGCOLOR="#00f0f0" CELLSPACING=0>
+<TR><TD>
+Continue on to <A HREF="prog_languages.html">Programming Language Notes</A><BR>
+Back to the <A HREF="ds_ToC.html">Table of Contents</A>
+</TD></TR></TABLE>
+<SMALL>
+&copy; <A HREF=mailto:morris@ee.uwa.edu.au>John Morris</A>, 1998
+</SMALL>
+</BODY>
+</HTML>

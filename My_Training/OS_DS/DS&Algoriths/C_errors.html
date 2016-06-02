@@ -1,0 +1,121 @@
+<HTML><HEAD>
+<TITLE>Data Structures and Algorithms: C errors</TITLE>
+
+<META name="description" content="Data Structures and Algorithms Course Notes,
+PLDS210 University of Western Australia">
+<META name="keywords" content="data structures,algorithms,abstract data types,
+error handling, C language">
+</HEAD>
+<BODY BGCOLOR="#ffffff">
+<TABLE BGCOLOR="#00c0f0" WIDTH="100%" CELLSPACING=0 CELLPADDING=0>
+<TR BGCOLOR="#00f0f0"><TD ALIGN=right>
+<FONT FACE=helvetica SIZE=+1><I>Data Structures and Algorithms</I></FONT>
+</TD></TR>
+
+<TR><TD><FONT FACE=helvetica SIZE=+2><B>Errors in C ADTs</B></FONT>
+</TD></TR>
+</TABLE>
+<P>
+
+What can we do in C?
+<P>
+<h4>No I/O</H4>
+Don't put I/O statements like 
+<FONT COLOR=green><TT>printf</TT></FONT> in
+low-level re-usable code.
+If the code is to be re-usable, you want it to function 
+correctly in <I>any</I> environment: I/O functions are
+generally the least portable aspects of any program.
+Leave them to the "higher" levels of any program where
+you certainly know what the operating environment of the
+program is.
+
+<H4>Use the function value to return an error</H4>
+
+If you were going to specify a 
+<FONT COLOR=green><TT>void</TT></FONT> function,
+specify it as returning an 
+<FONT COLOR=green><TT>int</TT></FONT>
+or <I>better</I> an <FONT COLOR=green><TT>enum</TT></FONT> instead.
+<P>
+Often there will be a value of the function return which 
+can be used for indicating an error condition.
+Constructors return pointers to blocks of memory allocated for
+the object:
+a null pointer indicates an error.
+<FONT COLOR=green>
+<PRE>int f( ... ) {
+    X a;
+    a = ConsX( ... );
+    if ( a != NULL ) {
+        /* No error */
+        ....
+        return 1;
+        }
+    else
+        {
+        /* return an error value to the next level up */
+        return 0;
+        }
+    }
+</PRE></FONT>
+
+<H4>No useable function value?</H4>
+
+One possible solution is to add a pointer to an error
+code to each method:
+<FONT COLOR=green>
+<PRE>/* vector.h */
+typedef struct vector_t *vector;
+typedef enum( NoError, SizeMisMatch, NoMemory, InvalidVector )
+                                 vector_error;
+
+double AddVector( vector a, vector b, int *error );
+
+</PRE></FONT>
+The implementation:
+<FONT COLOR=green>
+<PRE>#include "vector.h"
+double DotProduct( vector a, vector b, vector_error *error ) {
+    if ( LengthVector(a) == LengthVector(b) )
+        {
+        ....
+        }
+    else
+        {
+  *error = SizeMisMatch;
+  return 0.0;
+        }
+  }
+</PRE></FONT>
+This solution, while achieving the aim of robust code,
+would probably be considered too cumbersome.
+The additional argument also adds to the execution time.
+<H4>Emulate the exception handlers</H4>
+<H5>setjmp/longjmp</H5>
+There is a <TT>setjmp</TT>/<TT>longjmp</TT>
+mechanism in C which permits jumping from an arbitrary
+point to a handler.
+While it would be possible to use these, they pose potential
+portability problems, which are best avoided.
+<H5>signal catching</H5>
+Unix programs can also set a catcher for a <TT>signal</TT>.
+This mechanism was designed to enable a Unix parent process to
+monitor its children, so is perhaps an overkill for handling 
+something that a user can trivially fix - like keeping too many
+windows open and using up all available memory!
+
+
+<P>
+
+<TABLE CELLPADDING=5 WIDTH="100%" BGCOLOR="#00f0f0" CELLSPACING=0>
+<TR><TD>
+Continue on to <A HREF="C_errors_pt2.html">C Errors <I>(emulating an 
+exception mechanism)</I></A><BR>
+Back to the <A HREF="ds_ToC.html">Table of Contents</A>
+</TD></TR></TABLE>
+<SMALL>
+&copy; <A HREF=mailto:morris@ee.uwa.edu.au>John Morris</A>, 1998
+</SMALL>
+</BODY>
+</HTML>

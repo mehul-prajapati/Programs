@@ -1,0 +1,91 @@
+%
+% Either indent all the paragraphs or none!
+%
+\parindent 0in
+%
+% hanging indented paragraphs
+%
+\newlength{\indenthang}
+\newenvironment{hanging}[1]{
+\setlength{\indenthang}{#1}
+\begin{list}{xx}{ \itemindent=0pt
+\labelwidth=\indenthang
+\setlength{\leftmargin}{\labelwidth}
+\addtolength{\leftmargin}{4pt}
+}}{
+\end{list}
+}
+%
+% hangout command used for the 'item' command of list environments
+%
+\newcommand{\hangout}[1]{\item[#1 \hfill]}
+
+%
+% assembly program text environment
+%
+\newlength{\instab}
+\setlength{\instab}{20pt}
+\newlength{\optab}
+\setlength{\optab}{40pt}
+\newlength{\comtab}
+\setlength{\comtab}{60pt}
+\newenvironment{program}{
+\tt
+\begin{tabbing}
+\hspace{\instab}\=\hspace{\optab}\=\hspace{\comtab}\=\kill
+}{\end{tabbing}}
+%
+% C code text environment
+%
+\newenvironment{Ccode}{
+\addtolength{\leftmargin}{2cm}
+% Stop breaking code blocks over page boundaries
+\begin{minipage}{20cm}
+\begin{tabbing}
+\hspace{20pt}\=\hspace{20pt}\=\hspace{20pt}\=\hspace{20pt}\=\kill
+\tt
+}
+{\end{tabbing}
+\end{minipage}
+}
+
+%
+% miscellaneous
+%
+\newcommand{\IE}{{\it i.e.\ }}
+\newcommand{\EG}{{\it e.g.\ }}
+\newcommand{\CF}{{\it cf.\ }}
+\newcommand{\ETC}{{\it etc.}}
+\newcommand{\ETAL}{{\it et al.}}
+
+\newcommand{\hex}[1]{{{\tt #1}$_{16}$}}
+\newcommand{\dec}[1]{{{\tt #1}$_{10}$}}
+\newcommand{\million}{$\times10^6$}
+
+%
+% time
+%
+\def\clocktime{{\newcount\scratch
+ \scratch=\time
+ \divide\scratch by 60
+ \number\scratch :\multiply\scratch by -60
+ \advance\scratch by\time
+ \ifnum\scratch<10 0\fi
+ \number\scratch}}
+% use like so:
+%  \date{\today at \clocktime}
+%
+%
+\newcommand{\Ohx}{{\bf O}}
+\newcommand{\nx}{{{\it {\bf n}}}}
+\newcommand{\varx}[1]{{{\it {\bf #1}}}}
+
+% Often used math
+\newcommand{\Oh}[1]{{{\bf O}$(#1)$}}
+\newcommand{\logn}{{$\log{n}$}}
+%
+% Things we've got to get right later
+%
+\newcommand{\xx}{{\bf ?xx?}}
+\newcommand{\yy}{{\bf ?yy?}}
+\newcommand{\zz}{{\bf ?zz?}}

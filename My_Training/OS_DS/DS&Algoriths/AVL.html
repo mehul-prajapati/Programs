@@ -1,0 +1,121 @@
+<HTML><HEAD>
+<TITLE>Data Structures and Algorithms: AVL Trees</TITLE>
+
+<META name="description" content="Data Structures and Algorithms Course Notes,
+PLDS210 University of Western Australia">
+<META name="keywords" content="data structures,algorithms,abstract data types,
+AVL trees, binary trees, balanced trees, search trees, dynamic search trees">
+</HEAD>
+<BODY BGCOLOR="#ffffff">
+<TABLE BGCOLOR="#00c0f0" WIDTH="100%" CELLSPACING=0 CELLPADDING=0>
+<TR BGCOLOR="#00f0f0"><TD ALIGN=right>
+<FONT FACE=helvetica SIZE=+1><I>Data Structures and Algorithms</I></FONT>
+</TD></TR>
+
+<TR><TD><FONT FACE=helvetica SIZE=+2><B>8.3 AVL Trees</B></FONT>
+</TD></TR>
+</TABLE>
+<P>
+
+An <FONT COLOR="#fa0000"><B>AVL tree</B></FONT> is another balanced
+binary search tree.
+Named after their inventors,
+<B>A</B>delson-<B>V</B>elskii and <B>L</B>andis,
+they were the first dynamically balanced trees to be proposed.
+Like red-black trees, they are not perfectly balanced, but
+pairs of sub-trees differ in height by at most 1,
+maintaining an
+<B><I>O(</I>log<I>n)</I></B> search time.
+Addition and deletion operations also take
+<B><I>O(</I>log<I>n)</I></B> time.
+
+<H4>Definition of an AVL tree</H4>
+
+<TABLE>
+<TR><TD WIDTH="60%" COLSPAN=2>
+An AVL tree is a binary search tree which has the
+following properties:
+<OL>
+<LI> The sub-trees of every node differ in height by at most one.
+<LI> Every sub-tree is an AVL tree.
+</OL>
+</TD>
+<TD ROWSPAN=2><IMG SRC="fig/AVL_bal.gif"></TD>
+<TR><TD WIDTH="50%">&nbsp;</TD>
+<TD>
+<SMALL>Balance requirement for an AVL tree:
+the left and right sub-trees differ by
+at most 1 in height.</SMALL></TD>
+</TR>
+</TABLE>
+
+
+You need to be careful with this definition: it permits 
+some apparently unbalanced trees!
+For example, here are some trees:
+<CENTER>
+<TABLE BORDER CELLPADDING=10 CELLSPACING=4>
+<TR><TH>Tree</TH><TH WIDTH="30%">AVL tree?</TH></TR>
+<TR><TD><IMG SRC=fig/AVL_extreme.gif></TD><TD><center>Yes</CENTER>
+Examination shows that <I>each</I> left sub-tree has a height 1 greater
+than each right sub-tree.</TD></TR>
+<TR><TD><IMG SRC=fig/AVL1a.gif></TD><TD><center>No</CENTER>
+Sub-tree with root 8 has height 4 and sub-tree with root 18
+has height 2</TD></TR>
+</TABLE>
+</CENTER>
+
+<H4>Insertion</H4>
+
+As with the red-black tree,
+insertion is somewhat complex and involves a number
+of cases.
+Implementations of AVL tree insertion may be found in many
+textbooks:
+they rely on adding an extra attribute, the 
+<FONT COLOR="#fa0000"><B>balance factor</B></FONT>
+to each node. 
+This factor indicates whether the tree is 
+<I>left-heavy</I> (the height of the left sub-tree is 1 greater
+than the right sub-tree),
+<I>balanced</I> (both sub-trees are the same height) or
+<I>right-heavy</I> (the height of the right sub-tree is 1 greater
+than the left sub-tree).
+If the balance would be destroyed by an insertion, 
+a rotation is performed to correct the balance.
+<TABLE>
+<TR>
+<TD><IMG SRC="fig/AVL_case1.gif"></TD>
+<TD>A new item has been added to the left subtree of node 1,
+causing its height to become 2 greater than 2's
+right sub-tree (shown in green).
+A right-rotation is performed to correct the imbalance.
+</TD>
+</TR>
+</TABLE>
+
+<P>
+
+<P>
+<TABLE WIDTH="100%" BGCOLOR="#00c0f0">
+<TR><TD><H3>Key terms</H3></TD></TR></TABLE>
+<DL>
+<DT><FONT COLOR="#fa0000"><B>AVL trees</B></FONT>
+   <DD>Trees which remain <B>balanced</B> - and thus guarantee
+ <B>O(logn)</B> search times - in a dynamic environment.
+ Or more importantly, since any tree can be re-balanced - but at
+ considerable cost - can be re-balanced in <B>O(logn)</B> time.
+</DL>
+
+<P>
+
+<TABLE CELLPADDING=5 WIDTH="100%" BGCOLOR="#00f0f0" CELLSPACING=4>
+<TR><TD WIDTH=50%>
+Continue on to <A HREF="n_ary_trees.html">General n-ary Trees</A></TD>
+<TD>Back to the <A HREF="ds_ToC.html">Table of Contents</A>
+</TD></TR></TABLE>
+<SMALL>
+&copy; <A HREF=mailto:morris@ee.uwa.edu.au>John Morris</A>, 1998
+</SMALL>
+</BODY>
+</HTML>

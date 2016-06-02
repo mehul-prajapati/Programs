@@ -1,0 +1,108 @@
+<HTML><HEAD>
+<TITLE>Data Structures and Algorithms: Proving MST</TITLE>
+
+<META name="description" content="Data Structures and Algorithms Course Notes,
+PLDS210 University of Western Australia">
+<META name="keywords" content="data structures,algorithms,abstract data types,
+greedy algorithms, minimum spanning tree, Kruskal's algorithm">
+</HEAD>
+<BODY BGCOLOR="#ffffff">
+<TABLE BGCOLOR="#00c0f0" WIDTH="100%" CELLSPACING=0 CELLPADDING=0>
+<TR BGCOLOR="#00f0f0"><TD ALIGN=right>
+<FONT FACE=helvetica SIZE=+1><I>Data Structures and Algorithms</I></FONT>
+</TD></TR>
+
+<TR><TD><FONT FACE=helvetica SIZE=+2><B>Proving Greedy Algorithms</B></FONT>
+</TD></TR>
+</TABLE>
+<P>
+
+The very nature of greedy algorithms makes them difficult to
+prove. We choose the step that maximises the
+immediate gain (in the case of the minimum spanning
+tree - made the smallest possible addition to the total
+cost so far) without thought for the effect of this
+choice on the remainder of the problem.
+<P> 
+So the commonest method of proving a greedy algorithm is
+to use <I>proof by contradiction</I>,
+we show that if we didn't make the "greedy" choice,
+then, in the end, we will find that we should have made 
+that choice.
+<H3>The Minimum Spanning Tree Algorithm</H3>
+At each step in the MST algorithm, 
+we choose the cheapest edge that would not create a
+cycle.
+<P>
+We can easily establish that any edge creating a cycle
+should not be added.
+The cycle-completing edge is more expensive than any previously
+added edge and the nodes which it connects are already 
+joined by some path.
+Thus it is redundant and can be left out.
+<P>
+Each edge that we add must join two sub-trees.
+If the next cheapest edge, <B>e<SUB>x</SUB></B>, would join two
+sub-trees, <B>T<SUB>a</SUB></B> and <B>T<SUB>b</SUB></B>,
+then we must, at some later stage, use a 
+more expensive edge, <B>e<SUB>y</SUB></B>,
+to join <B>T<SUB>a</SUB></B> to <B>T<SUB>b</SUB></B>,
+either directly or by joining a node of one of them to a 
+node that is now connected to the other.
+But we can join <B>T<SUB>a</SUB></B> to <B>T<SUB>b</SUB></B> 
+(and any nodes which are now connected to them) more cheaply
+by using <B>e<SUB>x</SUB></B>, which proves the proposition that
+we should choose the cheapest edge at each stage.
+<H3>Complexity</H3>
+The steps in Kruskal's algorithm are:
+<CENTER><TABLE>
+<TR><TD>Initialise the forest</TD><TD><PRE> </PRE></TD><TD ALIGN=center><B>O(</B>|<B>V</B>|<B>)</B></TD></TR>  
+<TR><TD>Sort the edges</TD><TD><PRE> </PRE></TD><TD ALIGN=center><B>O(</B>|<B>E</B>|<B>log</B>|<B>E</B>|<B>)</B></TD></TR>  
+<TR><TD>Until we've added |<B>V</B>|-1 edges</TD><TD ALIGN=center><B>O(</B>|<B>V</B>|<B>)</B> x </TD></TR>
+<TR><TD>Check whether an edge<BR>
+forms a cycle</TD><TD ALIGN=center><B>O(</B>|<B>V</B>|<B>)</B> = </TD>
+<TD ALIGN=center><B>O(</B>|<B>V</B>|<B><SUP>2</SUP>)</B></TD>
+ </TR>
+<TR><TD>Total</TD><TD><PRE> </PRE></TD><TD ALIGN=center><B>O(</B>|<B>V</B>|<B>+</B>|<B>E</B>|<B>log</B>|<B>E</B>|<B>+</B>|<B>V</B>|<B><SUP>2</SUP>)</B></TD></TR>
+<TR><TD>Since <B></B>|<B>E</B>|<B>=O(</B>|<B>V</B>|<B><SUP>2</SUP>)</B></TD>
+<TD><PRE> </PRE></TD>
+<TD ALIGN=center><B>O(</B>|<B>V</B>|<B><SUP>2</SUP>log</B>|<B>V</B>|<B>)</B></TD></TR>
+</TABLE></CENTER>
+<P>
+Thus, we may refer to Kruskal's algorithm as an <B>O(n<SUP>2</SUP>log n)</B>
+algorithm, where <B>n</B> is the number of vertices.
+However, note that if <B></B>|<B>E</B>|<B></B> is similar to <B></B>|<B>V</B>|<B></B>,
+then the complexity is <B>O(n<SUP>2</SUP>)</B>.
+<P>
+The alternative MST algorithm, <A HREF=prim.html>Prim's algorithm</A>,
+can be made to run in <B>O(</B>|<B>E</B>|<B> + </B>|<B>V</B>|<B>log</B>|<B>V</B>|<B>)</B> time,
+using Fibonacci heaps.
+<P>
+Because of its wide practical application, the MST problem has been extensively
+studied and,
+for <I>sparse</I> (<B></B>|<B>E</B>|<B></B> approx= <B></B>|<B>V</B>|<B></B>) graphs,
+an even faster algorithm <B>O(</B>|<B>E</B>|<B>log log</B>|<B>V</B>|<B>)</B> is known
+(<I>cf</I> Fredman and Tarjan, "Fibonacci heaps and their
+uses in improved network optimization algorithms",
+JACM, <B>34</B>(3), 596-615(1987).)
+<P>
+<BLOCKQUOTE><FONT COLOR=red>
+This emphasizes the point that no good software engineer tries to
+re-invent wheels,
+he keeps a good algorithms text in his library and makes sure to 
+refer to it <I>before</I> attempting to program a new problem!
+</FONT></BLOCKQUOTE>
+
+
+<P>
+
+<TABLE CELLPADDING=5 WIDTH="100%" BGCOLOR="#00f0f0" CELLSPACING=4>
+<TR><TD WIDTH=50%>
+Return to <A HREF="mst.html">Minimum Spanning Tree</A></TD>
+<TD>Back to the <A HREF="ds_ToC.html">Table of Contents</A>
+</TD></TR></TABLE>
+<SMALL>
+&copy; <A HREF=mailto:morris@ee.uwa.edu.au>John Morris</A>, 1998
+</SMALL>
+</BODY>
+</HTML>

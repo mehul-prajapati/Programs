@@ -1,0 +1,320 @@
+<HTML><HEAD>
+<TITLE>Data Structures and Algorithms: Graph Algorithms</TITLE>
+
+<META name="description" content="Data Structures and Algorithms Course Notes,
+PLDS210 University of Western Australia">
+<META name="keywords" content="data structures,algorithms,abstract data types,
+graph algorithms, mininum spanning tree">
+</HEAD>
+<BODY BGCOLOR="#ffffff">
+<TABLE BGCOLOR="#00c0f0" WIDTH="100%" CELLSPACING=0 CELLPADDING=0>
+<TR BGCOLOR="#00f0f0"><TD ALIGN=right>
+<FONT FACE=helvetica SIZE=+1><I>Data Structures and Algorithms</I></FONT>
+</TD></TR>
+
+<TR><TD><FONT FACE=helvetica SIZE=+2><B>10 Graphs</B></FONT>
+</TD></TR>
+</TABLE>
+<P>
+
+
+<H3>10.1 Minimum Spanning Trees</H3>
+
+<H4>Greedy Algorithms</H4>
+
+Many algorithms can be formulated as a finite series of guesses,
+<I>eg</I> in the Travelling Salesman Problem,
+we try (guess) each possible tour in turn and determine
+its cost.
+When we have tried them <STRONG>all</STRONG>,
+ we know which one is the optimum (least cost) one.
+However, we must try them all before we can be certain that we
+know which is the optimum one, 
+leading to an <B><I>O(n!)</I></B> algorithm.
+<P>
+Intuitive strategies, such as
+building up the salesman's tour by adding the city which is closest to
+the current city, can readily be shown to produce sub-optimal tours.
+As another example, an experienced chess player will not take an
+opponent's pawn with his queen - because that move produced the
+maximal gain, the capture of a piece - if his opponent is guarding that
+pawn with another pawn. In such games, you must look at <I>all</I> the
+moves ahead to ensure that the one you choose is in fact the optimal
+one. All chess players know that short-sighted strategies are good 
+recipes for disaster!
+<P>
+There is a class of algorithms, the <I>greedy algorithms</I>,
+in which we can find a solution by using only knowledge available at
+the time the next choice (or guess) must be made.
+The problem of finding the Minimum Spanning Tree is a good example
+of this class.<P>
+<H4>The Minimum Spanning Tree Problem</H4>
+Suppose we have a group of islands that we wish to link with bridges
+so that it is possible to travel from one island to any other in the group.
+Further suppose that (as usual) our government wishes to spend the 
+absolute minimum amount on this project (because other factors like the
+cost of using, maintaining, etc, these bridges will probably be the responsibility
+of some future government <IMG SRC="fig/smiley.gif" ALT="Unable to display image" BORDER=0 ALIGN=middle>).
+ The engineers are able to
+produce a cost for a bridge linking each possible pair of islands. 
+The set of bridges which will enable one to travel from any island to any other
+at minimum capital cost to the government is the <I>minimum spanning tree</I>.<P>
+We will need some definitions first:
+<H4>Graphs</H4><P>
+A graph is a set of <I>vertices</I> and <I>edges</I> which connect them.
+We write:<P>
+<CENTER><B> G = (V,E)</B></CENTER>
+<P>
+where <B>V</B> is the set of vertices and
+ the set of edges,<P>
+<CENTER><STRONG>E = { (v<SUB>i</SUB>,v<SUB>j</SUB>) }</STRONG></CENTER>
+where <B>v<SUB>i</SUB></B> and
+<B>v<SUB>j</SUB></B> are in <B>V</B>.
+<H4>Paths</H4>
+A <I>path</I>, <B>p</B>, of length, <B>k</B>, through a 
+graph is a sequence of connected vertices:<P>
+<CENTER><B>p = &lt;v<SUB>0</SUB>,v<SUB>1</SUB>,...,v<SUB>k</SUB>&gt;</B></CENTER>
+where, for all <B>i</B> in (0,<B>k</B>-1:<P>
+<CENTER>
+<B>(v<SUB>i</SUB>,v<SUB>i+1</SUB>)</B> is in <B>E</B>.</CENTER>
+<P>
+<H4>Cycles</H4><P>
+<P>
+A graph contains no <I>cycles</I> if there is no path
+of non-zero length through the
+graph,
+<B>p = &lt;v<SUB>0</SUB>,v<SUB>1</SUB>,...,v<SUB>k</SUB>&gt;</B>
+such that <B>v<SUB>0</SUB> = v<SUB>k</SUB></B>.
+<H4>Spanning Trees</H4>
+<P>
+A <I>spanning tree</I> of a graph, G, is a set of
+<B>|V|</B>-1 edges that connect all vertices of the
+graph.
+<H4>Minimum Spanning Tree</H4>
+In general, it is possible to construct multiple spanning trees for a
+graph, <B>G</B>.
+If a cost, <B>c<SUB>ij</SUB></B>, is associated with each edge,
+<B>e<SUB>ij</SUB> = (v<SUB>i</SUB>,v<SUB>j</SUB>)</B>,
+then the minimum spanning tree is the set of edges, 
+<B>E<SUB>span</SUB></B>, forming a spanning tree,
+such that:
+<P><CENTER>
+<B>C = sum( c<SUB>ij</SUB></B> | all <B>e<SUB>ij</SUB></B> in <B>E<SUB>span</SUB> </B>)
+</CENTER><P>
+is a minimum.
+<H4>Kruskal's Algorithm</H4>
+This algorithm creates a <I>forest</I> of trees.
+Initially the forest consists of <B>n</B> single node trees
+(and no edges).
+At each step, we add one (the cheapest one) edge so
+that it joins two trees together.
+If it were to form a cycle, it would simply link
+two nodes that were already part of a single connected tree,
+so that this edge would not be needed.
+<P>
+The basic algorithm looks like this:
+<FONT COLOR=green>
+<PRE>Forest MinimumSpanningTree( Graph g, int n, double **costs ) {
+   Forest T;
+   Queue q;
+   Edge e;
+   T = ConsForest( g );
+   q = ConsEdgeQueue( g, costs );
+   for(i=0;i<(n-1);i++) {
+       do {
+          e = ExtractCheapestEdge( q );
+       } while ( !Cycle( e, T ) );
+       AddEdge( T, e );
+   }
+   return T;
+}
+</PRE></FONT>
+The steps are:
+<OL>
+<LI> The forest is constructed - with each node in a
+separate tree.
+<LI> The edges are placed in a priority queue.
+<LI> Until we've added <B>n</B>-1 edges,
+    <OL>
+<LI> Extract the cheapest edge from the queue,
+<LI> If it forms a cycle, reject it,
+<LI> Else add it to the forest.
+Adding it to the forest will join two trees together.
+</OL>
+</OL>
+Every step will have joined two trees in the forest together,
+so that at the end, 
+there will only be one tree in T.
+<P>
+We can use a heap for the priority queue.
+The trick here is to detect cycles.
+For this, we need a
+<I>union-find</I> structure.
+
+<H4>Union-find structure</H4>
+
+To understand the union-find structure, we need to look at
+a <I>partition</I> of a set.
+
+<H4>Partitions</H4>
+
+A partitions is  a set of sets of elements of a set.
+<UL>
+<LI>Every element of the set belong to one of the sets in the
+partition.
+<LI>No element of the set belong to more than one of the sub-sets.
+</UL>
+or<UL>
+<LI> Every element of a set belongs to one <I>and only one</I>
+of the sets of a partition.
+</UL>
+<P>
+The forest of trees is a partition of the original set of nodes.
+Initially all the sub-sets have exactly one node in them.
+As the algorithm progresses, we form a union of two of the trees
+(sub-sets), until eventually the partition has only one sub-set 
+containing all the nodes.
+<P>
+A partition of a set may be thought of as a set of 
+<I>equivalence classes</I>.
+Each sub-set of the partition contains a set of equivalent
+elements (the nodes connected into one of the trees of the
+forest). 
+This notion is the key to the cycle detection algorithm.
+For each sub-set, we denote one element as the 
+<I>representative</I> of that sub-set or equivalence class.
+Each element in the sub-set is, somehow, equivalent and
+represented by the nominated representative.
+<P>
+As we add elements to a tree,
+we arrange that all the elements point to their representative.
+As we form a union of two sets, 
+we simply arrange that the representative of one of the sets
+now points to any one of the elements of the other set.
+<P>
+So the test for a cycle reduces to:
+for the two nodes at the ends of the candidate edge,
+find their representatives.
+If the two representatives are the same, the two
+nodes are already in a connected tree and adding this
+edge would form a cycle.
+The search for the representative simply follows a chain of
+links.
+<P>
+Each node will need a representative pointer.
+Initially, each node is its own representative, 
+so the pointer is set to NULL.
+As the initial pairs of nodes are joined to form a tree,
+the representative pointer of one of the nodes is made to point
+to the other, which becomes the representative of the tree.
+As trees are joined, the representative pointer of the
+representative of one 
+of them is set to point to any element of the
+other. (Obviously, representative searches will be 
+somewhat faster if one of the representatives is made to
+point directly to the other.)
+<P>
+<CENTER>
+<TABLE BORDER=1 WIDTH="70%"><TR><TD><CENTER>
+Equivalence classes also play an important role in the<BR>
+<A HREF=../../Year1/CLP110/verify.html TARGET=ObjectsFirst>verification</A> of software.</TD></TR>
+</TABLE></CENTER>
+<P>
+Select diagrams of
+<A HREF=krusk.html TARGET="Kruskal's algorithm">Kruskal's algorithm</A>
+in operation.
+<H4>Greedy operation</H4>
+At no stage did we try to look ahead more than one
+edge - we simply chose the best one at any stage.
+Naturally, in some situations, this myopic view would lead
+to disaster!
+The simplistic approach
+often makes it difficult to prove that a greedy 
+algorithm leads to the <I>optimal</I> solution.
+proof by contradiction is a common proof
+technique used: we demonstrate that if we didn't make
+the greedy choice now, a non-optimal solution would result.
+<A HREF="greedy_proof.html">Proving the MST algorithm</A><BR>
+is, happily, one of the simpler proofs by contradiction!
+
+<H4>Data structures for graphs</H4>
+
+You should note that we have discussed graphs in an abstract
+way: specifying that they contain nodes and edges and using
+operations like <TT>AddEdge</TT>, <TT>Cycle</TT>, <I>etc</I>.
+This enables us to define an abstract data type <I>without</I>
+considering implementation details, such as how we will store the
+attributes of a graph! 
+This means that a complete solution to, for example, the MST
+problem can be specified before we've even decided how to store
+the graph in the computer.
+However, representation issues can't be deferred forever,
+so we need to examine ways of
+<A HREF=graph_rep.html>representing graphs</A> in a machine.
+As before, the performance of the algorithm will be determined
+by the data structure chosen.
+<P>
+
+
+<P>
+<A NAME=mst_anim>
+<TABLE BGCOLOR="#00f0f0" WIDTH="100%"> 
+<TR><TD >
+<FONT COLOR=blue FACE=helvetica>
+<B>Minimum Spanning Tree Animation</B><BR>
+This animation was written by Mervyn Ng.</FONT></TD>
+<TD ALIGN=center>
+  <TABLE BORDER=0>
+  <TR><TD>
+    <applet CODEBASE="Java/mst" code = "AlgAnimApp.class" width = 200 height = 35>
+    <param name = "filename" value = "GraphMST.java">
+    <param name = "buttonname" value = "Run the Animation">
+    <param name = "algname" value = "MST Algorithm">
+    <param name = "algfile" value = "graph.mst">
+    </applet>
+    </TD>
+  </TR>
+</TABLE>
+</TD>
+<TD><FONT FACE=helvetica>Please email comments to:<BR>
+<A HREF=mailto:morris@ee.uwa.edu.au>morris@ee.uwa.edu.au</A>
+</TR>
+</TABLE>
+
+<P>
+<TABLE WIDTH="100%" BGCOLOR="#00c0f0">
+<TR><TD><H3>Key terms</H3></TD></TR></TABLE>
+<DL>
+<DT><FONT COLOR="#fa0000"><B>Greedy algorithms</B></FONT>
+   <DD>Algorithms which solve a problem by making the next step
+     based on local knowledge alone - without looking ahead to
+     determine whether the next step is the optimal one.
+<DT><FONT COLOR="#fa0000"><B>Equivalence Classes</B></FONT>
+   <DD>The set of equivalence classes of a set is a 
+     <FONT COLOR="#fa0000"><B>partition</B></FONT> of a set
+     such that all the elements in each subset (or 
+      <FONT COLOR="#fa0000"><B>equivalence class</B></FONT>)
+      is related to every other element in the subset by an
+      <FONT COLOR="#fa0000"><B>equivalence relation</B></FONT>.
+<DT><FONT COLOR="#fa0000"><B>Union Find Structure</B></FONT>
+   <DD>A structure which enables us to determine whether two sets
+       are in fact the same set or not.
+<DT><FONT COLOR="#fa0000"><B>Kruskal's Algorithm</B></FONT>
+   <DD>One of the two algorithms commonly used for finding a 
+   minimum spanning tree - the other is <FONT COLOR="#fa0000"><B>
+    Prim's algorithm</B></FONT>.
+</DL>
+
+<P>
+
+<TABLE CELLPADDING=5 WIDTH="100%" BGCOLOR="#00f0f0" CELLSPACING=4>
+<TR><TD WIDTH=33%>
+<A HREF="greedy_proof.html">Proving the MST algorithm</A></TD>
+<TD WIDTH="33%"><A HREF="graph_rep.html">Graph Representations</A></TD>
+<TD>Back to the <A HREF="ds_ToC.html">Table of Contents</A>
+</TD></TR></TABLE>
+<SMALL>
+&copy; <A HREF=mailto:morris@ee.uwa.edu.au>John Morris</A>, 1998
+</SMALL>
+</BODY>
+</HTML>

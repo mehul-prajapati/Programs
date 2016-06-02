@@ -1,0 +1,43 @@
+<HTML>
+<HEAD>
+<TITLE>man page: rand()</TITLE>
+</HEAD>
+<BODY>
+<PRE>RAND(3V)               C LIBRARY FUNCTIONS               RAND(3V)
+
+NAME
+     rand, srand - simple random number generator
+
+SYNOPSIS
+     srand(seed)
+     int seed;
+
+     rand()
+
+DESCRIPTION
+     rand() uses a multiplicative congruential random number gen-
+     erator  with period 2**32 to return successive pseudo-random
+     numbers in the range from 0 to (2**31)-1.
+
+     srand() can be called at any time to reset the random-number
+     generator to a random starting point.  The generator is ini-
+     tially seeded with a value of 1.
+
+SYSTEM V DESCRIPTION
+     rand() returns successive pseudo-random numbers in the range
+     from 0 to (2**15)-1.
+
+SEE ALSO
+     drand48(3), random(3)
+
+NOTES
+     The spectral properties of rand() leave a great deal  to  be
+     desired.   drand48(3)  and  random(3)  provide  much better,
+     though more elaborate, random-number generators.
+
+BUGS
+     The low bits of the numbers generated are not  very  random;
+     use  the  middle  bits.  In particular the lowest bit alter-
+     nates between 0 and 1.
+</BODY>
+</HTML>

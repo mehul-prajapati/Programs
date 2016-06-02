@@ -1,0 +1,95 @@
+<HTML><HEAD>
+<TITLE>Data Structures and Algorithms: Quick Sort (2)</TITLE>
+
+<META name="description" content="Data Structures and Algorithms Course Notes,
+PLDS210 University of Western Australia">
+<META name="keywords" content="data structures,algorithms,abstract data types,
+quick sort">
+</HEAD>
+<BODY BGCOLOR="#ffffff">
+<TABLE BGCOLOR="#00c0f0" WIDTH="100%" CELLSPACING=0 CELLPADDING=0>
+<TR BGCOLOR="#00f0f0"><TD ALIGN=right>
+<FONT FACE=helvetica SIZE=+1><I>Data Structures and Algorithms</I></FONT>
+</TD></TR>
+
+<TR><TD><FONT FACE=helvetica SIZE=+2><B>7.3 Quick Sort <I>(cont)</I></B></FONT>
+</TD></TR>
+</TABLE>
+<P>
+
+<H3>Quick Sort - <FONT COLOR=red>The Facts!</FONT></H3>
+
+ Quick Sort is generally the best known sorting algorithm,
+ <I><FONT COLOR=red>but</FONT></I> it has a serious limitation,
+ which must be understood before using it in certain applications.
+ <P>
+What happens if we apply the <TT><FONT COLOR=green>qsort</FONT></TT>
+routine on the previous
+page to an already sorted array?
+This is certainly a case where we'd expect the performance to be quite
+good!
+<P>
+However, the first attempt to partition the problem into two problems
+will return an empty lower partition - the first element is the smallest.
+Thus the first partition call simply chops off one element and calls
+<TT><FONT COLOR=green>qsort</FONT></TT> for a partition with <I>n</I>-1 items!
+This happens a further <B><I>n</I>-2</B> times!
+Each partition call still requires <B>O(<I>n</I>)</B> operations - and
+we have generated <B>O(<I>n</I>)</B> such calls.
+<CENTER>
+<TABLE BORDER=4>
+<TR><TD><FONT COLOR=red>
+In the worst case, quicksort is an <B>O(<I>n</I><SUP>2</SUP>)</B>
+algorithm!
+</FONT></TD></TR>
+</TABLE></CENTER>
+
+<H4>Can we do anything about this?</H4>
+
+A number of variations to the simple quicksort will generally produce
+better results: rather than choose the first item as the pivot,
+some other strategies work better.
+<H4>Median-of-3 Pivot</H4>
+For example, the <B>median-of-3</B> pivot approach 
+selects three candidate pivots and uses the median one.
+If the three pivots are chosen from the first, middle and last
+positions, then it is easy to see that for the already sorted array,
+this will produce an optimum result:
+each partition will be exactly half (&plusmn;one element) of the problem
+and we will need exactly <B>ceiling(log<I>n</I>)</B> recursive calls.
+<H4>Random pivot</H4>
+Some <TT><FONT COLOR=green>qsort</FONT></TT>'s will simply use a randomly chosen pivot.
+This also works fine for sorted arrays - on average the pivot will
+produce two equal sized partitions and there will be 
+<B>O(log<I>n</I>)</B> of them.
+<CENTER>
+<TABLE BORDER=2><TR><TD>
+<CENTER>However, whatever strategy we use for choosing the pivot,<BR>
+it is possible to propose a pathological case<BR> 
+in which the
+problem is not divided equally at any partition stage.
+<P><FONT COLOR=red>
+Thus quicksort must always be treated as potentially <B>O(n<SUP>2</SUP>)</B>.
+</FONT>
+</CENTER></TD></TR>
+</TABLE></CENTER>
+<H4>Why bother with quicksort then?</H4>
+Heap sort is <I>always</I> <B>O(nlog n)</B>: 
+why not just use it?
+<BR>
+
+
+<P>
+
+<TABLE CELLPADDING=5 WIDTH="100%" BGCOLOR="#00f0f0" CELLSPACING=4>
+<TR><TD WIDTH=50%>
+Continue on to <A HREF="qsort3.html">Comparing quick and heap sort</A></TD>
+<TD>Back to the <A HREF="ds_ToC.html">Table of Contents</A>
+</TD></TR></TABLE>
+<SMALL>
+&copy; <A HREF=mailto:morris@ee.uwa.edu.au>John Morris</A>, 1998
+</SMALL>
+</BODY>
+</HTML>
+
+

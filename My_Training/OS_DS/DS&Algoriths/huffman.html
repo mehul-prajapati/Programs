@@ -1,0 +1,170 @@
+<HTML><HEAD>
+<TITLE>Data Structures and Algorithms: Introduction</TITLE>
+
+<META name="description" content="Data Structures and Algorithms Course Notes,
+PLDS210 University of Western Australia">
+<META name="keywords" content="data structures,algorithms,abstract data types,
+Huffman encoding, greedy algorithms">
+</HEAD>
+<BODY BGCOLOR="#ffffff">
+<TABLE BGCOLOR="#00c0f0" WIDTH="100%" CELLSPACING=0 CELLPADDING=0>
+<TR BGCOLOR="#00f0f0"><TD ALIGN=right>
+<FONT FACE=helvetica SIZE=+1><I>Data Structures and Algorithms</I></FONT>
+</TD></TR>
+
+<TR><TD><FONT FACE=helvetica SIZE=+2><B>11 Huffman Encoding</B></FONT>
+</TD></TR>
+</TABLE>
+<P>
+
+This problem is that of finding the minimum length bit string 
+which can be used to encode a string of symbols. 
+One application is text compression: 
+<BLOCKQUOTE>What's the smallest number of bits (hence the minimum size of file) 
+we can use to store an arbitrary piece of text?
+</BLOCKQUOTE>
+Huffman's scheme uses a table of 
+frequency of occurrence for each symbol (or character) in the input.
+This table may be derived from the input itself or from data which
+is representative of the input.
+For instance, the frequency of occurrence of letters in normal English
+might be derived from processing a large number of text documents and
+then used for encoding all text documents.
+We then need to assign a variable-length bit string to each character
+that unambiguously represents that character. 
+This means that the encoding for
+each character must have a unique prefix.
+If the characters to be encoded are arranged in a binary tree:
+<TABLE>
+<TR><TD><CENTER><IMG SRC="fig/huff.gif"><BR>
+Encoding tree for <TT>ETASNO</TT></CENTER></TD>
+<TD>An encoding for each character is found by following the
+tree from the route to the character in the leaf:
+the encoding is the string of symbols on each branch followed.
+<P>
+For example:<BR>	
+<PRE>
+  String   Encoding
+    TEA    10 00 010
+    SEA    011 00 010
+    TEN    10 00 110
+</PRE></TD></TR>
+</TABLE>
+<P>
+Notes:
+<OL> <LI> As desired, the highest frequency letters - E and T -
+have two digit encodings, whereas all the others have three digit encodings.
+<LI> Encoding would be done with a lookup table.
+</OL>	
+A divide-and-conquer approach might have us asking 
+which characters should appear in the left and right subtrees and 
+trying to build the tree from the top down.
+As with the optimal binary search tree, this will lead to to
+an exponential time algorithm.
+<P>
+A greedy approach places our <B>n</B> characters in <B>n</B> sub-trees
+and starts by combining the two least weight nodes into a tree 
+which is assigned the sum of the two leaf node weights as the weight for its root node.
+<P>
+<A HREF=huff-op.html TARGET=huff-op>Operation of the Huffman algorithm</A>.
+<P>
+The time complexity of the Huffman algorithm is <B>O(nlogn)</B>. 
+Using a heap to store the weight of each tree, 
+each iteration requires <B>O(logn)</B> time to determine the cheapest weight and 
+insert the new weight. 
+There are <B>O(n)</B> iterations, one for each item.
+
+<H3>Decoding Huffman-encoded Data</H3>
+Curious readers are, of course, now asking 
+<BLOCKQUOTE>
+"How do we <I><B>decode</B></I> a Huffman-encoded bit string?
+With these variable length strings, it's not possible to break up an
+encoded string of bits into characters!"
+</BLOCKQUOTE>
+<P>
+<TABLE>
+<TR>
+<TD WIDTH="50%">
+The decoding procedure is deceptively simple.
+Starting with the first bit in the stream, one then uses
+successive bits from the stream to determine whether to go
+left or right in the decoding tree.
+When we reach a leaf of the tree, we've decoded a character,
+so we place that character onto the (uncompressed) output stream.
+The next bit in the input stream is the first bit of the next
+character.
+</TD>
+<TD><IMG SRC="fig/huff_dec.gif"></TD></TR>
+</TABLE>
+
+<H3>Transmission and storage of Huffman-encoded Data</H3>
+
+If your system is continually dealing with data in which the 
+symbols have similar frequencies of occurence, then both encoders and
+decoders can use a standard encoding table/decoding tree.
+However, even text data from various sources will have quite 
+different characteristics.
+For example, ordinary English text will have generally have 'e'
+at the root of the tree, with short encodings for 'a' and 't',
+whereas C programs would generally have ';' at the root,
+with short encodings for other punctuation marks such as '(' and ')'
+(depending on the number and length of comments!).
+
+
+If the data has variable frequencies, then, for optimal encoding,
+we have to generate an encoding tree for each data set and
+store or transmit the encoding with the data.
+The extra cost of transmitting the encoding tree means that 
+we will not gain an overall benefit unless the data stream to be
+encoded is quite long - so that the savings through compression more
+than compensate for the cost of the transmitting the encoding tree
+also.
+
+<P>
+<A NAME=huffman_anim>
+<TABLE BGCOLOR="#00f0f0" WIDTH="100%"> 
+<TR><TD >
+<FONT COLOR=blue FACE=helvetica>
+<B>Huffman Encoding & Decoding Animation</B><BR>
+This animation was written by Woi Ang.</FONT></TD>
+<TD ALIGN=center>
+  <TABLE BORDER=0>
+  <TR><TD>
+    <applet CODEBASE="Java/huffman" code = "AlgAnimApp.class" width = 200 height = 35>
+    <param name = "filename" value = "AlgThread.java">
+    <param name = "buttonname" value = "Run the Animation">
+    <param name = "algname" value = "Huffman Encoding">
+    </applet>
+    </TD>
+  </TR>
+</TABLE>
+</TD>
+<TD><FONT FACE=helvetica>Please email comments to:<BR>
+<A HREF=mailto:morris@ee.uwa.edu.au>morris@ee.uwa.edu.au</A>
+</TR>
+</TABLE>
+
+<H2>Other problems</H2>
+
+<H3>Optimal Merge Pattern</H3>
+
+We have a set of files of various sizes to be merged. 
+In what order and combinations should we merge them? 
+The solution to this problem is basically the same as 
+the Huffman algorithm - 
+a merge tree is constructed with the largest file at its root.
+
+
+<P>
+
+<TABLE CELLPADDING=5 WIDTH="100%" BGCOLOR="#00f0f0" CELLSPACING=4>
+<TR><TD WIDTH=50%>
+Continue on to <A HREF="fft.html">Fast Fourier Transforms</A></TD>
+<TD>Back to the <A HREF="ds_ToC.html">Table of Contents</A>
+</TD></TR></TABLE>
+<SMALL>
+&copy; <A HREF=mailto:morris@ee.uwa.edu.au>John Morris</A>, 1998
+</SMALL>
+</BODY>
+</HTML>
+

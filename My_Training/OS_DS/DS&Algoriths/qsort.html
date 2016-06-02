@@ -1,0 +1,139 @@
+<HTML><HEAD>
+<TITLE>Data Structures and Algorithms: Quick Sort</TITLE>
+
+<META name="description" content="Data Structures and Algorithms Course Notes,
+PLDS210 University of Western Australia">
+<META name="keywords" content="data structures,algorithms,abstract data types,
+sorting, quick sort, QuickSort">
+</HEAD>
+<BODY BGCOLOR="#ffffff">
+<TABLE BGCOLOR="#00c0f0" WIDTH="100%" CELLSPACING=0 CELLPADDING=0>
+<TR BGCOLOR="#00f0f0"><TD ALIGN=right>
+<FONT FACE=helvetica SIZE=+1><I>Data Structures and Algorithms</I></FONT>
+</TD></TR>
+
+<TR><TD><FONT FACE=helvetica SIZE=+2><B>7.3 Quick Sort</B></FONT>
+</TD></TR>
+</TABLE>
+<P>
+
+Quicksort is a very efficient sorting algorithm invented by C.A.R. Hoare.
+It has two phases:
+ <UL>
+ <LI>the partition phase and
+ <LI>the sort phase.
+ </UL>
+As we will see, most of the work is done in the partition phase - 
+it works out where to divide the work.
+The sort phase simply sorts the two smaller 
+problems that are generated in the partition phase.
+<P>
+This makes Quicksort a good example of the 
+<FONT COLOR="#fa0000"><B>divide and conquer</B></FONT>
+strategy for solving problems.
+(You've already seen an example of this approach in the
+<A HREF=searching.html#binary-search>binary search procedure</A>.)
+In quicksort, we divide the array of items to be sorted into
+two partitions and then call the quicksort procedure recursively
+to sort the two partitions,
+<I>ie</I> we <I>divide</I> the problem into two smaller ones and
+<I>conquer</I> by solving the smaller ones.
+Thus the conquer part of the quicksort routine looks like this:
+
+<TABLE BORDER>
+<TR>
+<TD ROWSPAN=2><FONT COLOR=green><PRE>
+quicksort( void *a, int low, int high )
+  {
+  int pivot;
+  /* Termination condition! */
+  if ( high > low )
+    {
+    pivot = partition( a, low, high );
+    quicksort( a, low, pivot-1 );
+    quicksort( a, pivot+1, high );
+    }
+  }
+</PRE></FONT>
+</TD>
+<TD><CENTER><IMG SRC="fig/qsort_divide.gif"><BR>
+Initial Step - First Partition</TD></TR>
+<TR><TD ALIGN=CENTER><IMG SRC="fig/qsort_div2.gif"><BR>
+Sort Left Partition in the same way</TD> </TR>
+</TABLE>
+
+For the strategy to be effective, the <I>partition</I> phase
+must ensure that all the items in one part (the lower part) and less than
+all those in the other (upper) part.
+<P>
+To do this, we choose a <I>pivot</I> element and arrange that all the
+ items in the lower part are less than the pivot and all those in the
+ upper part greater than it.
+ In the most general case, we don't know anything about the items to be
+ sorted, so that any choice of the pivot element will do -
+ the first element is a convenient one.
+<P>
+As an illustration of this idea,
+you can view this animation,
+which shows a partition algorithm in which items to be sorted
+are copied from the original array to a new one:
+items <I>smaller</I> than the pivot are placed to the left
+of the new array and items <I>greater</I> than the pivot
+are placed on the right. In the final step, the
+pivot is dropped into the remaining slot in the middle. 
+
+<A NAME=qsort_anim>
+<TABLE BGCOLOR="#00f0f0" WIDTH="100%"> 
+<TR><TD >
+<FONT COLOR=blue FACE=helvetica>
+<B>QuickSort Animation</B><BR>
+This animation was based on a suggestion
+made by Jeff Rohl;<BR>
+it was written by Woi Ang.</FONT></TD>
+<TD ALIGN=center>
+<applet CODEBASE="Java/quick_sort" code = "AlgAnimApp.class" width = 200 height = 35>
+<param name = "filename" value = "AlgThread.java">
+<param name = "buttonname" value = "Run Quick Sort Animation">
+<param name = "algname" value = "Quick Sort">
+</applet>
+<P>
+</TD>
+</TABLE>
+Observe that the animation uses two arrays for the items being
+sorted:
+thus it requires <B><I>O(n)</I></B> additional <B>space</B>
+to operate.
+However, it's possible to partition the array
+<FONT COLOR="#fa0000"><B>in place</B></FONT>.
+The next page shows a conventional implementation of the
+partition phase which swaps elements in the same array
+and thus avoids using extra space.
+
+<P>
+<TABLE WIDTH="100%" BGCOLOR="#00c0f0">
+<TR><TD><H3>Key terms</H3></TD></TR></TABLE>
+<DL>
+<DT><FONT COLOR="#fa0000"><B>Divide and Conquer Algorithms</B></FONT>
+   <DD>Algorithms that solve (conquer) problems by dividing them into
+      smaller sub-problems until the problem is so small that it is
+      trivially solved.
+<DT><FONT COLOR="#fa0000"><B>in place</B></FONT>
+	<DD>In place sorting algorithms don't require additional temporary
+       space to store elements as they sort;
+      they use the space originally occupied by the elements.
+</DL>
+
+<P>
+
+<TABLE CELLPADDING=5 WIDTH="100%" BGCOLOR="#00f0f0" CELLSPACING=4>
+<TR><TD WIDTH=50%>
+Continue on to <A HREF="qsort1a.html">Quick sort: Partition in place</A></TD>
+<TD>Back to the <A HREF="ds_ToC.html">Table of Contents</A>
+</TD></TR></TABLE>
+<SMALL>
+&copy; <A HREF=mailto:morris@ee.uwa.edu.au>John Morris</A>, 1998
+</SMALL>
+</BODY>
+</HTML>
+
+

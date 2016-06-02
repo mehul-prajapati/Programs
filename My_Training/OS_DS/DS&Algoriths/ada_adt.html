@@ -1,0 +1,105 @@
+<HTML><HEAD>
+<TITLE>Data Structures and Algorithms - Ada ADTs</TITLE>
+</HEAD>
+<BODY BGCOLOR="#ffffff">
+<H1>Data Structures and Algorithms</H1>
+<HR>
+
+<H3>6.2 ADTs in Ada</H3>
+
+Ada was designed in the late 70's - just before object
+orientation was "discovered". However at that time the
+value of abstract data types was well understood and Ada
+provides good support for this concept.
+
+<P>
+Two Ada constructs are needed for defining an ADT:
+the data type and its methods are placed in an Ada <TT>package</TT>.
+For safety and information hiding, the data type is made
+<TT>private</TT>. Although a package's "client" can see the
+structure of the data type, the compiler prevents access to 
+individual attributes of the type: thus effectively implementing
+the information hiding principle.
+The client can see the information, but can't do anything with it!
+(I believe that the reason for exposing the structure of the 
+private type is purely pragmatic:
+compilers and linkers know how much space an ADT in a separately compiled
+package - for which only the specification might be available -
+requires.)
+<P>
+An Ada package for complex numbers would be implemented:
+<P><FONT COLOR=green><PRE>
+PACKAGE complex_numbers IS
+    TYPE complex IS PRIVATE;
+    I : CONSTANT complex;    -- 'i'
+
+    FUNCTION "-"( complex a ) RETURNS complex; -- Unary minus
+
+    FUNCTION "+"( complex a; complex b ) RETURNS complex;
+    FUNCTION "-"( complex a; complex b ) RETURNS complex;
+    FUNCTION "*"( complex a; complex b ) RETURNS complex;
+    FUNCTION "="( complex a; complex b ) RETURNS boolean;
+
+PRIVATE
+    TYPE complex IS RECORD
+        real, imag : FLOAT;
+        END RECORD;
+    I : CONSTANT complex := (0.0, 1.0);
+END complex_numbers;
+</PRE></FONT>
+The <TT>body</TT> or implementation would usually be placed in 
+a separate file and compiled separately:
+<P><FONT COLOR=green><PRE>
+PACKAGE BODY complex_numbers IS
+
+    FUNCTION "-"( complex a ) RETURNS complex IS -- Unary minus
+	RETURN complex'(-a.real,-a.imag);
+	END "-";
+
+    FUNCTION "+"( complex a; complex b ) RETURNS complex IS
+        RETURN complex'(a.real+b.real,a.imag+c.imag);
+        END "+";
+
+    FUNCTION "-"( complex a; complex b ) RETURNS complex IS
+        RETURN complex'(a.real-b.real,a.imag-c.imag);
+        END "-";
+
+    FUNCTION "*"( complex a; complex b ) RETURNS complex IS
+	RETURN complex'(a.real*b.real - a.imag*b.imag,
+                        a.real*b.imag + a.imag*b.real );
+	END "*";
+
+    FUNCTION "="( complex a; complex b ) RETURNS boolean IS
+	RETURN (a.real = b.real) AND (a.imag = b.imag);
+	END "=";
+
+END complex_numbers;
+</PRE></FONT>
+<P>
+Note that Ada provides excellent operator overloading capabilities,
+which enable us to write mathematically "natural" code: <I>e.g.</I>
+<P><FONT COLOR=green><PRE>
+    complex a, b, c, z;
+
+    IF a = b THEN
+	c := z - a;
+        z := -z;
+    END IF;
+</PRE></FONT>
+<P>
+You can also observe that Ada is an extreme case of the
+principle that programs are read many times
+more often than they are read (for modern languages
+at least - nothing is ever likely to match the verbosity of COBOL!).
+Keywords appear everywhere:
+<TT><FONT COLOR=green>IS, RETURNS,</FONT></TT> <I>etc.</I>.
+<BR>
+<HR>
+<A HREF="sorting.html">Sorting</A><BR>
+<A HREF="ds_ToC.html">Table of Contents</A>
+<HR>
+<SMALL>
+&copy; <A HREF=mailto:morris@ee.uwa.edu.au>John Morris</A>, 1996
+</SMALL>
+</BODY>
+</HTML>

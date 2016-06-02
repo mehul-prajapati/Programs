@@ -1,0 +1,128 @@
+<HTML><HEAD>
+<TITLE>Data Structures and Algorithms: Search Trees</TITLE>
+
+<META name="description" content="Data Structures and Algorithms Course Notes,
+PLDS210 University of Western Australia">
+<META name="keywords" content="data structures,algorithms,abstract data types,
+searching, search trees">
+</HEAD>
+<BODY BGCOLOR="#ffffff">
+<TABLE BGCOLOR="#00c0f0" WIDTH="100%" CELLSPACING=0 CELLPADDING=0>
+<TR BGCOLOR="#00f0f0"><TD ALIGN=right>
+<FONT FACE=helvetica SIZE=+1><I>Data Structures and Algorithms</I></FONT>
+</TD></TR>
+
+<TR><TD><FONT FACE=helvetica SIZE=+2><B>8 Searching Revisited</B></FONT>
+</TD></TR>
+</TABLE>
+<P>
+
+Before we examine some more searching techniques,
+we need to consider some operations on trees -
+in particular means of traversing trees.
+
+<H4>Tree operations</H4>
+
+A binary tree can be traversed in a number of ways:
+<CENTER>
+<TABLE BORDER=1 CELLPADDING=6>
+<TR><TD ALIGN=center>pre-order</TD>
+<TD><OL><LI> Visit the root
+<LI> Traverse the left sub-tree,
+<LI> Traverse the right sub-tree </OL> </TD>
+</TR>
+<TR><TD ALIGN=center>in-order</TD>
+<TD> <OL> <LI> Traverse the left sub-tree,
+<LI> Visit the root
+<LI> Traverse the right sub-tree
+</OL></TD>
+</TR>
+<TR><TD ALIGN=center>post-order</TD>
+<TD><OL> <LI> Traverse the left sub-tree,
+<LI> Traverse the right sub-tree
+<LI> Visit the root
+</OL></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P>
+If we traverse the standard ordered binary tree
+<I>in-order</I>, then we will visit all the
+nodes in sorted order.
+<P>
+<H4>Parse trees</H4>
+<TABLE>
+<TR><TD>
+If we represent the expression:
+<P><CENTER>
+<TT>A*(((B+C)*(D*E))+F)</TT>
+</CENTER><P>
+as a tree:</TD>
+<TD> <IMG SRC="fig/parse_tree.gif"></TD>
+</TR>
+</TABLE>
+<BR>
+then traversing it <I>post-order</I> will produce:
+<CENTER><TT>A B C + D E * * F + *</TT></CENTER>
+which is the familiar reverse-polish notation
+used by a compiler for evaluating the expression.
+
+<H4>Search Trees</H4>
+We've seen how to use a heap to maintain a balanced tree
+for a priority queue. 
+What about a tree used to store information for retrieval
+(but not removal)?
+We want to be able to find any item quickly in such a tree
+based on the value of its key. 
+The search routine on a binary tree:
+<FONT COLOR=green><PRE>tree_search(tree T, Key key) {
+    if (T == NULL) return NULL;
+    if (key == T-&gt;root) return T-&gt;root;
+    else
+        if (key &lt; T-&gt;root) return tree_search( T-&gt;left, key );
+        else               return tree_search( T-&gt;right, key );
+    }
+</PRE></FONT>
+is simple and provides us with a <B>O(log n)</B> searching routine
+<I>as long as we can keep the tree balanced</I>.
+However, if we simply add items to a tree,
+producing an unbalanced tree is easy!
+<CENTER>
+<TABLE>
+<TR><TD>
+This is what happens if <BR>
+we add the letters<P><CENTER>
+<TT>A B C D E F</TT>
+</CENTER><P>
+in that order to a tree:
+<P>
+Not exactly well balanced!</TD>
+<TD> <IMG SRC="fig/unbal_tree.gif"></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+<P>
+<TABLE WIDTH="100%" BGCOLOR="#00c0f0">
+<TR><TD><H3>Key terms</H3></TD></TR></TABLE>
+<DL>
+<DT><FONT COLOR="#fa0000"><B>Pre-order tree traversal</B></FONT>
+   <DD>Traversing a tree in the order: root | left | right
+<DT><FONT COLOR="#fa0000"><B>In-order tree traversal</B></FONT>
+   <DD>Traversing a tree in the order: left | root | right
+<DT><FONT COLOR="#fa0000"><B>Post-order tree traversal</B></FONT>
+   <DD>Traversing a tree in the order: left | right | root
+</DL>
+
+<P>
+
+<TABLE CELLPADDING=5 WIDTH="100%" BGCOLOR="#00f0f0" CELLSPACING=4>
+<TR><TD WIDTH=50%>
+Continue on to <A HREF="red_black.html">Red-Black Trees</A></TD>
+<TD>Back to the <A HREF="ds_ToC.html">Table of Contents</A>
+</TD></TR></TABLE>
+<SMALL>
+&copy; <A HREF=mailto:morris@ee.uwa.edu.au>John Morris</A>, 1998
+</SMALL>
+</BODY>
+</HTML>

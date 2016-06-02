@@ -1,0 +1,283 @@
+<HTML><HEAD>
+<TITLE>Data Structures and Algorithms: Searching</TITLE>
+
+<META name="description" content="Data Structures and Algorithms Course Notes,
+PLDS210 University of Western Australia">
+<META name="keywords" content="data structures,algorithms,abstract data types,
+searching">
+</HEAD>
+<BODY BGCOLOR="#ffffff">
+<TABLE BGCOLOR="#00c0f0" WIDTH="100%" CELLSPACING=0 CELLPADDING=0>
+<TR BGCOLOR="#00f0f0"><TD ALIGN=right>
+<FONT FACE=helvetica SIZE=+1><I>Data Structures and Algorithms</I></FONT>
+</TD></TR>
+
+<TR><TD><FONT FACE=helvetica SIZE=+2><B>4 Searching</B></FONT>
+</TD></TR>
+</TABLE>
+<P>
+<a name="searching">
+
+Computer systems are often used to store large amounts of data from which
+individual records must be retrieved according to some search criterion. Thus
+the efficient storage of data to facilitate fast searching is an important
+issue. In this section, we shall investigate the performance of some searching
+algorithms and the data structures which they use.
+
+<a name="seq-search">
+<H2>4.1 Sequential Searches</H2>
+
+Let's examine how long it will take to find an item matching a key in the
+collections we have discussed so far. We're interested in:
+<P>
+<OL TYPE="a">
+<LI>	the average time
+<LI>	the worst-case time and
+<LI>	the best possible time.
+</OL>
+However, we will generally be most concerned with the worst-case time as
+calculations based on worst-case times can lead to guaranteed performance
+predictions.
+Conveniently, the worst-case times are generally easier to calculate
+than average times.
+<P>
+If there are <B><I>n</I></B> items in our collection - whether it is stored as an array or as
+a linked list - then it is obvious that in the worst case, when there is no
+item in the collection with the desired key, then <B><I>n</I></B> comparisons of the key with
+keys of the items in the collection will have to be made.<P>
+To simplify analysis and comparison of algorithms, we look for a dominant
+operation and count the number of times that dominant operation has to be
+performed. In the case of searching, the dominant operation is the comparison,
+since the search requires n comparisons in the worst case, we say this is a
+<B><I>O(n)</I></B>
+<NOTE>(pronounce this "big-Oh-n" or "Oh-n")</NOTE>
+algorithm.
+The best case - in which the first
+comparison returns a match - requires a single comparison and is <B><I>O(</I>1<I>)</I></B>.
+The
+average time depends on the probability that the key will be found in the
+collection - this is something that we would not expect to know in the majority
+of cases. Thus in this case, as in most others, estimation of the average time
+is of little utility. If the performance of the system is vital, i.e. it's part
+of a life-critical system, then we must use the worst case in our design
+calculations as it represents the best guaranteed performance.
+
+<a name="binary-search">
+<H2>4.2 Binary Search</H2>
+
+However, if we place our items in an array and sort them in either ascending or
+descending order on the key first, then we can obtain much better performance
+with an algorithm called <FONT COLOR="#fa0000"><B>binary search</B></FONT>.
+<P>
+In binary search, we first compare the key with the item in the middle position
+of the array. If there's a match, we can return immediately. If the key is less
+than the middle key, then the item sought must lie in the lower half of the
+array; if it's greater then the item sought must lie in the upper half of the
+array. So we repeat the procedure on the lower (or upper) half of the array.<P>
+Our <TT><FONT COLOR=green>FindInCollection</FONT></TT>
+function can now be implemented:
+<P><PRE><FONT COLOR=green>
+static void *bin_search( collection c, int low, int high, void *key ) {
+	int mid;
+	/* Termination check */
+	if (low &gt; high) return NULL;
+	mid = (high+low)/2;
+	switch (memcmp(ItemKey(c-&gt;items[mid]),key,c-&gt;size)) {
+		/* Match, return item found */
+		case 0: return c-&gt;items[mid];
+		/* key is less than mid, search lower half */
+		case -1: return bin_search( c, low, mid-1, key);
+		/* key is greater than mid, search upper half */
+		case 1: return bin_search( c, mid+1, high, key );
+		default : return NULL;
+		}
+	}
+
+void *FindInCollection( collection c, void *key ) {
+/* Find an item in a collection
+   Pre-condition: 
+	c is a collection created by ConsCollection
+	c is sorted in ascending order of the key
+	key != NULL
+   Post-condition: returns an item identified by key if
+   one exists, otherwise returns NULL
+*/
+	int low, high;
+	low = 0; high = c-&gt;item_cnt-1;
+	return bin_search( c, low, high, key );
+}
+</FONT></PRE>
+Points to note:
+<OL TYPE="a">
+<LI> <TT><FONT COLOR=green>bin_search</FONT></TT> is recursive:
+it determines whether the search key lies in the lower or upper half
+of the array, then calls itself on the appropriate half.
+<LI> There is a termination condition (two of them in fact!)
+<OL TYPE="i">
+<LI> If <TT><FONT COLOR=green>low &gt; high</FONT></TT> then
+the partition to be searched has no elements in it <i>and</i>
+<LI> If there is a match with the element in the middle of the
+current partition, then we can return immediately.
+</OL>
+<LI> <TT><FONT COLOR=green>AddToCollection</FONT></TT>
+will need to be modified to ensure that
+each item added is placed in its correct place in the array.
+The procedure is simple:
+<OL TYPE="i">
+<LI> Search the array until the correct spot to insert the new item
+is found,
+<LI> Move all the following items up one position <i>and</i>
+<LI> Insert the new item into the empty position thus created.
+</OL>
+<LI> <TT><FONT COLOR=green>bin_search</FONT></TT> is declared
+<TT><FONT COLOR=green>static</FONT></TT>. 
+It is a local function and is not used outside this class:
+if it were not declared static, it would be exported and
+be available to all parts of the program.
+The static declaration also allows other classes to use the
+same name internally.
+<BLOCKQUOTE>
+<TABLE BORDER=3 BORDERCOLOR=red>
+<TR><TD>
+<FONT COLOR=red>
+<TT><FONT COLOR=green>static</FONT></TT> reduces the visibility of a function an
+should be used wherever possible to control access 
+to functions!
+</FONT>
+</TD></TR>
+</TABLE>
+</BLOCKQUOTE>
+</OL>
+<H4>Analysis</H4>
+
+<TABLE>
+<TR>
+<TD>
+<IMG SRC="fig/bsearch.gif"></TD> <TD>
+Each step of the algorithm divides the block of items
+being searched in half.
+We can divide a set of <I><B>n</B></I> items in half
+at most <B>log<SUB>2</SUB> <I>n</I></B> times.
+<P>
+Thus the running time of a binary search is
+proportional to <B>log <I>n</I></B> and we
+say this is a
+<B><I>O(</I>log <I>n)</I></B> 
+algorithm.
+</TD>
+
+</TR>
+</TABLE>
+<TABLE>
+<TR>
+<TD>
+Binary search requires a more complex program
+than our original search and thus for <I>small <B>n</B></I>
+it may run slower than the simple linear search.
+However, for large <I><B>n</B></I>,<BR>
+<CENTER>
+<IMG SRC="fig/limit.gif">
+</CENTER>
+<P>
+Thus at large <I><B>n</B></I>,
+<B>log <I>n</I></B>
+is <I>much</I> smaller than <I><B>n</B></I>,
+consequently an 
+<B><I>O(</I>log <I>n)</I></B> 
+algorithm
+is <I>much</I> faster than an
+<B><I>O(n)</I></B>
+one.
+</TD>
+<TD>
+<IMG SRC="fig/log_graph.gif">
+<CENTER>
+Plot of 
+<I><B>n</B></I>
+and
+<B>log <I>n</I></B>
+<I>vs</I>
+<I><B>n</B></I>
+.</CENTER>
+</TD>
+</TR>
+</TABLE>
+<P>
+We will examine this behaviour more formally in a
+<A HREF="complexity.html">later section</A>.
+First, let's see what we can do about the insertion
+(<TT><FONT COLOR=green>AddToCollection</FONT></TT>)
+operation.
+<P>
+In the worst case, insertion may require 
+<I><B>n</B></I>
+operations to insert into
+a sorted list.
+<P>
+<OL>
+<LI>We can find the place in the list
+where the new item belongs using binary search
+in
+<B><I>O(</I>log <I>n)</I></B> 
+operations.
+<LI>However, we have to shuffle all the following items
+up one place to make way for the new one.
+In the worst case, the new item is the first in
+the list,
+requiring
+<I><B>n</B></I>
+move operations for the shuffle!
+</UL>
+<P>
+A similar analysis will show that deletion is also an
+<B><I>O(n)</I></B>
+operation.
+<P>
+If our collection is static, <I>ie</I> it doesn't
+change very often - if at all - then we may not be
+concerned with the time required to change its contents:
+we may be prepared for the initial build of
+the collection and the occasional insertion and
+deletion to take some time.
+In return, we will be able to use a simple data structure
+(an array)
+which has little memory overhead.
+<P>
+However, if our collection is large and dynamic, <I>ie</I> items
+are being added and deleted continually,
+then we can obtain considerably better performance
+using a data structure called a <A HREF=trees.html>tree</A>.
+
+
+<P>
+<TABLE WIDTH="100%" BGCOLOR="#00c0f0">
+<TR><TD><H3>Key terms</H3></TD></TR></TABLE>
+<DL>
+<DT><FONT COLOR="#fa0000"><B>Big Oh</B></FONT>
+   <DD>A notation formally describing the set of all functions which
+      are bounded above by a nominated function.
+<DT><FONT COLOR="#fa0000"><B>Binary Search</B></FONT>
+	<DD>A technique for searching an ordered list in which we first
+      check the middle item and - based on that comparison -
+      "discard" half the data. The same procedure is then applied to
+      the remaining half until a match  is found or there are no more
+      items left. 
+</DL>
+
+<P>
+
+<TABLE CELLPADDING=5 WIDTH="100%" BGCOLOR="#00f0f0" CELLSPACING=0>
+<TR><TD>
+<FONT FACE=arial,helvetica>
+Continue on to <A HREF="trees.html">Trees</A>
+</TD><TD>
+<FONT FACE=arial,helvetica>
+Back to the <A HREF="ds_ToC.html">Table of Contents</A>
+</TD></TR></TABLE>
+<SMALL>
+&copy; <A HREF=mailto:morris@ee.uwa.edu.au>John Morris</A>, 1998
+</SMALL>
+</BODY>
+</HTML>
+
+

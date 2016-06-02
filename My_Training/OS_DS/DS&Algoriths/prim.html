@@ -1,0 +1,129 @@
+<HTML><HEAD>
+<TITLE>Data Structures and Algorithms: Graph Algorithms</TITLE>
+
+<META name="description" content="Data Structures and Algorithms Course Notes,
+PLDS210 University of Western Australia">
+<META name="keywords" content="data structures,algorithms,abstract data types,
+graph algorithms, mininum spanning tree, Prim">
+</HEAD>
+<BODY BGCOLOR="#ffffff">
+<TABLE BGCOLOR="#00c0f0" WIDTH="100%" CELLSPACING=0 CELLPADDING=0>
+<TR BGCOLOR="#00f0f0"><TD ALIGN=right>
+<FONT FACE=helvetica SIZE=+1><I>Data Structures and Algorithms</I></FONT>
+</TD></TR>
+
+<TR><TD><FONT FACE=helvetica SIZE=+2><B>Prim's Algorithm</B></FONT>
+</TD></TR>
+</TABLE>
+<P>
+
+
+<H4>Prim's Algorithm</H4>
+Prim's algorithm is very similar to Kruskal's:
+whereas Kruskal's "grows" a forest of trees,
+Prim's algorithm grows a single tree until it
+becomes the minimum spanning tree.
+Both algorithms use the greedy approach -
+they add the cheapest edge that will not cause a
+cycle. 
+But rather than choosing the cheapest edge that
+will connect <I>any</I> pair of trees together,
+Prim's algorithm only adds edges that join nodes to
+the existing tree.
+(In this respect, Prim's algorithm is very similar
+to <A HREF=dijkstra.html>Dijkstra's algorithm</A>
+for finding shortest paths.)
+<P>
+Prim's algorithm works efficiently if we keep a
+list <B><I>d[v]</I></B> of the cheapest weights which connect
+a vertex, <B><I>v</I></B>, which is not in the tree,
+to <I>any</I> vertex already in the tree.
+A second list <B><I>pi[v]</I></B> keeps the index of the
+node already in the tree to which <B></I>v</I></B>
+can be connected with cost, <B><I>d[v]</I>.
+ 
+<PRE>int *MinimumSpanningTree( Graph g, int n, double **costs ) {
+   Queue q;
+   int u, v;
+   int d[n], *pi;
+   q = ConsEdgeQueue( g, costs );
+   pi = ConsPredList( n );
+   for(i=0;i<n;i++) {
+     d[i] = INFINITY;
+     }
+   /* Choose 0 as the "root" of the MST */
+   d[0] = 0;
+   pi[0] = 0;
+   while ( !Empty( q ) ) {
+     u = Smallest( g );
+     for each v in g->adj[u] {
+       if ( (v in q) && costs[u][v] < d[v] ) {
+         pi[v] = u;
+         d[v] = costs[u][v];
+         }
+       }
+     }
+   return pi;
+   }
+</PRE></FONT>
+The steps are:
+<OL>
+<LI> The edge queue is constructed
+<LI> A <FONT COLOR="#fa0000"><B>predecessor list</B></FONT>
+     of predecessors for each node is constructed.
+<LI> "Best" distances to each node are set to infinity.
+<LI> Choose node 0 as the "root" of the MST (any node will do
+     as the MST must contain all nodes),
+<LI> While the edge queue is not empty,
+    <OL>
+<LI> Extract the cheapest edge, <B><I>u</I></B>, from the queue,
+<LI> Relax all its neighbours -
+if the distance of this node from the closest node in
+ the MST formed so far is larger than <B><I>d[u][v]</I></B>,
+ then update  <B><I>d[u][v]</I></B> and set <B><I>v</I></B>'s
+ predecessor to <B><I>u</I></B>.
+</OL>
+<LI>Return the predecessor list.
+</OL>
+<P>
+The time complexity is 
+<B><I>O(V</I>log<I>V + E</I>log<I>V) = O(E</I>log<I>V)</I></B>,
+making it the same as Kruskal's algorithm.
+However, Prim's algorithm can be improved using
+<B><FONT COLOR="#fa0000">Fibonacci Heaps</B></FONT> 
+(<I>cf</I> Cormen) to
+<B><I>O(E + </I>log<I>V)</I></B>. 
+<P>
+<TABLE WIDTH="100%" BGCOLOR="#00c0f0">
+<TR><TD><H3>Key terms</H3></TD></TR></TABLE>
+<DL>
+<DT><FONT COLOR="#fa0000"><B>Predecessor list</B></FONT>
+   <DD>A data structure for defining a graph by storing a
+     predecessor for each node with that node.
+     Thus it uses a single array of integers to define
+     a sub-graph of a graph.
+<DT><FONT COLOR="#fa0000"><B>Fibonacci Heaps</B></FONT>
+   <DD>See Cormen, chapter 21.
+</DL>
+
+<P>
+The time complexity is 
+<B><I>O(V</I>log<I>V + E</I>log<I>V) = O(E</I>log<I>V)</I></B>,
+making it the same as Kruskal's algorithm.
+However, Prim's algorithm can be improved using
+<B><FONT COLOR="#fa0000">Fibonacci Heaps</B></FONT> 
+(<I>cf</I> Cormen) to
+<B><I>O(E + </I>log<I>V). 
+<P>
+
+<TABLE CELLPADDING=5 WIDTH="100%" BGCOLOR="#00f0f0" CELLSPACING=4>
+<TR><TD WIDTH=33%>
+<A HREF="greedy_proof.html">Proving the MST algorithm</A></TD>
+<TD WIDTH="33%"><A HREF="graph_rep.html">Graph Representations</A></TD>
+<TD>Back to the <A HREF="ds_ToC.html">Table of Contents</A>
+</TD></TR></TABLE>
+<SMALL>
+&copy; <A HREF=mailto:morris@ee.uwa.edu.au>John Morris</A>, 1998
+</SMALL>
+</BODY>
+</HTML>

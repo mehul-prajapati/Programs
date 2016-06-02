@@ -1,0 +1,102 @@
+<HTML><HEAD>
+<TITLE>Data Structures and Algorithms: C++ exceptions</TITLE>
+
+<META name="description" content="Data Structures and Algorithms Course Notes,
+PLDS210 University of Western Australia">
+<META name="keywords" content="data structures,algorithms,abstract data types,
+exceptions, error handling, C++">
+</HEAD>
+<BODY BGCOLOR="#ffffff">
+<TABLE BGCOLOR="#00c0f0" WIDTH="100%" CELLSPACING=0 CELLPADDING=0>
+<TR BGCOLOR="#00f0f0"><TD ALIGN=right>
+<FONT FACE=helvetica SIZE=+1><I>Data Structures and Algorithms</I></FONT>
+</TD></TR>
+
+<TR><TD><FONT FACE=helvetica SIZE=+2><B>C++ Exceptions</B></FONT>
+</TD></TR>
+</TABLE>
+<P>
+
+C++ defines a mechanism that is somewhat similar to
+Ada's exception mechanism.
+<P>
+C++ allows you to execute a <TT><FONT COLOR=green>throw</FONT></TT>
+statement when an error is detected.
+When a <TT><FONT COLOR=green>throw</FONT></TT> is invoked, 
+control jumps immediately to a <TT><FONT COLOR=green>catch</FONT></TT>
+routine.
+<P>
+First you define a <TT><FONT COLOR=green>try</FONT></TT> block which
+encloses the "normal" (no exception) code.
+The <TT><FONT COLOR=green>try</FONT></TT> block is followed by a number of
+<TT><FONT COLOR=green>catch</FONT></TT> blocks:
+if code in the <TT><FONT COLOR=green>try</FONT></TT> block throws an exception,
+it is caught by one of the <TT><FONT COLOR=green>catch</FONT></TT> blocks.
+<FONT COLOR=green>
+<PRE>try {
+    classX x;
+    x.mangle( 2 );
+    x.straighten( -2 );
+    }
+catch( const char *string ) { ..... }
+catch( RangeErr &re ) { .... }
+catch( ... ) {
+    // catches any other error
+    ....
+    }
+</PRE></FONT>
+<TT><FONT COLOR=green>classX</FONT></TT>'s constructor, <TT><FONT COLOR=green>mangle</FONT></TT> and <TT><FONT COLOR=green>straighten</FONT></TT>
+methods contain <TT><FONT COLOR=green>throw</FONT></TT> statements when
+problems are encountered:
+<FONT COLOR=green>
+<PRE>classX::mangle( int degree ) {
+     if ( degree > MAX_MANGLE )
+         throw "Can't mangle this much!";
+     .... // Normal code for mangle
+     }
+</PRE></FONT>
+The <TT><FONT COLOR=green>throw</FONT></TT> causes control to jump straight out of
+the <TT><FONT COLOR=green>mangle</FONT></TT> method to the <TT><FONT COLOR=green>catch</FONT></TT> block, 
+skipping all subsequent statements in the <TT><FONT COLOR=green>try</FONT></TT>
+block.
+<P>
+However, like much of C++, the rules
+which are used to associate a <TT><FONT COLOR=green>throw</FONT></TT>
+with the correct <TT><FONT COLOR=green>catch</FONT></TT> are too complex
+to contemplate.
+Stroustroup attempted to make the <TT><FONT COLOR=green>throw</FONT></TT> 
+like a general method invocation with parameters,
+overloading, <I>etc, etc</I>.
+<P>
+Historical note:
+many early C++ compilers did not implement
+the <TT><FONT COLOR=green>throw/catch</FONT></TT> pair, 
+(possibly because of the complexity alluded to above!)
+and some textbooks avoid it -
+or relegate it to the last few pages!
+<P>
+Basically, like a lot of C++ features,
+the <TT><FONT COLOR=green>throw/catch</FONT></TT> 
+mechanism is best used in a very simple way,
+<I>eg</I> by providing a single <TT><FONT COLOR=green>catch</FONT></TT>
+block with a single <TT><FONT COLOR=green>int</FONT></TT> or
+<TT><FONT COLOR=green>enum</FONT></TT>
+parameter!
+Ada's simple and clean mechanism may lack some
+power (an exception handler can't be passed a
+parameter), but it's a lot easier to
+understand and use!
+
+
+<P>
+
+<TABLE CELLPADDING=5 WIDTH="100%" BGCOLOR="#00f0f0" CELLSPACING=0>
+<TR><TD>
+Continue on to <A HREF="java_throw.html">Java Exceptions</A><BR>
+Back to the <A HREF="ds_ToC.html">Table of Contents</A>
+</TD></TR></TABLE>
+<SMALL>
+&copy; <A HREF=mailto:morris@ee.uwa.edu.au>John Morris</A>, 1998
+</SMALL>
+</BODY>
+</HTML>

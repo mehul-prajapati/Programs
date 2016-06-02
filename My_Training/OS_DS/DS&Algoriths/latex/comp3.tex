@@ -1,0 +1,87 @@
+%
+% comp3.tex Complexity section - Analysis
+%
+% This is part of the common section of the complexity section -
+% used in both HTML and PS versions
+%
+
+\subsection{Analysing an algorithm}
+
+\subsubsection{Simple Statement Sequence}
+First note that a sequence of statements which is executed
+once only is \Oh{1}.
+It doesn't matter how many statements are in the sequence -
+only that the number of statements (or the time that they
+take to execute) is constant for all problems.
+
+\subsubsection{Simple Loops}
+If a problem of size \nx\ can be solved with a simple loop: \\
+
+\begin{Ccode}
+for(i=0;i<n;i++)\\
+\>	\{ s; \}\\
+\end{Ccode}
+
+where s is an \Oh{1}\ sequence of statements, then the
+time complexity is \nx\Oh{1}\ or \Oh{n}.
+
+If we have two nested loops:
+
+\begin{Ccode}
+for(j=0;j<n;j++)\\
+\>    for(i=0;i<n;i++)\\
+\>\>        \{ s; \}\\
+\end{Ccode}
+
+then we have \nx\ repetitions of an \Oh{n}\ sequence,
+giving a complexity of: \nx\Oh{n}\ or \Oh{n^2}.
+
+Where the index 'jumps' by an increasing amount in each iteration,
+we might have a loop like: 
+
+\begin{Ccode}
+h = 1;\\
+while( h $\leq$ n )\\
+\>    \{ s;\\
+\>    h = 2*h; \}
+\end{Ccode} 
+
+in which {\tt h} takes values 1, 2, 4, ... until it exceeds \nx.
+This sequence has $1 + \lfloor{\log_2{n}\rfloor }$ values, so the 
+complexity is \Oh{\log_2{n}}.
+
+If the inner loop depends on an outer loop index:
+\begin{verbatim}
+for(j=0;j<n;j++)
+    for(i=0;i<j;i++)
+        { s; }
+\end{verbatim}
+The inner loop {\tt for(i=0; .. } gets executed \varx{i}\ times, 
+so the total is:
+\[ \sum_1^n{i} = \frac{n(n+1))}{2} \]
+and the complexity is \Oh{n^2}.
+We see that this is the same as the result for two nested 
+loops above,
+so the variable number of iterations of the inner loop 
+doesn't affect the `big picture'.
+
+However, if the number of iterations of one of the loops
+decreases by a constant factor with every iteration:
+\begin{verbatim}
+h = n;
+for(j=0;j<h;j++)
+    {
+    for(i=0;i<n;i++)
+        { s; }
+    h = h/2;
+    }
+\end{verbatim}
+Then:
+There are $\log_2{n}$\ iterations of the outer loop and the inner loop
+is \Oh{n}, so the overall complexity is
+\Oh{{n\log{n}}}.
+This is substantially better than the previous case in which the
+number of iterations of one of the loops decreased by a constant
+for each iteration!
+
+

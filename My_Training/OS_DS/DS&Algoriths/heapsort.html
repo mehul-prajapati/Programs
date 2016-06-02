@@ -1,0 +1,95 @@
+<HTML><HEAD>
+<TITLE>Data Structures and Algorithms: Heap Sort</TITLE>
+
+<META name="description" content="Data Structures and Algorithms Course Notes,
+PLDS210 University of Western Australia">
+<META name="keywords" content="data structures,algorithms,abstract data types,
+heap sort">
+</HEAD>
+<BODY BGCOLOR="#ffffff">
+<TABLE BGCOLOR="#00c0f0" WIDTH="100%" CELLSPACING=0 CELLPADDING=0>
+<TR BGCOLOR="#00f0f0"><TD ALIGN=right>
+<FONT FACE=helvetica SIZE=+1><I>Data Structures and Algorithms</I></FONT>
+</TD></TR>
+
+<TR><TD><FONT FACE=helvetica SIZE=+2><B>7.2 Heap Sort</B></FONT>
+</TD></TR>
+</TABLE>
+<P>
+
+We noted earlier, when discussing 
+<A HREF=heaps.html>heaps</A>,
+that, as well as their use in priority queues,
+they provide a means of sorting:
+<OL>
+<LI> construct a heap,
+<LI> add each item to it (maintaining the heap property!),
+<LI> when all items have been added,
+remove them one by one (restoring the heap property as
+each one is removed).
+</OL>
+Addition and deletion are both <B>O(log<I>n</I>)</B>
+operations. We need to perform <B><I>n</I></B> 
+additions and deletions, leading to an
+<B>O(<I>n</I>log<I>n</I>)</B> algorithm.
+
+We will look at another efficient sorting 
+algorithm,
+<A HREF=qsort.html>Quicksort</A>,
+and then compare it with Heap sort.
+
+
+<H3>Animation</H3>
+
+The following animation uses a slight modification of the above approach
+to sort directly using a heap.
+You will note that it places <B>all</B> the items into the array
+first, <B>then</B> takes items at the bottom of the heap and restores
+the heap property, rather than restoring the heap property as
+<B>each</B> item is entered as the algorithm above suggests.
+(This approach is described more fully in Cormen <I>et al.</I>)
+<P>
+Note that the animation shows the data 
+<UL><LI>stored in an array (as it is in the implementation of the
+        algorithm) <I>and also</I>
+    <LI>in the tree form - so that the heap structure can be clearly
+        seen.
+</UL>
+Both representations are, of course, equivalent.
+<P>
+<A NAME=heap_sort_anim>
+<TABLE BGCOLOR="#00f0f0" WIDTH="100%"> 
+<TR><TD >
+<FONT COLOR=blue FACE=helvetica>
+<B>Heap Sort Animation</B><BR>
+This animation was written by Woi Ang.</FONT></TD>
+<TD ALIGN=center>
+  <TABLE BORDER=0>
+  <TR><TD>
+    <applet CODEBASE="Java/heap_sort" code = "AlgAnimApp.class" width = 200 height = 35>
+    <param name = "filename" value = "AlgThread.java">
+    <param name = "buttonname" value = "Run Heap Sort">
+    <param name = "algname" value = "Heap Sort">
+    </applet>
+    </TD>
+  </TR>
+</TABLE>
+</TD>
+<TD><FONT FACE=helvetica>Please email comments to:<BR>
+<A HREF=mailto:morris@ee.uwa.edu.au>morris@ee.uwa.edu.au</A>
+</TR>
+</TABLE>
+
+
+<P>
+
+<TABLE CELLPADDING=5 WIDTH="100%" BGCOLOR="#00f0f0" CELLSPACING=0>
+<TR><TD>
+Continue on to <A HREF="qsort.html">Quick Sort</A></TD>
+<TD>Back to the <A HREF="ds_ToC.html">Table of Contents</A>
+</TD></TR></TABLE>
+<SMALL>
+&copy; <A HREF=mailto:morris@ee.uwa.edu.au>John Morris</A>, 1998
+</SMALL>
+</BODY>
+</HTML>

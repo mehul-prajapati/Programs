@@ -1,0 +1,219 @@
+
+\documentstyle{article}
+\begin{document}
+\input{../LaTeX/illustrations.tex}
+\input{macros.tex}
+\newcommand{\HR}{\rule{12cm}{0.5mm}}
+%
+
+\section*{Data Structures and Algorithms}
+\HR
+\setcounter{section}{11}
+\section{Multiplication of Polynomials}
+\label{sec:poly-mult}
+If we have two polynomials:
+
+\[A(x) = \sum_{j=0}^{n-1}a_{j}x^{j}   \]
+and
+\[B(x) = \sum_{j=0}^{n-1}b_{j}x^{j}   \]
+then, we can form a product:
+\[C(x) = A(x)B(x) = \sum_{0}^{2n-2}c_{j}x^{j} \]
+where
+\[c_{j} = \sum_{k=0}^{j}a_{k}b_{j-k} \]
+Clearly, this algorithm is $\Theta(n^2)$.
+
+\newcommand{\PVR}{{Point-Value Representation}}
+\subsection{\PVR}
+
+In section \ref{sec:poly-mult}, we used the
+{\it coefficient form} to represent the polynomials.
+There is an alternative way to represent
+polynomials, using the {\it point-value representation}.
+A polynomial of degree $n-1$ can be represented by
+$n$ point-value pairs:
+
+\[ \{ (x_0,y_0), (x_1,y_1), \ldots , (x_{n-1},y_{n-1}) \} \]
+
+where
+\begin{itemize}
+\item All the $x_k$ are distinct
+\item $y_k = A(x_k)$
+\end{itemize}
+
+\subsection{Uniqueness Theorem}
+
+For any set of $n$ points, there is a unique polynomial.
+
+(For a proof, {\it see} Cormen \ETAL).
+
+\subsection{Operations in the \PVR} 
+
+If we have two polynomials, $A$ and $B$:
+
+\[ A(x) = \{ (x_0,y_0), (x_1,y_1), \ldots , (x_{n-1},y_{n-1}) \} \]
+and
+\[ B(x) = \{ (x_0,y_0'), (x_1,y_1'), \ldots , (x_{n-1},y_{n-1}') \} \]
+where all the $x_k$ are the same,
+then
+
+\[ C(x) = A(x)+ B(x) = \{ (x_0,y_0+y_0'), (x_1,y_1+y_1'), \ldots , (x_{n-1},y_{n-1}+y_{n-1}') \} \]
+and
+\[ C(x) = A(x)\dot B(x) = \{ (x_0,y_0y_0'), (x_1,y_1y_1'), \ldots , (x_{n-1},y_{n-1}y_{n-1}') \} \]
+giving a $\Theta(n)$ procedure for multiplying two polynomials.
+But note that we now need $2n$ points in our representations of $A$
+and $B$.
+
+Unfortunately, conversion between coefficient and point-value
+representations requires generating $n$ or $2n$ points.
+Evaluating $y_k = A(x_k)$ requires $\Theta(n)$ operations 
+using Horner's rule,
+so the conversion is $\Theta(n^2)$!
+
+However, note that we can choose any $x_k$ as long as they are 
+distinct.
+If we choose the {\em $n$ complex $n^{th}$ roots of unity},
+then we are performing a Discrete Fourier Transform.
+As we will show, this takes $\Theta(n\log{n})$ time.
+The reverse transformation 
+(from point-value to coefficient representation),
+called {\it interpolation}, is also a Fourier Transform,
+also requiring $\Theta(n\log{n})$ time.
+
+This leads us to the following polynomial multiplication
+algorithm:
+
+\begin{tabular}{|p{9cm}|c|}
+\hline
+Augment polynomials $A$ and $B$
+by adding $n$ higher order 0 coefficients & $\Theta(n)$ \\
+\hline
+{\em Evaluate}
+
+Compute point-value representation of $A(x)$ and $B(x)$
+by two applications of the FFT
+
+$\Rightarrow$ values at each $(2n)^{th}$ root of unity. & $\Theta(n\log{n})$ \\
+\hline
+
+Point-wise multiply & $\Theta(n)$ \\
+\hline
+
+{\em Interpolate}
+
+Create coefficient representation by application of FFT & $\Theta(n\log{n})$ \\
+\hline
+Total & $\Theta(n\log{n})$ \\
+\hline
+\end{tabular}
+
+\subsection{Complex Roots of Unity}
+
+The complex $n^{th}$ root of unity, $\omega$, is defined by:
+\[ \omega^n = 1 \]
+There are exactly $n$ such roots:
+\[ e^{\frac{2\pi{ik}}{n}}  
+= \cos{\frac{2\pi k}{n}} + i \sin{\frac{2\pi k}{n}}
+\ for\ k = 0,1, \ldots ,n-1 
+ \]
+The {\em principal $n^{th}$ root of
+unity} is
+\[ \omega_n = e^{\frac{2\pi i}{n}} \]
+The other roots are
+\[ \omega_n^2, \omega_n^3, \ldots , \omega_n^{n-1} \]
+
+\subsection{Properties of $\omega$}
+\begin{tabular}{p{3cm}p{6cm}}
+\begin{center}Cancellation \\ lemma
+\end{center} &
+For any $n\geq 0, k \geq 0, d > 0$:
+\[ \omega_{dn}^{dk} = \omega_n^k \]
+ \\
+ & For any even $n > 0$:
+\[ \omega_n^{\frac{n}{2}} = \omega_2 = -1 \] \\
+\begin{center}Halving \\ lemma
+\end{center} &
+If $n$ is even, the squares of the $n$ complex $n^{th}$
+roots of unity are the $\frac{n}{2}$ complex $(\frac{n}{2})^{th}$ roots. \\
+\end{tabular}
+
+\subsection{The Fast Fourier Transform}
+
+
+To evaluate $A(x)$, we divide it into two parts:
+\[ A^{even}(x) = a_0 + a_2x + a_4x^2 + \ldots + a_{n-2}x^{\frac{n}{2}-1} \]
+and
+\[ A^{odd}(x) = a_1 + a_3x + a_5x^2 + \ldots + a_{n-1}x^{\frac{n}{2}-1} \]
+now
+\[ A(x) = A^{even}(x^2) + A^{odd}(x^2)x \]
+So evaluating $A(x)$ at
+\[ \omega_n^0, \omega_n^1, \omega_n^2, \ldots, \omega_n^{n-1} \]
+reduces to 
+\begin{enumerate}
+\item Evaluating $A^{even}(x)$ and $A^{odd}(x)$ at
+\[ (\omega_n^0)^2, (\omega_n^1)^2, (\omega_n^2)^2, \ldots, (\omega_n^{n-1})^2 \]{\em but} these are the complex $(\frac{n}{2})^{th}$ roots of unity
+and there are only $\frac{n}{2}$ of them.
+\item Combining them.
+\end{enumerate}
+
+So we have divided our $\Theta(n^2)$ evaluation into
+two sub-problems of size $\frac{n}{2}$.
+As usual, we can divide the problem $\log{n}$ times,
+giving a  $\Theta(n\log{n})$ evaluation algorithm.
+
+Thus the time complexity of FFT is $\Theta(n\log{n})$ and
+we have developed a
+$\Theta(n\log{n})$ algorithm for multiplying polynomials.
+
+\subsection{Recursive FFT}
+
+A recursive FFT algorithm has the following form:
+\[ 
+\begin{array}{l}
+fft(a, n) \\
+\ \ \ if\ n=1\ then\ return\ a; \\
+\ \ \ \omega_n = e^{\frac{2\pi i}{n}} \\
+\ \ \ \omega = 1 \\
+\ \ \ a^{e} = ( a_0,a_2,a_4,\ldots,a_{n-2}) \\
+\ \ \ a^{o} = ( a_1,a_3,a_5,\ldots,a_{n-1}) \\
+\ \ \ y^{e} = fft( a^e, \frac{n}{2} ) \\
+\ \ \ y^{o} = fft( a^o, \frac{n}{2} ) \\
+\ \ \ for\ k = 0\ to\ \frac{n}{2}-1 \\
+\ \ \ \ \ \ y_k = y_k^e + \omega y_k^o \\
+\ \ \ \ \ \ y_{k+\frac{n}{2}} = y_k^e - \omega y_k^o \\
+\ \ \ \ \ \ \omega = \omega \omega_n \\
+\ \ \ return\ y
+\end{array} \]
+
+\subsection{The Butterfly}
+
+To save the overhead of recursive calls,
+efficient FFT routines are iterative,
+replacing the $n$ values input to each of the
+$\log{n}$ stages with the new values calculated
+in that stage.
+
+The combination stage in the recursive algorithm may be
+represented diagrammatically:
+
+\begin{center}
+\leavevmode
+\epsfxsize=8cm
+\epsfbox{butterfly.eps}
+\end{center}
+
+Standard iterative algorithms simply stack $n$ of these
+`butterflies' (so-called because of the shape of the
+diagram) vertically
+and then replicate this stack for $\log{n}$ stages.
+The results from each stage overwrite those from the
+previous one. 
+A `bit-twiddling' function determines which butterfly in
+the stage $k+1$ the outputs of the butterfly in
+stage $k$ are sent.
+
+
+
+\HR
+
+{\small { \copyright John Morris, 1996 } }
+\end{document}

@@ -1,0 +1,53 @@
+<HTML><HEAD>
+<TITLE>Data Structures and Algorithms - Recursive List</TITLE>
+</HEAD>
+<BODY BGCOLOR="#ffffff">
+<H1>Data Structures and Algorithms</H1>
+<HR>
+
+<H3>Recursively Defined Lists</H3>
+We can define a <I>list</I> as:
+<OL TYPE=a>
+<LI> empty <I>or</I>
+<LI> containing a node and a link to a list.
+</OL>
+<P>
+A list can be scanned using a recursive function:
+<I>eg.</I> to count the number of items in a list:
+<FONT COLOR=green><PRE>
+int ListCount( List l ) {
+    if ( l == NULL ) return 0;
+    else return 1 + ListCount( l->next );
+    }
+</PRE></FONT>
+However, it turns out to be <I>much</I> faster to 
+write this function without the recursive call:
+<FONT COLOR=green><PRE>
+int ListCount( List l ) {
+    int cnt = 0;
+    while ( l != NULL ) {
+        cnt++;
+        l = l->next;
+        }
+    return cnt;
+    }
+</PRE></FONT>
+The overhead of calling a function is quite large on
+any machine, so that the second <I>iterative</I> 
+version executes faster.
+(Another factor is
+that modern machines rely heavily on the cache for
+performance:
+the iterative code of the second version
+doesn't use so much memory for the call stack and
+so makes much better use of the cache.)
+<BR>
+<HR>
+<A HREF="trees.html">Back to trees</A><BR>
+<A HREF="ds_ToC.html">Table of Contents</A>
+<HR>
+<SMALL>
+&copy; <A HREF=mailto:morris@ee.uwa.edu.au>John Morris</A>, 1996
+</SMALL>
+</BODY>
+</HTML>

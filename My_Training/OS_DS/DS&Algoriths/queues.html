@@ -1,0 +1,200 @@
+<HTML><HEAD>
+<TITLE>Data Structures and Algorithms: Queues</TITLE>
+
+<META name="description" content="Data Structures and Algorithms Course Notes,
+PLDS210 University of Western Australia">
+<META name="keywords" content="data structures,algorithms,abstract data types,
+queues, priority queues">
+</HEAD>
+<BODY BGCOLOR="#ffffff">
+<TABLE BGCOLOR="#00c0f0" WIDTH="100%" CELLSPACING=0 CELLPADDING=0>
+<TR BGCOLOR="#00f0f0"><TD ALIGN=right>
+<FONT FACE=helvetica SIZE=+1><I>Data Structures and Algorithms</I></FONT>
+</TD></TR>
+
+<TR><TD><FONT FACE=helvetica SIZE=+2><B>6 Queues</B></FONT>
+</TD></TR>
+</TABLE>
+<P>
+
+Queues are dynamic collections which have some concept of
+order.
+This can be either based on order of entry into the queue -
+giving us First-In-First-Out (FIFO) or Last-In-First-Out (LIFO)
+queues.
+Both of these can be built with linked lists:
+the simplest "add-to-head" implementation of a linked list
+gives LIFO behaviour.
+A minor modification - adding a tail pointer and adjusting
+the addition method implementation - will produce
+a FIFO queue.
+<P>
+
+<H3>Performance</H3>
+
+A straightforward analysis shows that for both these cases,
+the time needed to add or delete an item is constant and
+<I>independent of the number of items in the queue</I>.
+Thus we class both addition and deletion as an
+<B><I>O</I>(1)</B>
+operation. 
+For any given real machine+operating system+language combination,
+addition may take <B><I>c<SUB>1</SUB></I></B> seconds and
+deletion <B><I>c<SUB>2</SUB></I></B> seconds,
+but we aren't interested in the
+value of the constant, it will vary from machine to
+machine, language to language, <I>etc</I>.
+The key point is that the time is not dependent on <B><I>n</I></B>
+- producing 
+<B><I>O</I>(1)</B>
+algorithms.
+<P>
+Once we have written an
+<B><I>O</I>(1)</B> method,
+there is generally little more that we can do
+from an algorithmic point of view.
+Occasionally, a better approach may produce a
+lower constant time.
+Often, enhancing our compiler, run-time system, machine,
+<I>etc</I> will produce some significant improvement.
+However
+<B><I>O</I>(1)</B> methods are already very fast,
+and it's unlikely that effort expended in 
+improving such a method will produce much real gain!
+<P>
+<A NAME=priority>
+<H3>5.1 Priority Queues</H3>
+Often the items added to a queue have a <I><FONT COLOR=red>priority 
+</FONT></I>
+associated with them:
+this priority determines the order in which they
+exit the queue - highest priority items are removed
+first. 
+<P>
+This situation arises often in process control systems.
+Imagine the operator's console in a large automated
+factory.
+It receives many routine messages from all parts of
+the system: they are assigned a low priority because
+they just report the normal functioning of the system -
+they update various parts of the operator's console display
+simply so that there is some confirmation that
+there are no problems.
+It will make little difference if they are delayed or lost.
+<P>
+However, occasionally something breaks or fails and
+alarm messages are sent.
+These have high priority because some action is required
+to fix the problem (even if it is mass evacuation because
+nothing can stop the imminent explosion!).
+<P>
+Typically such a system will be composed of many small
+units, one of which will be a buffer for messages
+received by the operator's console.
+The communications system places messages in the buffer
+so that communications links can be freed for further
+messages while the console software is processing the
+message.
+The console software extracts messages from the buffer
+and updates appropriate parts of the display system.
+Obviously we want to sort messages on their priority so
+that we can ensure that the alarms are processed immediately
+and not delayed behind a few thousand routine messages
+while the plant is about to explode.
+<P>
+As we have seen, we could use a tree structure -
+which generally provides 
+<B><I>O</I>(log<I>n</I>)</B>
+performance for both insertion and deletion.
+Unfortunately, if the tree becomes unbalanced,
+performance will degrade to
+<B><I>O(n)</I></B>
+in pathological cases.
+This will probably not be acceptable
+when dealing with dangerous industrial processes,
+nuclear reactors, flight control systems and
+other <I>life-critical</I> systems.
+<P>
+<TABLE BORDER=2 BGCOLOR="#e0ffff">
+<TR>
+<TD>
+<H4>Aside</H4>
+The great majority of computer systems would fall into
+the broad class of <I>information systems</I> - which 
+simply store and process information for the benefit
+of people who make decisions based on that information.
+Obviously, in such systems, it usually doesn't matter
+whether it takes 1 or 100 seconds to retrieve a piece of
+data - this simply determines whether  you take your coffee
+break now or later.
+However, as we'll see, using the best known algorithms is
+usually easy and straight-forward: if they're not already
+coded in libaries, they're in text-books. 
+You don't even have to work out how to code them!
+In such cases, it's just your reputation that's going to
+suffer if someone (who has studied
+his or her algorithms text!) comes along later and says
+<BLOCKQUOTE>
+"Why on earth did X (you!) use this
+<B><I>O(n</I><SUP>2</SUP></I>)</I></B> method -<BR>
+there's a well known <B><I>O(n)</I></B> one!"
+</BLOCKQUOTE>
+Of course, hardware manufacturers are <B>very</B> happy if
+you use inefficient algorithms - it drives the demand
+for new, faster hardware - and keeps their profits high!
+</TD></TR>
+</TABLE>
+
+<P>
+There is a structure which will provide
+<I>guaranteed</I>
+<B><I>O</I>(log<I>n)</I></B> 
+performance for both insertion and deletion:
+it's called a <A HREF="heaps.html">
+<FONT COLOR="#fa0000"><B>heap</B></FONT></A>.
+
+
+<P>
+<TABLE WIDTH="100%">
+<TR><TD BGCOLOR="#00c0f0">
+<H3>Key terms</H3></TD></TR>
+<TR><TD>
+<DL>
+<DT><FONT COLOR="#fa0000"><B>FIFO queue</B></FONT>
+   <DD>A queue in which the first item added is always the first one out.
+<DT><FONT COLOR="#fa0000"><B>LIFO queue</B></FONT>
+   <DD>A queue in which the item most recently added is always the first one out.
+<DT><FONT COLOR="#fa0000"><B>Priority queue</B></FONT>
+   <DD>A queue in which the items are sorted so that the highest priority
+      item is always the next one to be extracted.
+<DT><FONT COLOR="#fa0000"><B>Life critical systems</B></FONT>
+   <DD>Systems on which we depend for safety and which may result in
+death or injury if they fail:
+medical monitoring, industrial plant monitoring and control and
+aircraft control systems are examples of life critical systems.
+<DT><FONT COLOR="#fa0000"><B>Real time systems</B></FONT>
+   <DD>Systems in which <B>time</B> is a constraint. 
+A system which must respond to some event (<I>eg</I> the change
+in attitude of an aircraft caused by some atmospheric event
+like wind-shear) within a fixed time to maintain stability 
+or continue correct operation
+(<I>eg</I> the aircraft systems must make the necessary adjustments
+to the control surfaces before the aircraft falls out of the sky!).
+</DL>
+</TD>
+</TR>
+</TABLE>
+
+<TABLE CELLPADDING=5 CELLSPACING=10 WIDTH="100%" BGCOLOR="#00f0f0" CELLSPACING=0>
+<TR><TD WIDTH="50%">
+<FONT FACE=helvetica,arial>Continue on to <A HREF="heaps.html">Heaps</A>
+</FONT></TD>
+<TD>
+<FONT FACE=helvetica,arial>Back to the <A HREF="ds_ToC.html">Table of Contents</A>
+</FONT>
+</TD></TR></TABLE>
+<SMALL>
+&copy; <A HREF=mailto:morris@ee.uwa.edu.au>John Morris</A>, 1998
+</SMALL>
+</BODY>
+</HTML>

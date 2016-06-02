@@ -1,0 +1,147 @@
+<html>
+<body>
+<pre>
+<h1>µVision Build Log</h1>
+<h2>Project:</h2>
+D:\Ankit\Programs\misc\ll.uvproj
+Project File Date:  05/20/2013
+
+<h2>Output:</h2>
+Build target 'Target 1'
+assembling STARTUP.A51...
+compiling linkedlist1.c...
+linkedlist1.c(3): warning C318: can't open file 'stdbool.h'
+LINKEDLIST1.C(17): error C141: syntax error near 'struct'
+LINKEDLIST1.C(17): error C202: 'test_struct': undefined identifier
+LINKEDLIST1.C(17): error C141: syntax error near '='
+LINKEDLIST1.C(18): error C202: 'ptr': undefined identifier
+LINKEDLIST1.C(23): error C202: 'ptr': undefined identifier
+LINKEDLIST1.C(24): error C202: 'ptr': undefined identifier
+LINKEDLIST1.C(26): error C202: 'ptr': undefined identifier
+LINKEDLIST1.C(27): error C202: 'ptr': undefined identifier
+LINKEDLIST1.C(30): error C141: syntax error near 'add_to_end', expected ')'
+LINKEDLIST1.C(37): error C202: 'add_to_end': undefined identifier
+LINKEDLIST1.C(42): error C141: syntax error near 'struct'
+LINKEDLIST1.C(42): error C202: 'test_struct': undefined identifier
+LINKEDLIST1.C(42): error C141: syntax error near '='
+LINKEDLIST1.C(43): error C202: 'ptr': undefined identifier
+LINKEDLIST1.C(48): error C202: 'ptr': undefined identifier
+LINKEDLIST1.C(49): error C202: 'ptr': undefined identifier
+LINKEDLIST1.C(51): error C202: 'add_to_end': undefined identifier
+LINKEDLIST1.C(53): error C202: 'ptr': undefined identifier
+LINKEDLIST1.C(54): error C202: 'ptr': undefined identifier
+LINKEDLIST1.C(58): error C202: 'ptr': undefined identifier
+LINKEDLIST1.C(59): error C202: 'ptr': undefined identifier
+LINKEDLIST1.C(61): error C202: 'ptr': undefined identifier
+LINKEDLIST1.C(68): error C202: 'bool': undefined identifier
+LINKEDLIST1.C(68): error C141: syntax error near 'found'
+LINKEDLIST1.C(76): error C202: 'found': undefined identifier
+LINKEDLIST1.C(86): error C202: 'true': undefined identifier
+LINKEDLIST1.C(154): error C202: 'true': undefined identifier
+LINKEDLIST1.C(159): error C202: 'false': undefined identifier
+Target not created
+Build target 'Target 1'
+compiling linkedlist1.c...
+linkedlist1.c(3): warning C318: can't open file 'stdbool.h'
+LINKEDLIST1.C(20): error C141: syntax error near 'struct'
+LINKEDLIST1.C(20): error C202: 'test_struct': undefined identifier
+LINKEDLIST1.C(20): error C141: syntax error near '='
+LINKEDLIST1.C(21): error C202: 'ptr': undefined identifier
+LINKEDLIST1.C(26): error C202: 'ptr': undefined identifier
+LINKEDLIST1.C(27): error C202: 'ptr': undefined identifier
+LINKEDLIST1.C(29): error C202: 'ptr': undefined identifier
+LINKEDLIST1.C(30): error C202: 'ptr': undefined identifier
+LINKEDLIST1.C(33): error C141: syntax error near 'add_to_end', expected ')'
+LINKEDLIST1.C(40): error C202: 'add_to_end': undefined identifier
+LINKEDLIST1.C(45): error C141: syntax error near 'struct'
+LINKEDLIST1.C(45): error C202: 'test_struct': undefined identifier
+LINKEDLIST1.C(45): error C141: syntax error near '='
+LINKEDLIST1.C(46): error C202: 'ptr': undefined identifier
+LINKEDLIST1.C(51): error C202: 'ptr': undefined identifier
+LINKEDLIST1.C(52): error C202: 'ptr': undefined identifier
+LINKEDLIST1.C(54): error C202: 'add_to_end': undefined identifier
+LINKEDLIST1.C(56): error C202: 'ptr': undefined identifier
+LINKEDLIST1.C(57): error C202: 'ptr': undefined identifier
+LINKEDLIST1.C(61): error C202: 'ptr': undefined identifier
+LINKEDLIST1.C(62): error C202: 'ptr': undefined identifier
+LINKEDLIST1.C(64): error C202: 'ptr': undefined identifier
+LINKEDLIST1.C(71): error C202: 'bool': undefined identifier
+LINKEDLIST1.C(71): error C141: syntax error near 'found'
+LINKEDLIST1.C(79): error C202: 'found': undefined identifier
+LINKEDLIST1.C(89): error C202: 'found': undefined identifier
+Target not created
+Build target 'Target 1'
+compiling linkedlist1.c...
+linkedlist1.c(3): warning C318: can't open file 'stdbool.h'
+linkedlist1.c(7): warning C322: unknown identifier
+linkedlist1.c(7): warning C322: unknown identifier
+LINKEDLIST1.C(24): error C141: syntax error near 'struct'
+LINKEDLIST1.C(24): error C202: 'test_struct': undefined identifier
+LINKEDLIST1.C(24): error C141: syntax error near '='
+LINKEDLIST1.C(25): error C202: 'ptr': undefined identifier
+LINKEDLIST1.C(30): error C202: 'ptr': undefined identifier
+LINKEDLIST1.C(31): error C202: 'ptr': undefined identifier
+LINKEDLIST1.C(33): error C202: 'ptr': undefined identifier
+LINKEDLIST1.C(34): error C202: 'ptr': undefined identifier
+LINKEDLIST1.C(49): error C141: syntax error near 'struct'
+LINKEDLIST1.C(49): error C202: 'test_struct': undefined identifier
+LINKEDLIST1.C(49): error C141: syntax error near '='
+LINKEDLIST1.C(50): error C202: 'ptr': undefined identifier
+LINKEDLIST1.C(55): error C202: 'ptr': undefined identifier
+LINKEDLIST1.C(56): error C202: 'ptr': undefined identifier
+LINKEDLIST1.C(60): error C202: 'ptr': undefined identifier
+LINKEDLIST1.C(61): error C202: 'ptr': undefined identifier
+LINKEDLIST1.C(65): error C202: 'ptr': undefined identifier
+LINKEDLIST1.C(66): error C202: 'ptr': undefined identifier
+LINKEDLIST1.C(68): error C202: 'ptr': undefined identifier
+Target not created
+Build target 'Target 1'
+compiling linkedlist1.c...
+linkedlist1.c(3): warning C318: can't open file 'stdbool.h'
+linkedlist1.c(7): warning C322: unknown identifier
+linkedlist1.c(7): warning C322: unknown identifier
+LINKEDLIST1.C(24): error C141: syntax error near 'struct'
+LINKEDLIST1.C(24): error C202: 'test_struct': undefined identifier
+LINKEDLIST1.C(24): error C141: syntax error near '='
+LINKEDLIST1.C(25): error C202: 'ptr': undefined identifier
+LINKEDLIST1.C(30): error C202: 'ptr': undefined identifier
+LINKEDLIST1.C(31): error C202: 'ptr': undefined identifier
+LINKEDLIST1.C(33): error C202: 'ptr': undefined identifier
+LINKEDLIST1.C(34): error C202: 'ptr': undefined identifier
+LINKEDLIST1.C(49): error C141: syntax error near 'struct'
+LINKEDLIST1.C(49): error C202: 'test_struct': undefined identifier
+LINKEDLIST1.C(49): error C141: syntax error near '='
+LINKEDLIST1.C(50): error C202: 'ptr': undefined identifier
+LINKEDLIST1.C(55): error C202: 'ptr': undefined identifier
+LINKEDLIST1.C(56): error C202: 'ptr': undefined identifier
+LINKEDLIST1.C(60): error C202: 'ptr': undefined identifier
+LINKEDLIST1.C(61): error C202: 'ptr': undefined identifier
+LINKEDLIST1.C(65): error C202: 'ptr': undefined identifier
+LINKEDLIST1.C(66): error C202: 'ptr': undefined identifier
+LINKEDLIST1.C(68): error C202: 'ptr': undefined identifier
+Target not created
+Build target 'Target 1'
+compiling linkedlist1.c...
+linkedlist1.c(3): warning C318: can't open file 'stdbool.h'
+linkedlist1.c(7): warning C322: unknown identifier
+linkedlist1.c(7): warning C322: unknown identifier
+LINKEDLIST1.C(24): error C141: syntax error near 'struct'
+LINKEDLIST1.C(24): error C202: 'test_struct': undefined identifier
+LINKEDLIST1.C(24): error C141: syntax error near '='
+LINKEDLIST1.C(25): error C141: syntax error near 'if'
+LINKEDLIST1.C(30): error C202: 'ptr': undefined identifier
+LINKEDLIST1.C(31): error C202: 'ptr': undefined identifier
+LINKEDLIST1.C(33): error C202: 'ptr': undefined identifier
+LINKEDLIST1.C(34): error C202: 'ptr': undefined identifier
+LINKEDLIST1.C(49): error C141: syntax error near 'struct'
+LINKEDLIST1.C(49): error C202: 'test_struct': undefined identifier
+LINKEDLIST1.C(49): error C141: syntax error near '='
+LINKEDLIST1.C(50): error C202: 'ptr': undefined identifier
+LINKEDLIST1.C(55): error C202: 'ptr': undefined identifier
+LINKEDLIST1.C(56): error C202: 'ptr': undefined identifier
+LINKEDLIST1.C(60): error C202: 'ptr': undefined identifier
+LINKEDLIST1.C(61): error C202: 'ptr': undefined identifier
+LINKEDLIST1.C(65): error C202: 'ptr': undefined identifier
+LINKEDLIST1.C(66): error C202: 'ptr': undefined identifier
+LINKEDLIST1.C(68): error C202: 'ptr': undefined identifier
+Target not created

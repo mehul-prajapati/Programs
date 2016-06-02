@@ -1,0 +1,270 @@
+<HTML><HEAD>
+<TITLE>Data Structures and Algorithms: Objects and ADTs</TITLE>
+
+<META name="description" content="Data Structures and Algorithms Course Notes,
+PLDS210 University of Western Australia">
+<META name="keywords" content="data structures,algorithms,abstract data types,
+computer science,course notes">
+</HEAD>
+<BODY BGCOLOR="#ffffff">
+
+<TABLE BGCOLOR="#00c0f0" WIDTH="100%" CELLSPACING=0 CELLPADDING=0>
+<TR BGCOLOR="#00f0f0"><TD ALIGN=right>
+<FONT FACE=helvetica SIZE=+1><I>Data Structures and Algorithms</I></FONT>
+</TD></TR>
+
+<A NAME=objects>
+<TR><TD><FONT FACE=helvetica SIZE=+2><B>2.1 Objects and ADTs</B></FONT>
+</TD></TR>
+</TABLE>
+<P>
+
+In this course, we won't delve into the full theory of object-oriented design.
+We'll concentrate on the pre-cursor of OO design: abstract data types (ADTs). A
+theory for the full object oriented approach is readily built on the ideas for
+abstract data types.<p>
+
+An <FONT COLOR="#fa0000"><B>abstract data type</B></FONT>
+is a data structure and a collection of functions or
+procedures which operate on the data structure. <p>
+To align ourselves with OO theory, we'll call the functions and procedures
+<FONT COLOR="#fa0000"><B>methods</B></FONT>
+and the data structure and its methods a 
+<FONT COLOR="#fa0000"><B>class</B></FONT>,
+<I>i.e.</I> we'll call our ADTs classes.
+However our classes do not have the full capabilities associated with
+classes in OO theory. 
+An instance of the class is called an <FONT COLOR=red><i>object</i>
+</FONT>.
+Objects represent objects in
+the real world and appear in programs as variables of a type defined by the
+class. These terms have exactly the same meaning in OO design methodologies,
+but they have additional properties such as inheritance that we will not
+discuss here.<p>
+It is important to note the object orientation is a <i>design methodology</i>.
+As a consequence, it is possible to write OO programs using languages such as
+C, Ada and Pascal. The so-called OO languages such as C++ and
+<a href="eiffel.html">Eiffel</a> simply
+provide some compiler support for OO design: this support must be provided by
+the programmer in non-OO languages.
+
+<h2><a name="collections">2.2 An Example: Collections</a></h2>
+
+Programs often deal with collections of items. These collections may be
+organised in many ways and use many different program structures to represent
+them, yet, from an abstract point of view, there will be a few common
+operations on any collection. These might include:
+<P>
+<CENTER>
+<TABLE BORDER=3 CELLPADDING=4>
+<TR>
+<TD><tt><FONT COLOR=green>create</FONT></tt></TD>
+	<TD>Create a new collection</TD>
+</TR>
+<TR>
+<TD>
+<tt><FONT COLOR=green>add</FONT></tt></TD>
+	<TD>Add an item to a collection</TD>
+</TR>
+<TR>
+<TD> <tt><FONT COLOR=green>delete</FONT></tt></TD>
+	<TD>Delete an item from a collection</TD>
+</TR>
+<TR>
+<TD><tt><FONT COLOR=green>find</FONT></tt></TD>
+	<TD>Find an item matching some criterion in the collection</TD>
+</TR>
+<TR>
+<TD><tt><FONT COLOR=green>destroy</FONT></tt></TD>
+	<TD>Destroy the collection</TD>
+</TR>
+</TABLE></CENTER>
+<h3>
+<a name="constructors">2.2.1 Constructors and destructors
+</a></h3>
+The create and destroy methods - often called constructors and destructors -
+are usually implemented for any abstract data type. Occasionally, the data
+type's use or semantics are such that there is only ever one object of that
+type in a program. In that case, it is possible to hide even the object's
+`handle' from the user. However, even in these cases, constructor and
+destructor methods are often provided.
+<p>
+Of course, specific applications may call for additional methods, e.g. we may
+need to join two collections (form a union in set terminology) - or may not
+need all of these.
+<p><BLOCKQUOTE><FONT COLOR=red>
+One of the aims of good program design would be to ensure that additional
+requirements are easily handled.
+</FONT></BLOCKQUOTE>
+<P>
+
+<A NAME=data_structure>
+<H3>2.2.2 Data Structure</H3>
+To construct an abstract software model of a collection, we start by building
+the formal specification. The first component of this is the name of a data
+type - this is the type of objects that belong to the
+<tt><FONT COLOR=green>collection</FONT></tt>
+<i>class</i>. In C, we use <tt><FONT COLOR=green>typedef</FONT></tt> to define a new type which is a
+pointer to a structure:
+<P><CENTER>
+<FONT COLOR=green>
+<tt>typedef struct collection_struct *collection;</tt>
+</FONT></CENTER>
+<p>
+<tt></tt>Note that we are defining a pointer to a structure only; we have not
+specified details of the <i>attributes</i> of the structure. We are
+deliberately deferring this - the details of the implementation are irrelevant
+at this stage. We are only concerned with the abstract behaviour of the
+collection. <i>In fact, as we will see later, we want to be able to substitute
+different data structures for the actual implementation of the collection,
+depending on our needs.</i>
+<P>
+The <TT><FONT COLOR=green>typedef</FONT></TT> declaration provides us
+with a C type (<I>class</I> in OO design parlance),
+<TT><FONT COLOR=green>collection</FONT></TT>.
+We can declare <I>objects</I> of type 
+<TT><FONT COLOR=green>collection</FONT></TT> wherever needed.
+Although C forces us to reveal that the handle for objects of the class
+is a pointer, it is better to take an abstract view: we regard variables of
+type <TT><FONT COLOR=green>collection</FONT></TT>
+simply as <I>handles</I> to objects of the class and forget
+that the variables are actually C pointers.
+<P>
+
+<A NAME=methods>
+<H3>2.2.3 Methods</H3>
+
+Next, we need to define the methods:<p>
+<FONT COLOR=green>
+<tt>collection ConsCollection( int max_items, int item_size );<br>
+void AddToCollection( collection c, void *item );<br>
+void DeleteFromCollection( collection c, void *item );<br>
+void *FindInCollection( collection c, void *key );</tt>
+</FONT>
+<P>
+Note that we are using a number of C
+<a href=C_hacks.html>"hacks"</a> here.
+C - even in <a href="ANSI_C.html">ANSI standard</a> form -
+is not exactly the safest programming language in the sense
+of the support it provides for the engineering of quality software.
+However, its portability and extreme popularity mean that it is a practical
+choice for even large software engineering projects. Unfortunately, C++,
+because it is based on C, isn't much better.
+<a href=ANSI_C.html#java>Java</a>, the latest fad in the
+software industry, shows some evidence that its designers have learned from
+experience (or actually read some of the literature in programming language
+research!) and has eliminated some of the more dangerous features of C.<p>
+Just as we defined our collection object as a pointer to a structure, we assume
+that the object which belong in this collection are themselves represented by
+pointers to data structures.
+Hence in <tt><FONT COLOR=green>AddToCollection</FONT></tt>,
+<tt><FONT COLOR=green>item</FONT></tt>
+is typed <tt><FONT COLOR=green>void *</FONT></tt>.
+In ANSI C, <tt><FONT COLOR=green>void * </FONT></tt>will match any pointer -
+thus <tt><FONT COLOR=green>AddToCollection</FONT></tt> may be used to add any object to our collection.
+Similarly, 
+<TT><FONT COLOR=green>key</FONT></TT>
+in <tt><FONT COLOR=green>FindInCollection</FONT></tt>
+is typed <tt><FONT COLOR=green>void *</FONT></tt>, as the
+key which is used to find any item in the collection may itself be some object.
+<tt><FONT COLOR=green>FindInCollection</FONT></tt>
+returns a pointer to the item which matches key, so
+it also has the type <tt><FONT COLOR=green>void *</FONT></tt>.
+The use of <tt><FONT COLOR=green>void * </FONT></tt>here
+highlights one of the deficiencies of C: it doesn't provide the capability to
+create generic objects, <i>cf</i> the ability to define generic packages in
+<a href=ada.html>Ada</a> or 
+<A HREF=notyet.html>templates</A> in C++.
+<P>
+Note there are various other <A HREF=C_hacks.html>"hacks"</a>
+to overcome C's limitations in this area.
+One uses the pre-processor. You might like to try to work out an alternative
+approach and try to convince your tutor that it's better than the one set out
+here!
+
+<A name="pre-conditions">
+<H3>2.2.4 Pre- and post-conditions</H3>
+
+No formal specification is complete without pre- and post-conditions. A useful
+way to view these is as forming a contract between the object and its client.
+<i>The pre-conditions</i> define a state of the program which the client
+guarantees will be true before calling any method, whereas the
+<i>post-conditions</i> define the state of the program that the object's method
+will guarantee to create for you when it returns.<p>
+Again C (unlike <a href="eiffel.html">Eiffel</a>, for example) provides no
+formal support for pre- and post-conditions. However, the standard does define
+an <tt><FONT COLOR=green>assert</FONT></tt> function
+which can (and should!) be used to verify pre- and post-conditions
+[<A HREF=assert.html TARGET=assert>man page for assert</A>].
+We will see how this is used when we examine an
+implementation of our collection object. Thus pre- and post-conditions should
+be expressed as comments accompanying the method definition. <p>
+Adding pre- and post-conditions to the collection object would produce:<br>
+<A HREF=source/collection.h TARGET=collection.h REL=parent>Select to load collection.h</A>
+<p>
+<b>Aside</b><p>
+In order to keep the discussion simple at this stage, a very general
+specification of a collection has been implied by the definitions used here.
+Often, we would restrict our specification in various ways: for example, by not
+permitting duplicates (items with the same key) to be added to the collection.
+With such a collection, the pre- and post-conditions can be made more formal:<br>
+<A HREF=source/ucollection.h TARGET=ucollection.h REL=parent>Select to load ucollection.h</A>
+<p>
+Note how the pre- and post-conditions now use the
+<tt><FONT COLOR=green>FindInUCollection</FONT></tt> function to more precisely define the state of the
+object before and after the method has been invoked. Such formal pre- and
+post-conditions are obviously much more useful than the informal English ones
+previously specified. They are also easier to translate to appropriate
+assertions as will be seen when the implementation is constructed.
+
+<A name="conventions">
+<H3>2.2.5 C conventions</H3>
+
+This specification - which all a user or client of this object needs to see (he
+isn't interested in the implementation details) - would normally be placed in a
+file with a <tt><FONT COLOR=green>.h</FONT></tt> (h = header) suffix to its name.
+For the collection, we
+would place the specifications in files called <tt><FONT COLOR=green>collection.h</FONT></tt> and
+<tt><FONT COLOR=green>Ucollection.h</FONT></tt> and use the C <tt><FONT COLOR=green>#include</FONT></tt> facility to import them
+into programs which needed to use them.
+The implementation or body of the class
+is placed in a file with a <tt><FONT COLOR=green>.c</FONT></tt> suffix.
+<br>
+<H4>References</H4>
+Some additional sources of information on Object Orientation:
+<UL><LI><A HREF="http://catalog.com/softinfo/objects.html">What is Object-Oriented Software?</A>
+<LI><A HREF="http://www.ifs.univie.ac.at/ISOO/OOCONCEPT/ooconcept.html">Basic Principles and Concepts of Object-Orientation</A> - an extensive set of notes
+of OO concepts. Unfortunately most of the bibliography links seem to be
+outdated.
+<LI><A HREF="http://www.cs.indiana.edu/classes/c304/oop-intro.html">Object Oriented Programming</A> - notes for a class at Indiana University (based on Objective-C).
+<LI><A HREF="http://www.arrakis.es/~devis/oo.html#oop">Object Oriented Programming Languages</A> - summary of OO programming languages (with 
+links to full details).
+</UL>
+
+
+
+<P>
+<TABLE WIDTH="100%" BGCOLOR="#00c0f0">
+<TR><TD><H3>Key terms</H3></TD></TR></TABLE>
+<DL>
+<DT><FONT COLOR="#fa0000"><B>abstract data type (ADT)</B></FONT>
+   <DD>A data structure and a set of operations which can be performed
+        on it. A class in object-oriented design is an ADT.
+         However, classes have additional properties
+         (inheritance and polymorphism) not normally 
+      associated with ADTs.
+</DL>
+
+<P>
+
+<TABLE CELLPADDING=5 WIDTH="100%" BGCOLOR="#00f0f0" CELLSPACING=0>
+<TR><TD>
+Continue on to <A HREF="errors.html">Error Handling</A><BR>
+Continue on to <A HREF="arrays.html">Arrays</A><BR>
+Back to the <A HREF="ds_ToC.html">Table of Contents</A>
+</TD></TR></TABLE>
+<SMALL>
+&copy; <A HREF=mailto:morris@ee.uwa.edu.au>John Morris</A>, 1998
+</SMALL>
+</BODY>
+</HTML>

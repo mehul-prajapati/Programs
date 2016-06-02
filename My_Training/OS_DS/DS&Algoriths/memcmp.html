@@ -1,0 +1,37 @@
+<HTML><HEAD><TITLE>memcmp</TITLE></HEAD>
+<BODY>
+<PRE>
+MEMORY(3)              C LIBRARY FUNCTIONS              MEMORY(3)
+
+NAME
+     memory, memccpy, memchr, memcmp,  memcpy,  memset  -  memory
+     operations
+
+SYNOPSIS
+     #include &lt;memory.h&gt;
+
+     <I>... others omitted ...</I>
+
+     int memcmp(s1, s2, n)
+     char *s1, *s2;
+     int n;
+
+DESCRIPTION
+     These functions operate as efficiently as possible on memory
+     areas  (arrays  of  characters  bounded by a count, not ter-
+     minated by a null character).  They do  not  check  for  the
+     overflow of any receiving memory area.
+
+     memcmp() compares its arguments,  looking  at  the  first  <B>n</B>
+     characters only, and returns an integer less than, equal to,
+     or greater than 0, according as <B>s1</B> is lexicographically less
+     than, equal to, or greater than <B>s2</B>.
+
+     <I>See full man page for other descriptions.</I>
+
+NOTES
+     For user convenience, all these functions  are  declared  in
+     the &lt;memory.h&gt; header file.
+
+</PRE></BODY></HTML>
+

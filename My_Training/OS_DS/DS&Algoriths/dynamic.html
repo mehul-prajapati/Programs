@@ -1,0 +1,142 @@
+<HTML><HEAD>
+<TITLE>Data Structures and Algorithms: Dynamic Algorithms</TITLE>
+
+<META name="description" content="Data Structures and Algorithms Course Notes,
+PLDS210 University of Western Australia">
+<META name="keywords" content="data structures,algorithms,abstract data types,
+dynamic algorithms, Fibonacci numbers">
+</HEAD>
+<BODY BGCOLOR="#ffffff">
+<TABLE BGCOLOR="#00c0f0" WIDTH="100%" CELLSPACING=0 CELLPADDING=0>
+<TR BGCOLOR="#00f0f0"><TD ALIGN=right>
+<FONT FACE=helvetica SIZE=+1><I>Data Structures and Algorithms</I></FONT>
+</TD></TR>
+
+<TR><TD><FONT FACE=helvetica SIZE=+2><B>9 Dynamic Algorithms</B></FONT>
+</TD></TR>
+</TABLE>
+<P>
+
+Sometimes, the divide and conquer approach seems appropriate
+but fails to produce an efficient algorithm.
+<A NAME=fibonacci>
+<P>
+We all know the algorithm for calculating Fibonacci numbers:
+<FONT COLOR=green>
+<PRE>int fib( int n ) {
+  if ( n < 2 ) return n;
+  else
+    return fib(n-1) + fib(n-2);
+}
+</PRE></FONT>
+
+This algorithm is commonly used as an example of the elegance
+of recursion as a programming technique.
+However, when we examine its time complexity, we find it's
+far from elegant!
+
+<H4>Analysis</H4>
+
+If <I><B>t<SUB>n</SUB></B></I> is the time required to calculate
+<I><B>f<SUB>n</SUB></B></I>,
+where
+<B><I>f<SUB>n</SUB></I></B> is the <B><I>n</I></B><SUP>th</SUP>
+Fibonacci number.
+Then, by examining the function above, it's clear that
+<CENTER>
+<I><B>t<SUB>n</SUB></B> = <B>t<SUB>n-1</SUB></B> + <B>t<SUB>n-2</SUB></B></I>
+</CENTER>
+<I>and</I>
+<CENTER> <B><I>t</I><SUB>1</SUB></B> = <B><I>t</I><SUB>2</SUB></B> = <B><I>c</I></B>,</CENTER>
+where <B>c</B> is a constant.<BR>
+<I>Therefore</I><P>
+<CENTER><I><B>t<SUB>n</SUB></B> = <B>cf<SUB>n</SUB></B></I></CENTER>
+
+Now,
+<CENTER><IMG SRC="fig/fib_limit.gif"></CENTER>
+thus
+<CENTER>
+<I><B>t<SUB>n</SUB></B></I> = <I><B>O(f<SUB>n</SUB>)</B></I> = <B><I>O</I>(1.618..<SUP><I>n</I></SUP>)</B>
+</CENTER>
+So this simple function will take exponential time!
+As we will see in more detail later,
+algorithms which run in exponential time are to be avoided at all costs!
+
+<H4>An Iterative Solution</H4>
+
+However, this simple alternative:
+<FONT COLOR=green>
+<PRE>int fib( int n ) {
+  int k, f1, f2;
+  if ( n &lt; 2 ) return n;
+  else {
+    f1 = f2 = 1;
+    for(k=2;k&lt;n;k++) {
+      f = f1 + f2;
+      f2 = f1;
+      f1 = f;
+      }
+  return f;
+}
+</PRE></FONT>
+runs in <B><I>O(n)</I></B> time.
+<P>
+This algorithm solves the problem of calculating 
+<B><I>f</I><SUB>0</SUB></B> and
+<B><I>f</I><SUB>1</SUB></B> first,
+calculates
+<B><I>f</I><SUB>2</SUB></B> from these,
+then
+<B><I>f</I><SUB>3</SUB></B> from 
+<B><I>f</I><SUB>2</SUB></B> and
+<B><I>f</I><SUB>1</SUB></B>, and so on.
+Thus, instead of dividing the large problem into two (or more)
+smaller problems and solving those problems (as we did in the
+<FONT COLOR="#fa0000"><B>divide and conquer</B></FONT> approach),
+we start with the simplest possible problems.
+We solve them (usually trivially) and save these results.
+These results are then used to solve slightly larger problems
+which are, in turn, saved and used to solve larger problems again.
+
+<H4>Free Lunch?</H4>
+As we know, there's never one! 
+Dynamic problems obtain their efficiency by solving and
+<I>storing</I> the answers to small problems.
+Thus they usually trade <B>space</B> for increased speed.
+In the Fibonacci case, the extra space is insignificant -
+the two variables <FONT COLOR=green><TT>f1</TT></FONT>
+and <FONT COLOR=green><TT>f2</TT></FONT>,
+but in some more complex dynamic algorithms, 
+we'll see that the space used is significant.
+<P>
+
+
+
+<P>
+<TABLE WIDTH="100%" BGCOLOR="#00c0f0">
+<TR><TD><H3>Key terms</H3></TD></TR></TABLE>
+<DL>
+<DT><FONT COLOR="#fa0000"><B>Dynamic Algorithm</B></FONT>
+   <DD>A general class of algorithms which solve problems by
+    solving smaller versions of the problem, saving the
+    solutions to the small problems and then combining them
+    to solve the larger problem. 
+</DL>
+
+<P>
+
+<TABLE CELLPADDING=5 WIDTH="100%" BGCOLOR="#00f0f0" CELLSPACING=4>
+<TR><TD WIDTH=50%>
+<FONT FACE=arial,helvetica>
+Continue on to <A HREF="binom.html">Binomial Coefficients</A></TD>
+<TD>
+<FONT FACE=arial,helvetica>
+Back to the <A HREF="ds_ToC.html">Table of Contents</A>
+</TD></TR></TABLE>
+<SMALL>
+&copy; <A HREF=mailto:morris@ee.uwa.edu.au>John Morris</A>, 1998
+</SMALL>
+</BODY>
+</HTML>
+
+

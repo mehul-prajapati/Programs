@@ -1,0 +1,143 @@
+<HTML><HEAD>
+<TITLE>Data Structures and Algorithms: Recursion</TITLE>
+
+<META name="description" content="Data Structures and Algorithms Course Notes,
+PLDS210 University of Western Australia">
+<META name="keywords" content="data structures,algorithms,abstract data types,
+recursion">
+</HEAD>
+<BODY BGCOLOR="#ffffff">
+<TABLE BGCOLOR="#00c0f0" WIDTH="100%" CELLSPACING=0 CELLPADDING=0>
+<TR BGCOLOR="#00f0f0"><TD ALIGN=right>
+<FONT FACE=helvetica SIZE=+1><I>Data Structures and Algorithms</I></FONT>
+</TD></TR>
+
+<TR><TD><FONT FACE=helvetica SIZE=+2><B>3.4 Recursion</B></FONT>
+</TD></TR>
+</TABLE>
+<P>
+
+<TABLE>
+<TR>
+<TD WIDTH="70%">
+Many examples of the use of recursion may be found:
+the technique is useful both for the definition of mathematical
+functions and for the definition of data structures.
+Naturally, if a data structure may be defined recursively,
+it may be processed by a recursive function!
+</TD>
+<TD BGCOLOR="#80f0f0">
+<TABLE BORDER=1 CELLPADDING=2>
+<TR><TD><FONT COLOR=red><B>recur</B></FONT><BR>
+<I>From the Latin,
+<B>re-</B> = back +<BR>
+<B>currere</B> = to run<BR></I>
+To happen again, <I>esp</I> at repeated intervals.</TD></TR>
+</TABLE>
+</TD>
+</TR>
+</TABLE>
+
+
+<H3>3.4.1 Recursive functions</H3>
+
+Many mathematical functions can be defined recursively:
+<UL>
+<LI>factorial
+<LI>Fibonacci
+<LI>Euclid's GCD (greatest common denominator)
+<LI>Fourier Transform
+</UL>
+Many problems can be solved recursively, <I>eg</I>
+games of all types from simple ones like the Towers of Hanoi
+problem to complex ones like chess.
+In games, the recursive solutions are particularly convenient
+because, having solved the problem by a series of recursive
+calls, you want to find out how you got to the solution.
+By keeping track of the move chosen at any point,
+the program call stack does this housekeeping for you! 
+This is explained in more detail later.
+
+<h3><a name="factorial">3.4.2 Example: Factorial </a></h3>
+
+One of the simplest examples of a recursive definition is that for the
+factorial function:
+<FONT COLOR=red><PRE>
+factorial( n ) = if ( n = 0 ) then 1
+                 else n * factorial( n-1 )
+</PRE></FONT>
+A natural way to calculate factorials is to write a recursive function which
+matches this definition:
+<P>
+<FONT COLOR=green>
+<PRE>function fact( int n )
+	{
+	if ( n == 0 ) return 1;
+	else return n*fact(n-1);
+	}</PRE></FONT>
+<P>
+Note how this function calls itself to evaluate the next term.
+Eventually it will reach the termination condition and exit.
+However, before it reaches the termination condition, it
+will have pushed n stack frames onto the program's run-time stack.
+<P>
+The termination condition is obviously extremely important when
+dealing with recursive functions.
+If it is omitted, then the function will continue to call itself
+until the program runs out of stack space - usually with moderately
+unpleasant results!
+<P><BLOCKQUOTE><FONT COLOR=red><CENTER>
+Failure to include a correct termination condition 
+in a recursive function is a recipe for disaster!
+</CENTER></FONT></BLOCKQUOTE>
+Another commonly used (and abused!) example of a recursive function is
+the calculation of Fibonacci numbers. Following the definition:
+<p>
+<FONT COLOR=red>
+<PRE>fib( n ) = if ( n = 0 ) then 1
+           if ( n = 1 ) then 1
+           else fib( n-1 ) + fib( n-2 )
+</PRE></FONT>
+one can write:
+<p>
+<FONT COLOR=green><PRE>function fib( int n )
+	{
+	if ( (n == 0) || (n == 1) ) return 1;
+	else return fib(n-1) + fib(n-2);
+	}</PRE></FONT>
+Short and elegant, it uses recursion to provide a neat solution
+- that is actually a disaster! We shall re-visit this and show why it is such a
+disaster later.
+<p>
+Data structures also may be recursively defined. One of the most important
+class of structure - trees - allows recursive definitions which lead to simple
+(and efficient) recursive functions for manipulating them.<p>
+But in order to see why trees are valuable structures, let's first examine the
+problem of searching.
+
+
+<P>
+<TABLE WIDTH="100%" BGCOLOR="#00c0f0">
+<TR><TD><H3>Key terms</H3></TD></TR></TABLE>
+<DL>
+<DT><FONT COLOR="#fa0000"><B>Termination condition</B></FONT>
+   <DD>Condition which terminates a series of recursive calls -
+and prevents the program from running out of space for stack frames!
+</DL>
+
+<P>
+
+<TABLE CELLPADDING=5 WIDTH="100%" BGCOLOR="#00f0f0" CELLSPACING=0>
+<TR><TD>
+<FONT FACE=arial,helvetica>
+Continue on to <A HREF="searching.html">Searching</A>
+</TD><TD>
+<FONT FACE=arial,helvetica>
+Back to the <A HREF="ds_ToC.html">Table of Contents</A>
+</TD></TR></TABLE>
+<SMALL>
+&copy; <A HREF=mailto:morris@ee.uwa.edu.au>John Morris</A>, 1998
+</SMALL>
+</BODY>
+</HTML>
+

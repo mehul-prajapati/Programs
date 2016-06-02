@@ -1,0 +1,237 @@
+C51 COMPILER V9.01   LINKEDLIST1                                                           05/20/2013 11:37:49 PAGE 1   
+
+
+C51 COMPILER V9.01, COMPILATION OF MODULE LINKEDLIST1
+OBJECT MODULE PLACED IN linkedlist1.OBJ
+COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE linkedlist1.c BROWSE DEBUG OBJECTEXTEND
+
+line level    source
+
+   1          #include<stdio.h>
+   2          #include<stdlib.h>
+   3          #include<stdbool.h>
+*** WARNING C318 IN LINE 3 OF linkedlist1.c: can't open file 'stdbool.h'
+   4          #define false   0
+   5          #define true    1
+   6          #define bool    _Bool
+   7          #if __STDC_VERSION__ < 199901L && __GNUC__ < 3
+*** WARNING C322 IN LINE 7 OF linkedlist1.c: unknown identifier
+*** WARNING C322 IN LINE 7 OF linkedlist1.c: unknown identifier
+   8          typedef int     _Bool;
+   9          #endif
+  10          
+  11          
+  12          struct test_struct
+  13          {
+  14              int val;
+  15              struct test_struct *next;
+  16          };
+  17          
+  18          struct test_struct *head = NULL;
+  19          struct test_struct *curr = NULL;
+  20          
+  21          struct test_struct* create_list(int val)
+  22          {
+  23   1          printf("\n creating list with headnode as [%d]\n",val);
+  24   1          struct test_struct *ptr = (struct test_struct*)malloc(sizeof(struct test_struct))
+*** ERROR C141 IN LINE 24 OF LINKEDLIST1.C: syntax error near 'struct'
+*** ERROR C202 IN LINE 24 OF LINKEDLIST1.C: 'test_struct': undefined identifier
+*** ERROR C141 IN LINE 24 OF LINKEDLIST1.C: syntax error near '='
+  25   1          if(NULL == ptr)
+*** ERROR C141 IN LINE 25 OF LINKEDLIST1.C: syntax error near 'if'
+  26   1          {
+  27   2              printf("\n Node creation failed \n");
+  28   2              return NULL;
+  29   2          }
+  30   1          ptr->val = val;
+*** ERROR C202 IN LINE 30 OF LINKEDLIST1.C: 'ptr': undefined identifier
+  31   1          ptr->next = NULL;
+*** ERROR C202 IN LINE 31 OF LINKEDLIST1.C: 'ptr': undefined identifier
+  32   1      
+  33   1          head = curr = ptr;
+*** ERROR C202 IN LINE 33 OF LINKEDLIST1.C: 'ptr': undefined identifier
+  34   1          return ptr;
+*** ERROR C202 IN LINE 34 OF LINKEDLIST1.C: 'ptr': undefined identifier
+  35   1      }
+  36          
+  37          struct test_struct* add_to_list(int val, bool add_to_end)
+  38          {
+  39   1          if(NULL == head)
+  40   1          {
+  41   2              return (create_list(val));
+  42   2          }
+  43   1      
+  44   1          if(add_to_end)
+C51 COMPILER V9.01   LINKEDLIST1                                                           05/20/2013 11:37:49 PAGE 2   
+
+  45   1              printf("\n Adding node to end of list with value [%d]\n",val);
+  46   1          else
+  47   1              printf("\n Adding node to beginning of list with value [%d]\n",val);
+  48   1      
+  49   1          struct test_struct *ptr = (struct test_struct*)malloc(sizeof(struct test_struct));
+*** ERROR C141 IN LINE 49 OF LINKEDLIST1.C: syntax error near 'struct'
+*** ERROR C202 IN LINE 49 OF LINKEDLIST1.C: 'test_struct': undefined identifier
+*** ERROR C141 IN LINE 49 OF LINKEDLIST1.C: syntax error near '='
+  50   1          if(NULL == ptr)
+*** ERROR C202 IN LINE 50 OF LINKEDLIST1.C: 'ptr': undefined identifier
+  51   1          {
+  52   2              printf("\n Node creation failed \n");
+  53   2              return NULL;
+  54   2          }
+  55   1          ptr->val = val;
+*** ERROR C202 IN LINE 55 OF LINKEDLIST1.C: 'ptr': undefined identifier
+  56   1          ptr->next = NULL;
+*** ERROR C202 IN LINE 56 OF LINKEDLIST1.C: 'ptr': undefined identifier
+  57   1      
+  58   1          if(add_to_end)
+  59   1          {
+  60   2              curr->next = ptr;
+*** ERROR C202 IN LINE 60 OF LINKEDLIST1.C: 'ptr': undefined identifier
+  61   2              curr = ptr;
+*** ERROR C202 IN LINE 61 OF LINKEDLIST1.C: 'ptr': undefined identifier
+  62   2          }
+  63   1          else
+  64   1          {
+  65   2              ptr->next = head;
+*** ERROR C202 IN LINE 65 OF LINKEDLIST1.C: 'ptr': undefined identifier
+  66   2              head = ptr;
+*** ERROR C202 IN LINE 66 OF LINKEDLIST1.C: 'ptr': undefined identifier
+  67   2          }
+  68   1          return ptr;
+*** ERROR C202 IN LINE 68 OF LINKEDLIST1.C: 'ptr': undefined identifier
+  69   1      }
+  70          
+  71          struct test_struct* search_in_list(int val, struct test_struct **prev)
+  72          {
+  73   1          struct test_struct *ptr = head;
+  74   1          struct test_struct *tmp = NULL;
+  75   1          bool found = false;
+  76   1      
+  77   1          printf("\n Searching the list for value [%d] \n",val);
+  78   1      
+  79   1          while(ptr != NULL)
+  80   1          {
+  81   2              if(ptr->val == val)
+  82   2              {
+  83   3                  found = true;
+  84   3                  break;
+  85   3              }
+  86   2              else
+  87   2              {
+  88   3                  tmp = ptr;
+  89   3                  ptr = ptr->next;
+  90   3              }
+  91   2          }
+  92   1      
+  93   1          if(true == found)
+  94   1          {
+  95   2              if(prev)
+C51 COMPILER V9.01   LINKEDLIST1                                                           05/20/2013 11:37:49 PAGE 3   
+
+  96   2                  *prev = tmp;
+  97   2              return ptr;
+  98   2          }
+  99   1          else
+ 100   1          {
+ 101   2              return NULL;
+ 102   2          }
+ 103   1      }
+ 104          
+ 105          int delete_from_list(int val)
+ 106          {
+ 107   1          struct test_struct *prev = NULL;
+ 108   1          struct test_struct *del = NULL;
+ 109   1      
+ 110   1          printf("\n Deleting value [%d] from list\n",val);
+ 111   1      
+ 112   1          del = search_in_list(val,&prev);
+ 113   1          if(del == NULL)
+ 114   1          {
+ 115   2              return -1;
+ 116   2          }
+ 117   1          else
+ 118   1          {
+ 119   2              if(prev != NULL)
+ 120   2                  prev->next = del->next;
+ 121   2      
+ 122   2              if(del == curr)
+ 123   2              {
+ 124   3                  curr = prev;
+ 125   3              }
+ 126   2              else if(del == head)
+ 127   2              {
+ 128   3                  head = del->next;
+ 129   3              }
+ 130   2          }
+ 131   1      
+ 132   1          free(del);
+ 133   1          del = NULL;
+ 134   1      
+ 135   1          return 0;
+ 136   1      }
+ 137          
+ 138          void print_list(void)
+ 139          {
+ 140   1          struct test_struct *ptr = head;
+ 141   1      
+ 142   1          printf("\n -------Printing list Start------- \n");
+ 143   1          while(ptr != NULL)
+ 144   1          {
+ 145   2              printf("\n [%d] \n",ptr->val);
+ 146   2              ptr = ptr->next;
+ 147   2          }
+ 148   1          printf("\n -------Printing list End------- \n");
+ 149   1      
+ 150   1          return;
+ 151   1      }
+ 152          
+ 153          int main(void)
+ 154          {
+ 155   1          int i = 0, ret = 0;
+ 156   1          struct test_struct *ptr = NULL;
+ 157   1      
+C51 COMPILER V9.01   LINKEDLIST1                                                           05/20/2013 11:37:49 PAGE 4   
+
+ 158   1          print_list();
+ 159   1      
+ 160   1          for(i = 5; i<10; i++)
+ 161   1              add_to_list(i,true);
+ 162   1      
+ 163   1          print_list();
+ 164   1      
+ 165   1          for(i = 4; i>0; i--)
+ 166   1              add_to_list(i,false);
+ 167   1      
+ 168   1          print_list();
+ 169   1      
+ 170   1          for(i = 1; i<10; i += 4)
+ 171   1          {
+ 172   2              ptr = search_in_list(i, NULL);
+ 173   2              if(NULL == ptr)
+ 174   2              {
+ 175   3                  printf("\n Search [val = %d] failed, no such element found\n",i);
+ 176   3              }
+ 177   2              else
+ 178   2              {
+ 179   3                  printf("\n Search passed [val = %d]\n",ptr->val);
+ 180   3              }
+ 181   2      
+ 182   2              print_list();
+ 183   2      
+ 184   2              ret = delete_from_list(i);
+ 185   2              if(ret != 0)
+ 186   2              {
+ 187   3                  printf("\n delete [val = %d] failed, no such element found\n",i);
+ 188   3              }
+ 189   2              else
+ 190   2              {
+ 191   3                  printf("\n delete [val = %d]  passed \n",i);
+ 192   3              }
+ 193   2      
+ 194   2              print_list();
+ 195   2          }
+ 196   1      
+ 197   1          return 0;
+ 198   1      }
+
+C51 COMPILATION COMPLETE.  3 WARNING(S),  19 ERROR(S)

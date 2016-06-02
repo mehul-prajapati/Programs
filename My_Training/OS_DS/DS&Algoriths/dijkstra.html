@@ -1,0 +1,234 @@
+<HTML><HEAD>
+<TITLE>Data Structures and Algorithms: Dijkstra's Algorithm</TITLE>
+
+<META name="description" content="Data Structures and Algorithms Course Notes,
+PLDS210 University of Western Australia">
+<META name="keywords" content="data structures,algorithms,abstract data types,
+shortest paths, Dijkstra's algorithm, graph algorithms ">
+</HEAD>
+<BODY BGCOLOR="#ffffff">
+<TABLE BGCOLOR="#00c0f0" WIDTH="100%" CELLSPACING=0 CELLPADDING=0>
+<TR BGCOLOR="#00f0f0"><TD ALIGN=right>
+<FONT FACE=helvetica SIZE=+1><I>Data Structures and Algorithms</I></FONT>
+</TD></TR>
+
+<TR><TD><FONT FACE=helvetica SIZE=+2><B>10.2 Dijkstra's Algorithm</B></FONT>
+</TD></TR>
+</TABLE>
+<P>
+
+Djikstra's algorithm (named after its discover,
+<A HREF=e_w_dijkstra.html>E.W. Dijkstra</A>) solves the
+problem of finding the shortest path from a point in
+a graph (the <I>source</I>) to a destination.
+It turns out that one can find the shortest paths from
+a given source to <I>all</I> points in a graph in the
+same time, 
+hence this problem is sometimes called the
+<FONT COLOR="#fa0000"><B>single-source shortest paths</B></FONT> problem.
+<FONT COLOR=blue><BLOCKQUOTE>
+The somewhat unexpected result that <I>all</I> the
+paths can be found as easily as one further 
+demonstrates the value of reading the literature
+on algorithms!
+</BLOCKQUOTE></FONT>
+<P>
+
+This problem is related to the spanning tree one.
+The graph representing all the paths from one vertex
+to all the others must be a spanning tree
+- it must include all vertices.
+There will also be no cycles as a cycle would define more
+than one path from the selected vertex to at least one other vertex.
+
+For a graph,<BR>
+<CENTER>
+<TABLE CELLPADDING=6><TR><TD VALIGN=top ALIGN=center><B>G</B> = <B>(V,E)</B></TD>
+<TD VALIGN=top>
+where</TD><TD><UL><LI><B>V</B> is a set of vertices and
+<LI><B>E</B> is a set of edges.
+</UL>
+</TD></TR>
+</TABLE>
+</CENTER>
+
+Dijkstra's algorithm keeps two sets of vertices:
+<CENTER>
+<TABLE WIDTH=80%>
+<TR><TD VALIGN=top><B>S</B></TD>
+<TD>&nbsp;</TD>
+<TD>the set of vertices whose shortest paths from the
+source have already been determined <I>and</I></TD></TR>
+<TR><TD ALIGN=top> <B>V-S</B></TD>
+<TD>&nbsp;</TD>
+<TD>the remaining vertices.</TD></TR>
+</TABLE>
+</CENTER>
+The other data structures needed are:
+<CENTER>
+<TABLE WIDTH=80%>
+<TR><TD VALIGN=top><B>d</B></TD>
+<TD> array of best estimates of shortest path to each vertex </TD></TR>
+<TR><TD VALIGN=top><B>pi</B></TD>
+<TD>an array of <A HREF=dij_pred.html>predecessors</A> for 
+each vertex </TD></TR>
+</TABLE>
+</CENTER>
+<P>
+The basic mode of operation is:
+<OL>
+<LI> Initialise <B>d</B> and <B>pi</B>,
+<LI> Set <B>S</B> to empty,
+<LI> While there are still vertices in <B>V-S</B>,
+<OL TYPE=i>
+<LI> Sort the vertices in <B>V-S</B> according to the current best estimate
+of their distance from the source,
+<LI> Add <B>u</B>, the closest vertex in <B>V-S</B>, to <B>S</B>,
+<LI> <B><FONT COLOR="#fa0000">Relax</FONT></B> all the vertices still in <B>V-S</B>
+connected to <B>u</B>
+</OL>
+</OL>
+<P>
+
+<H4>Relaxation</H4>
+
+The <B>relaxation</B> process updates the costs of all the
+vertices, <B>v</B>, connected to a vertex, <B>u</B>, if 
+we could improve the best estimate of the shortest path to
+<B>v</B> by including <B>(u,v)</B> in the path to <B>v</B>.
+<P>
+The relaxation procedure proceeds as follows:
+<FONT COLOR=green><PRE>initialise_single_source( Graph g, Node s )
+   for each vertex v in Vertices( g )
+       g.d[v] := infinity
+       g.pi[v] := nil
+   g.d[s] := 0;
+</PRE></FONT>
+
+This sets up the graph so that each node has no predecessor
+(<B>pi[v] = nil</B>) and the estimates of the cost (distance) of
+each node from the source (<B>d[v]</B>) are infinite, except for
+the source node itself (<B>d[s] = 0</B>).
+<P>
+<CENTER>
+<TABLE WIDTH=80% BORDER=1>
+<TD>
+Note that we have also introduced a further way to store
+a graph (or part of a graph - as this structure can only 
+store a spanning tree),
+the <FONT COLOR="#fa0000"><B>predecessor sub-graph</B></FONT>
+- the list of predecessors of each node,
+<P>
+<CENTER><B>pi[j], 1 <= j <= |V|</B></CENTER>
+<P>
+The edges in the predecessor sub-graph are <B>(pi[v],v)</B>.
+</TD>
+</TABLE>
+</CENTER>
+<P>
+The relaxation procedure checks whether the current
+best estimate of the shortest distance to <B>v</B>
+(<B>d[v]</B>) can be improved by going through <B>u</B> (<I>i.e.</I>
+by making <B>u</B> the predecessor of <B>v</B>):
+<FONT COLOR=green><PRE>relax( Node u, Node v, double w[][] )
+    if d[v] > d[u] + w[u,v] then
+       d[v] := d[u] + w[u,v]
+       pi[v] := u
+</PRE></FONT>
+The algorithm itself is now:
+<FONT COLOR=green><PRE>shortest_paths( Graph g, Node s )
+    initialise_single_source( g, s )
+    S := { 0 }        /* Make S empty */
+    Q := Vertices( g ) /* Put the vertices in a PQ */
+    while not Empty(Q) 
+        u := ExtractCheapest( Q );
+        AddNode( S, u ); /* Add u to S */
+        for each vertex v in Adjacent( u )
+            relax( u, v, w )
+</PRE></FONT>
+<P>
+<A HREF=dij-op.html TARGET=op>Operation of Dijkstra's algorithm</A>
+<P>
+As usual, <A HREF=dij-proof.html>proof</A> of a greedy algorithm is the trickiest part.
+<P>
+
+<A NAME=dijkstra_anim>
+<H3>Animation</H3>
+
+In this animation, a number of cases have been selected to show all
+aspects of the operation of Dijkstra's algorithm.
+Start by selecting the data set (or you can just work through the
+first one - which appears by default). 
+Then select either step or run to execute the algorithm.
+Note that it starts by assigning a weight of infinity to all nodes,
+and then selecting a source and assigning a weight of zero to it.
+As nodes are added to the set for which shortest paths are known, their
+colour is changed to red.
+When a node is selected, the weights of its neighbours are relaxed ..
+nodes turn green and flash as they are being relaxed. 
+Once all nodes are relaxed, their predecessors are updated, arcs
+are turned green when this happens.
+The cycle of selection, weight relaxation and predecessor update
+repeats itself until all the shortest path to all nodes has been found.
+<P>
+<TABLE BGCOLOR="#00f0f0" WIDTH="100%"> 
+<TR><TD >
+<FONT COLOR=blue FACE=helvetica>
+<B>Dijkstra's Algorithm Animation</B><BR>
+This animation was written by Mervyn Ng and Woi Ang.</FONT></TD>
+<TD ALIGN=center>
+  <TABLE BORDER=0>
+  <TR><TD>
+    <applet CODEBASE="Java/dijkstra" code = "AlgAnimApp.class" width = 200 height = 35>
+    <param name = "filename" value = "GraphDij.java">
+    <param name = "buttonname" value = "Run the Animation">
+    <param name = "algname" value = "Dijkstra's Algorithm">
+		<param name = "algfile" value = "graph.dij">
+    </applet>
+    </TD>
+  </TR>
+</TABLE>
+</TD>
+<TD><FONT FACE=helvetica>Please email comments to:<BR>
+<A HREF=mailto:morris@ee.uwa.edu.au>morris@ee.uwa.edu.au</A>
+</TR>
+</TABLE>
+
+An 
+<A HREF="http://www.cs.uwa.edu.au/teaching/cs300/readings/graphapplet/dijkstra.html">
+alternative animation</A> of Dijskstra's algorithm may give you a different insight!
+
+
+<P>
+<TABLE WIDTH="100%">
+<TR><TD BGCOLOR="#00c0f0"><H3>Key terms</H3></TD></TR>
+</TD></TR>
+<TR><TD><DL>
+<DT><FONT COLOR="#fa0000"><B>single-source shortest paths problem</B></FONT>
+   <DD>A descriptive name for the problem of finding the shortest
+       paths to all the nodes in a graph from a single designated source.
+       This problem is commonly known by the algorithm used to solve it -
+       Dijkstra's algorithm.
+<DT><FONT COLOR="#fa0000"><B>predecessor list</B></FONT>
+   <DD>A structure for storing a <FONT COLOR="#fa0000"><B>path</B></FONT>
+      through a graph.
+</DL>
+</TD></TR>
+</TABLE>
+
+<P>
+
+<TABLE CELLPADDING=5 WIDTH="100%" BGCOLOR="#00f0f0" CELLSPACING=4>
+<TR><TD WIDTH=33%><FONT FACE=arial,helvetica>
+Continue on to <A HREF="dij-op.html">Operation of Dijkstra's algorithm</A></TD>
+<TD WIDTH=33%><FONT FACE=arial,helvetica>
+Continue on to <A HREF="huffman.html">Huffman Encoding</A></TD>
+<TD><FONT FACE=arial,helvetica>
+Back to the <A HREF="ds_ToC.html">Table of Contents</A>
+</TD></TR></TABLE>
+<SMALL>
+&copy; <A HREF=mailto:morris@ee.uwa.edu.au>John Morris</A>, 1998
+</SMALL>
+</BODY>
+</HTML>
+

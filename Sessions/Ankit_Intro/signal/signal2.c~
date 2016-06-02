@@ -1,0 +1,31 @@
+#include <stdio.h>
+#include <unistd.h>
+#include <signal.h>
+#include <string.h>
+ 
+static void handler (int sig)
+{
+	printf ("In Handler\n");			
+}
+ 
+int main ()
+
+{
+    sigset_t mask;	
+    struct sigaction act;
+ 
+	memset (&act, '\0', sizeof(act));
+ 
+	act.sa_handler = &handler;
+    act.sa_flags = 0;
+    
+    if (sigaction(SIGTERM, &act, NULL) < 0) 
+    {
+		perror ("sigaction");
+	}
+
+	sleep (10);
+    printf("Exiting main\n");
+
+    return 0;
+}
